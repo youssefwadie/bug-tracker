@@ -7,6 +7,7 @@ import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails
 import com.github.youssefwadie.bugtracker.user.UserService;
 import com.github.youssefwadie.bugtracker.user.service.RegistrationService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
+import com.github.youssefwadie.bugtracker.security.UserContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class UserAuthController {
 
     @PostMapping("login")
     public ResponseEntity<UserDto> login() {
-        UserDto userDto = userMapper.modelToDto(getLoggedInUser());
+        UserDto userDto = userMapper.modelToDto(UserContextHolder.get());
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 

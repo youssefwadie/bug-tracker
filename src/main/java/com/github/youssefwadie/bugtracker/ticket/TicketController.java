@@ -3,7 +3,9 @@ package com.github.youssefwadie.bugtracker.ticket;
 import com.github.youssefwadie.bugtracker.dto.ticket.TicketDto;
 import com.github.youssefwadie.bugtracker.dto.ticket.TicketMapper;
 import com.github.youssefwadie.bugtracker.model.Ticket;
+import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
+import com.github.youssefwadie.bugtracker.security.UserContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +18,17 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/tickets", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TicketController {
     private final TicketService ticketService;
-    private final TicketValidatorService validatorService;
 
     private final TicketMapper ticketMapper;
 
     @GetMapping("")
     public ResponseEntity<List<Ticket>> getAllTickets() {
-        return ResponseEntity.ok(ticketService.findAll());
+        User loggedInUser = UserContextHolder.get();
+        if (loggedInUser != null) {
+            return ResponseEntity.ok(ticketService.findAllBySubmittedUserId(loggedInUser.getId()));
+        }
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)

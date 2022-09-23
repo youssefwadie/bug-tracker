@@ -2,9 +2,9 @@ package com.github.youssefwadie.bugtracker.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
 import com.github.youssefwadie.bugtracker.security.service.JwtService;
-import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

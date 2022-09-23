@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.security;
+package com.github.youssefwadie.bugtracker.security.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.DisabledException;

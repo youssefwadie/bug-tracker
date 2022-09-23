@@ -8,13 +8,13 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class AuthService {
-  private loginPath = 'users/login';
+  private readonly API_LOGIN_PATH = 'users/login';
 
   constructor(private http: HttpClient) {
   }
 
   login(user: User): Observable<User> {
-    return this.http.post<User>(`${environment.rootUrl}/${this.loginPath}`, {}, {
+    return this.http.post<User>(`${environment.rootUrl}/${this.API_LOGIN_PATH}`, {}, {
       withCredentials: true,
       headers: {
         Authorization:

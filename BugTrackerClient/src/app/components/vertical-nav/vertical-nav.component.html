@@ -1,25 +1,22 @@
-<div class="d-flex">
-  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav" orientation="vertical">
-    <li ngbNavItem="logo" class="text-center">
-      <a ngbNavLink class="link-secondary">
-        <img src="favicon.ico" class="img-fluid rounded me-3 logo" alt="bug tracker logo"/>
+<div class="d-flex min-vh-100">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav flex-column  bg-white" orientation="vertical">
+    <li ngbNavItem="logo" class="nav-item text-center">
+      <a ngbNavLink class="nav-link link-secondary">
+        <img src="assets/logo.svg" class="img-fluid rounded me-3 logo" alt="bug tracker logo"/>
       </a>
-      <ng-template ngbNavContent>
-        <app-dashboard></app-dashboard>
-      </ng-template>
     </li>
 
-    <li ngbNavItem="dashboard">
-      <a ngbNavLink class="link-secondary">
+    <li ngbNavItem="dashboard" class="nav-item">
+      <a ngbNavLink class="nav-link link-secondary" (click)="navigateToDashboard()">
         <fa-icon [icon]="faComputer" class="me-2"></fa-icon>
         <span>Dashboard</span>
       </a>
       <ng-template ngbNavContent>
-        <app-dashboard></app-dashboard>
+          <app-dashboard></app-dashboard>
       </ng-template>
     </li>
-    <li ngbNavItem="tickets">
-      <a ngbNavLink class="link-secondary">
+    <li ngbNavItem="tickets" class="nav-item">
+      <a ngbNavLink class="nav-link link-secondary" (click)="navigateToTickets()">
         <fa-icon [icon]="faTicket" class="me-2"></fa-icon>
         <span>Tickets</span>
       </a>
@@ -27,20 +24,20 @@
         <app-tickets></app-tickets>
       </ng-template>
     </li>
-    <li ngbNavItem="admin">
-      <a ngbNavLink class="link-secondary">
+    <li ngbNavItem="administration" class="nav-item">
+      <a ngbNavLink class="nav-link link-secondary" (click)="navigateToAdministration()">
         <fa-icon [icon]="faToolbox" class="me-2"></fa-icon>
         <span>Administration</span>
       </a>
       <ng-template ngbNavContent>
-        <p>Administration</p>
+        <p>Administration Section</p>
       </ng-template>
     </li>
 
-    <li ngbNavItem="logout">
+    <li ngbNavItem="logout" class="nav-item">
       <hr>
       <a ngbNavLink class="mt-3 text-center">
-        <button class="btn btn-sm btn-outline-danger">Logout</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="logout()">Logout</button>
       </a>
 
     </li>
@@ -50,4 +47,4 @@
 </div>
 
 
-<pre>Active: {{ active }}</pre>
+<!--<pre>Active: {{ active }}</pre>-->

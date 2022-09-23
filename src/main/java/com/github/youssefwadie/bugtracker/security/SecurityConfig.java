@@ -2,6 +2,8 @@ package com.github.youssefwadie.bugtracker.security;
 
 import com.github.youssefwadie.bugtracker.security.filters.JWTGeneratorFilter;
 import com.github.youssefwadie.bugtracker.security.filters.JWTValidatorFilter;
+import com.github.youssefwadie.bugtracker.security.interceptors.UserContextInterceptor;
+import com.github.youssefwadie.bugtracker.security.service.BugTrackerAuthenticationEntryPoint;
 import com.github.youssefwadie.bugtracker.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +16,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(TokenProperties.class)
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     @Autowired
@@ -71,4 +75,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(10);
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new UserContextInterceptor());
+    }
 }

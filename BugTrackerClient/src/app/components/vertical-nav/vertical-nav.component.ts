@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {faComputer, faTicket, faToolbox} from "@fortawesome/free-solid-svg-icons";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-vertical-nav',
@@ -11,10 +12,25 @@ export class VerticalNavComponent implements OnInit {
   faTicket = faTicket;
   faToolbox = faToolbox;
 
-  active = 'dashboard';
-  constructor() { }
+  @Input() active: string;
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
+  logout(): void {
+    console.log('logging out...');
+  }
+
+  navigateToAdministration() {
+    this.router.navigate(['administration'])
+  }
+
+  navigateToTickets() {
+    this.router.navigate(['tickets'])
+  }
+
+  navigateToDashboard() {
+    this.router.navigate(['dashboard']);
+  }
 }

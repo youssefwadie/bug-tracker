@@ -1,1 +1,30 @@
-<p>tickets works!</p>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Title</th>
+    <th scope="col">Project Name</th>
+    <th scope="col">Developer Assigned</th>
+    <th scope="col">Ticket Type</th>
+    <th scope="col">Ticket Priority</th>
+    <th scope="col">Ticket Status</th>
+    <th scope="col">Created At</th>
+    <th scope="col"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let ticket of tickets">
+    <th scope="row">{{ ticket.title }}</th>
+    <td>{{ ticket.project }}</td>
+    <td>{{ ticket.assignedDeveloper }}</td>
+    <td>{{ ticket.type }}</td>
+    <td>{{ ticket.priority }}</td>
+    <td>{{ ticket.status }}</td>
+    <td>{{ ticket.createdAt }}</td>
+
+  </tr>
+  </tbody>
+</table>
+<div class="d-flex justify-content-between p-2">
+  <ngb-pagination [collectionSize]="120" [(page)]="page" [maxSize]="5" (pageChange)="onPageChange()"
+                  [boundaryLinks]="true"></ngb-pagination>
+</div>
