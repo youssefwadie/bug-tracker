@@ -25,7 +25,7 @@ public class TokenProperties {
         this.key = "jxgE#*($#Qe_XH!uPq8Vdby@YFNkANd^u3dQ53YU%n4B";
         this.accessTokenLifeTime = 604_800; // one week (in seconds)
         this.secretKey = null;
-        this.accessTokenCookieName = "refresh-token";
+        this.accessTokenCookieName = "access-token";
     }
 
     @PostConstruct

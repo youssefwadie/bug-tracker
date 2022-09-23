@@ -20,11 +20,33 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String name;
+    @Column(name = "first_name", length = 255)
+    private String firstName;
+
+    @Column(name = "last_name", length = 255)
+    private String lastName;
+
 
     private String email;
 
     private String password;
 
     private boolean enabled;
+
+    @Transient
+    public String getFullName() {
+        return String.format("%s %s", firstName, lastName);
+    }
+
+
+    public void setFullName(String fullName) {
+        int whiteSpaceIndex = fullName.indexOf(' ');
+        if (whiteSpaceIndex == -1) {
+            this.firstName = fullName;
+        } else {
+            this.firstName = fullName.substring(0, whiteSpaceIndex);
+            this.lastName = fullName.substring(whiteSpaceIndex + 1);
+        }
+    }
+
 }

@@ -2,7 +2,9 @@ package com.github.youssefwadie.bugtracker.security;
 
 import com.github.youssefwadie.bugtracker.security.filters.JWTGeneratorFilter;
 import com.github.youssefwadie.bugtracker.security.filters.JWTValidatorFilter;
+import com.github.youssefwadie.bugtracker.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +21,15 @@ import javax.servlet.Filter;
 @Configuration
 @EnableConfigurationProperties(TokenProperties.class)
 public class SecurityConfig {
-    private final TokenProperties tokenProperties;
-    private final JwtService jwtService;
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Autowired
+    SecurityFilterChain filterChain(
+            final HttpSecurity http,
+            final BugTrackerAuthenticationEntryPoint authenticationEntryPoint,
+            final JwtService jwtService,
+            final TokenProperties tokenProperties
+    ) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 //        http.cors().configurationSource(request -> {
@@ -38,25 +44,27 @@ public class SecurityConfig {
 //        });
 
         http.csrf().disable();
-        http.authorizeRequests(request -> {
-            request.antMatchers("/api/v1/users/**").authenticated();
-            request.antMatchers("/api/v1/register/**").permitAll();
-
+        http.authorizeRequests(auth -> {
+            auth.antMatchers("/api/v1/admin/**").hasRole("ADMIN");
+            auth.antMatchers("/api/v1/users/login").authenticated();
+            auth.antMatchers("/api/v1/users/resend").permitAll();
+            auth.antMatchers("/api/v1/register/**").permitAll();
         });
-        http.addFilterBefore(jwtValidatorFilter(), BasicAuthenticationFilter.class);
-        http.addFilterAfter(jwtGeneratorFilter(), BasicAuthenticationFilter.class);
-        http.httpBasic();
+
+        http.httpBasic().authenticationEntryPoint(authenticationEntryPoint);
+
+        http.addFilterBefore(jwtValidatorFilter(jwtService, tokenProperties), BasicAuthenticationFilter.class);
+        http.addFilterAfter(jwtGeneratorFilter(jwtService, tokenProperties), BasicAuthenticationFilter.class);
         return http.build();
     }
 
-    Filter jwtValidatorFilter() {
+    Filter jwtValidatorFilter(JwtService jwtService, TokenProperties tokenProperties) {
         return new JWTValidatorFilter(tokenProperties, jwtService);
     }
 
-    Filter jwtGeneratorFilter() {
+    Filter jwtGeneratorFilter(JwtService jwtService, TokenProperties tokenProperties) {
         return new JWTGeneratorFilter(tokenProperties, jwtService);
     }
-
 
     @Bean
     PasswordEncoder passwordEncoder() {

@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.security;
+package com.github.youssefwadie.bugtracker.security.service;
 
 import com.github.youssefwadie.bugtracker.model.User;
 import lombok.Getter;
@@ -48,6 +48,6 @@ public class BugTrackerUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.isEnabled();
     }
 }

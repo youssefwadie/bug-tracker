@@ -24,4 +24,8 @@ public class ConfirmationTokenService {
     public void deleteAllByUserId(Long userId) {
         repository.deleteAllByUserId(userId);
     }
+
+    public void setConfirmedById(Long id) {
+        repository.setEnabledById(id);
+    }
 }

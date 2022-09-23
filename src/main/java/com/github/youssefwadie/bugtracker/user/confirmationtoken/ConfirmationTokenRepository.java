@@ -17,4 +17,9 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     @Modifying
     @Query("DELETE FROM ConfirmationToken cf WHERE cf.userId = ?1")
     void deleteAllByUserId(Long userId);
+
+    @Modifying
+    @Query("UPDATE ConfirmationToken cf SET cf.confirmed = true WHERE cf.id = ?1")
+    void setEnabledById(Long id);
+
 }

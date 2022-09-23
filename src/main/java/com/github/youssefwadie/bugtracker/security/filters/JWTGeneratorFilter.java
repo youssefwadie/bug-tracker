@@ -1,7 +1,7 @@
 package com.github.youssefwadie.bugtracker.security.filters;
 
-import com.github.youssefwadie.bugtracker.security.BugTrackerUserDetails;
-import com.github.youssefwadie.bugtracker.security.JwtService;
+import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
+import com.github.youssefwadie.bugtracker.security.service.JwtService;
 import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.server.Cookie;
@@ -40,6 +40,7 @@ public class JWTGeneratorFilter extends OncePerRequestFilter {
                 .secure(true)
                 .httpOnly(true)
                 .maxAge(tokenProperties.getAccessTokenLifeTime())
+                .path("/api/v1")
                 .build();
 
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -49,6 +50,6 @@ public class JWTGeneratorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !request.getServletPath().equals("api/v1/users/login");
+        return !request.getServletPath().equals("/api/v1/users/login");
     }
 }

@@ -1,0 +1,24 @@
+.line-center {
+  margin: 0;
+  padding: 0 2%;
+  display: inline-block;
+}
+
+h2 {
+  font-size: 12px;
+  color: #96999e;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+
+}
+
+h2:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: solid 1px lightgray;
+  z-index: -1;
+}

@@ -1,7 +1,7 @@
 package com.github.youssefwadie.bugtracker.ticket;
 
 import com.github.youssefwadie.bugtracker.model.Ticket;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public Ticket save(Ticket ticket) throws ConstraintsViolationException {
+    public Ticket save(Ticket ticket) throws ConstraintViolationException {
         validatorService.validateTicket(ticket);
         return ticketRepository.save(ticket);
     }

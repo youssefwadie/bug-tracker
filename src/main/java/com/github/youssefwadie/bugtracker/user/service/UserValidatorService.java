@@ -1,8 +1,7 @@
 package com.github.youssefwadie.bugtracker.user.service;
 
-import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
 import com.github.youssefwadie.bugtracker.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -19,7 +18,7 @@ import java.util.regex.Pattern;
 public class UserValidatorService {
     private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,16}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
-    public static final String PASSWORD_VALIDATION_MESSAGE = """
+    public static final String PASSWORD_VALIDATION_MSG = """
             The password must contains at least 8 characters and at most 16 characters
             \t1-at least one digit.
             \t2-one lowercase alphabet.
@@ -28,6 +27,9 @@ public class UserValidatorService {
             \t5-doesn't contain any white space.
             """;
 
+    public static final String BLANK_INPUT_MSG = "cannot be blank";
+    public static final String ALREADY_TAKEN_EMAIL_MSG = "already taken";
+    public static final String INVALID_EMAIL_MSG = "invalid email";
     private final EmailValidator emailValidator = EmailValidator.getInstance(true);
     private final UserRepository userRepository;
 
@@ -39,61 +41,86 @@ public class UserValidatorService {
         return emailValidator.isValid(email);
     }
 
-    public void validateRegistrationRequest(RegistrationRequest registrationRequest) throws ConstraintsViolationException {
-        final Map<String, String> errors = new HashMap<>();
-        if (emailAlreadyInUser(registrationRequest.getEmail())) {
-            errors.put("email", "already taken");
-        }
-        if (isValidPassword(registrationRequest.getPassword())) {
-            errors.put("password", PASSWORD_VALIDATION_MESSAGE);
-        }
-        if (!errors.isEmpty()) {
-            throw new ConstraintsViolationException(errors);
-        }
+//    public void validateRegistrationRequest(RegistrationRequest registrationRequest) throws ConstraintViolationException {
+//        final Map<String, String> errors = new HashMap<>();
+//        String email = registrationRequest.getEmail();
+//        if (isBlank(email)) {
+//            errors.put("email", BLANK_INPUT_MSG);
+//        } else if (!emailAlreadyInUser(registrationRequest.getEmail())) {
+//            errors.put("email", ALREADY_TAKEN_EMAIL_MSG);
+//        } else if (!isValidEmail(registrationRequest.getEmail())) {
+//            errors.put("email", INVALID_EMAIL_MSG);
+//        }
+//
+//        if (!isValidPassword(registrationRequest.getPassword())) {
+//            errors.put("password", PASSWORD_VALIDATION_MSG);
+//        }
+//        if (isBlank(registrationRequest.getFirstName())) {
+//            errors.put("firstName", BLANK_INPUT_MSG);
+//        }
+//        if (isBlank(registrationRequest.getLastName())) {
+//            errors.put("lastName", BLANK_INPUT_MSG);
+//        }
+//        if (!errors.isEmpty()) {
+//            throw new ConstraintViolationException(errors);
+//        }
+//    }
+
+    public boolean isBlank(String str) {
+        return str == null || str.isBlank();
     }
 
-    public void validateUser(User user) throws ConstraintsViolationException {
+    public void validateUser(User user) throws ConstraintViolationException {
         final Map<String, String> errors = new HashMap<>();
         final String userEmail = user.getEmail();
         if (!isValidEmail(userEmail)) {
-            errors.put("email", "Invalid email, please try different one");
+            errors.put("email", INVALID_EMAIL_MSG);
         } else {
             if (user.getId() != null) {
                 // NOT a new user
-                if (!isUniqueEmail(user)) errors.put("email", "already taken");
+                if (!isUniqueEmail(user)) errors.put("email", ALREADY_TAKEN_EMAIL_MSG);
             } else {
-                if (userRepository.existsByEmail(userEmail)) errors.put("email", "already taken");
+                if (userRepository.existsByEmail(userEmail)) errors.put("email", ALREADY_TAKEN_EMAIL_MSG);
             }
         }
 
         // new user
         if (user.getId() == null) {
             if (!isValidPassword(user.getPassword())) {
-                errors.put("password", PASSWORD_VALIDATION_MESSAGE);
+                errors.put("password", PASSWORD_VALIDATION_MSG);
             }
         }
 
+        if (isBlank(user.getFirstName())) {
+            errors.put("firstName", BLANK_INPUT_MSG);
+        }
+
+        if (isBlank(user.getLastName())) {
+            errors.put("lastName", BLANK_INPUT_MSG);
+        }
+
         if (!errors.isEmpty()) {
-            throw new ConstraintsViolationException(errors);
+            throw new ConstraintViolationException(errors);
         }
     }
 
-    private boolean emailAlreadyInUser(String email) {
-        return userRepository.existsByEmail(email);
-    }
+//    private boolean emailAlreadyInUser(String email) {
+//        return userRepository.existsByEmail(email);
+//    }
 
     private boolean isUniqueEmail(User user) {
         String userEmail = user.getEmail();
-        Optional<User> userOptionalFromTheDB = userRepository.findById(user.getId());
+        Optional<User> userOptionalInDB = userRepository.findById(user.getId());
+
         // unlikely to happen
-        if (userOptionalFromTheDB.isEmpty()) {
+        if (userOptionalInDB.isEmpty()) {
             throw new IllegalArgumentException("the passed user's id is not in the database");
         }
 
-        User userFromTheDB = userOptionalFromTheDB.get();
+        User userInTheDB = userOptionalInDB.get();
 
-        // password changed
-        if (!userFromTheDB.getEmail().equals(user.getEmail())) {
+        // email changed
+        if (!userInTheDB.getEmail().equals(user.getEmail())) {
             return !userRepository.existsByEmail(userEmail);
         }
 

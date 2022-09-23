@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.dto;
+package com.github.youssefwadie.bugtracker.dto.ticket;
 
 import com.github.youssefwadie.bugtracker.model.Ticket;
 import org.mapstruct.InheritInverseConfiguration;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Mapper
 @Component
 public interface TicketMapper {
+
     @Mapping(source = "assignedUser.id", target = "assignedTo")
     @Mapping(source = "project.id", target = "project")
     TicketDto modelToDto(Ticket ticket);

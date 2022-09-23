@@ -1,9 +1,9 @@
 package com.github.youssefwadie.bugtracker.ticket;
 
-import com.github.youssefwadie.bugtracker.dto.TicketDto;
-import com.github.youssefwadie.bugtracker.dto.TicketMapper;
+import com.github.youssefwadie.bugtracker.dto.ticket.TicketDto;
+import com.github.youssefwadie.bugtracker.dto.ticket.TicketMapper;
 import com.github.youssefwadie.bugtracker.model.Ticket;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class TicketController {
     }
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketDto newTicket) throws ConstraintsViolationException {
+    public ResponseEntity<Ticket> createTicket(@RequestBody TicketDto newTicket) throws ConstraintViolationException {
         Ticket savedTicket = ticketService.save(ticketMapper.dtoToModel(newTicket));
         return ResponseEntity.ok(savedTicket);
     }

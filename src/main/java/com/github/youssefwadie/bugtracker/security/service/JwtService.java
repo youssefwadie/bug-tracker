@@ -1,7 +1,8 @@
-package com.github.youssefwadie.bugtracker.security;
+package com.github.youssefwadie.bugtracker.security.service;
 
 import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +28,14 @@ public class JwtService {
 
         Long id = claims.get(USER_ID_CLAIM_NAME, Long.class);
         String email = claims.getSubject();
-        String name = claims.get(USER_NAME_CLAIM_NAME, String.class);
+        String fullName = claims.get(USER_NAME_CLAIM_NAME, String.class);
         Role userRole = Role.valueOf(claims.get(USER_ROLES_CLAIM_NAME, String.class));
 
         User user = new User();
         user.setId(id);
         user.setEmail(email);
         user.setRole(userRole);
-        user.setName(name);
+        user.setFullName(fullName);
         return user;
     }
 
@@ -48,7 +49,7 @@ public class JwtService {
                 .setIssuer("Bug Tracker")
                 .setSubject(user.getEmail())
                 .claim(USER_ID_CLAIM_NAME, user.getId())
-                .claim(USER_NAME_CLAIM_NAME, user.getName())
+                .claim(USER_NAME_CLAIM_NAME, user.getFullName())
                 .claim(USER_ROLES_CLAIM_NAME, user.getRole())
                 .setIssuedAt(now)
                 .setExpiration(accessTokenExpirationDate)

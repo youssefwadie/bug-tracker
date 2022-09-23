@@ -1,7 +1,6 @@
 package com.github.youssefwadie.bugtracker.user.controllers;
 
 import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import com.github.youssefwadie.bugtracker.user.service.RegistrationService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +15,7 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     @PostMapping(value = "", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> registerNewUser(@RequestBody RegistrationRequest registrationRequest) throws ConstraintsViolationException {
-
+    public ResponseEntity<?> registerNewUser(@RequestBody RegistrationRequest registrationRequest) {
         String message = registrationService.register(registrationRequest);
         final SimpleResponseBody responseBody = SimpleResponseBody
                 .builder(HttpStatus.OK)
@@ -27,14 +25,14 @@ public class RegistrationController {
 
     }
 
+
     @GetMapping("confirm")
     public ResponseEntity<?> confirmToken(@RequestParam("token") String token) {
         try {
             String message = registrationService.confirmToken(token);
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException ex) {
-            SimpleResponseBody responseBody =
-                    new SimpleResponseBody.Builder(HttpStatus.BAD_REQUEST).setMessage(ex.getMessage()).build();
+            SimpleResponseBody responseBody = SimpleResponseBody.builder(HttpStatus.BAD_REQUEST).setMessage(ex.getMessage()).build();
             return ResponseEntity.badRequest().body(responseBody);
         }
     }

@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.security;
+package com.github.youssefwadie.bugtracker.security.service;
 
 
 import com.github.youssefwadie.bugtracker.model.User;
