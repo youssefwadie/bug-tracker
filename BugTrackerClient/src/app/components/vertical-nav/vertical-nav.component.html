@@ -1,0 +1,53 @@
+<div class="d-flex">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav" orientation="vertical">
+    <li ngbNavItem="logo" class="text-center">
+      <a ngbNavLink class="link-secondary">
+        <img src="favicon.ico" class="img-fluid rounded me-3 logo" alt="bug tracker logo"/>
+      </a>
+      <ng-template ngbNavContent>
+        <app-dashboard></app-dashboard>
+      </ng-template>
+    </li>
+
+    <li ngbNavItem="dashboard">
+      <a ngbNavLink class="link-secondary">
+        <fa-icon [icon]="faComputer" class="me-2"></fa-icon>
+        <span>Dashboard</span>
+      </a>
+      <ng-template ngbNavContent>
+        <app-dashboard></app-dashboard>
+      </ng-template>
+    </li>
+    <li ngbNavItem="tickets">
+      <a ngbNavLink class="link-secondary">
+        <fa-icon [icon]="faTicket" class="me-2"></fa-icon>
+        <span>Tickets</span>
+      </a>
+      <ng-template ngbNavContent>
+        <app-tickets></app-tickets>
+      </ng-template>
+    </li>
+    <li ngbNavItem="admin">
+      <a ngbNavLink class="link-secondary">
+        <fa-icon [icon]="faToolbox" class="me-2"></fa-icon>
+        <span>Administration</span>
+      </a>
+      <ng-template ngbNavContent>
+        <p>Administration</p>
+      </ng-template>
+    </li>
+
+    <li ngbNavItem="logout">
+      <hr>
+      <a ngbNavLink class="mt-3 text-center">
+        <button class="btn btn-sm btn-outline-danger">Logout</button>
+      </a>
+
+    </li>
+  </ul>
+
+  <div [ngbNavOutlet]="nav" class="ms-4"></div>
+</div>
+
+
+<pre>Active: {{ active }}</pre>

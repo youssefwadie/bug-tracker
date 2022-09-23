@@ -1,7 +1,11 @@
-<div class="container-sm">
-  <form class="row" #registerForm="ngForm">
-    <div class="col-lg-6 offset-lg-3 p-3">
-      <div class="row mb-2">
+<div class="d-flex row align-items-center justify-content-center">
+  <div class="col-form-label col-sm-3">
+    <img src="favicon.ico" class="img-fluid rounded me-3 logo" alt="bug tracker logo"/>
+    <span>Bug Tracker Sign up</span>
+  </div>
+  <div class="d-flex row align-items-center justify-content-center">
+    <form class="col-sm-5" #registerForm="ngForm">
+      <div class="d-flex row align-items-center justify-content-center mb-2">
         <div class="col">
           <input
             [ngClass]="(firstNameField.dirty || !validRegistration) && (firstNameField.invalid) ? 'form-control border-danger' : 'form-control'"
@@ -21,66 +25,59 @@
             [ngClass]="(lastNameField.dirty || !validRegistration) && (lastNameField.invalid) ? 'form-control border-danger' : 'form-control'"
             required/>
         </div>
+      </div>
+      <input
+        id="email"
+        type="email"
+        placeholder="Email Address"
+        pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+(\.[a-z]{2,4})+$"
+        #emailField="ngModel"
+        [(ngModel)]="email"
+        [ngClass]="(emailField.dirty || !validRegistration) && (emailField.invalid) ? 'form-control rounded p-2 mb-2 border-danger' : 'form-control rounded p-2 mb-2'"
+        name="email"
+        required
+      />
 
-      </div>
-      <div class="form-group">
-        <input
-          id="email"
-          type="email"
-          placeholder="Email Address"
-          pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+(\.[a-z]{2,4})+$"
-          #emailField="ngModel"
-          [(ngModel)]="email"
-          [ngClass]="(emailField.dirty || !validRegistration) && (emailField.invalid) ? 'form-control rounded p-2 mb-2 border-danger' : 'form-control rounded p-2 mb-2'"
-          name="email"
-          required
-        />
-      </div>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        placeholder="Password"
+        #passwordField="ngModel"
+        [(ngModel)]="password"
+        [ngClass]="(passwordField.dirty || !validRegistration) && (passwordField.invalid) ? 'form-control rounded p-2 mb-2 border-danger' : 'form-control rounded p-2 mb-2'"
+        required
+        pattern=".{8,}"
+      />
 
-      <div class="form-group">
-        <input
-          id="password"
-          type="password"
-          name="password"
-          placeholder="Password"
-          #passwordField="ngModel"
-          [(ngModel)]="password"
-          [ngClass]="(passwordField.dirty || !validRegistration) && (passwordField.invalid) ? 'form-control rounded p-2 mb-2 border-danger' : 'form-control rounded p-2 mb-2'"
-          required
-          pattern=".{8,}"
-        />
-      </div>
-
-      <div *ngIf="passwordField.dirty" class="form-group">
-        <input
-          id="repeatedPassword"
-          type="password"
-          class="form-control rounded p-2 mb-2"
-          #repeatedPasswordField="ngModel"
-          (keydown.enter)="registerForm.valid && onRegister()"
-          [(ngModel)]="repeatedPassword"
-          [ngClass]="(repeatedPasswordField.dirty || !validRegistration) && (repeatedPasswordField.invalid) ? 'form-control rounded p-2 mb-2 border-danger' : 'form-control rounded p-2 mb-2'"
-          name="repeatedPassword"
-          placeholder="Re-enter password"
-          required
-          pattern=".{8,}"
-        />
-      </div>
+      <input *ngIf="passwordField.dirty"
+             id="repeatedPassword"
+             type="password"
+             class="form-control rounded p-2 mb-2"
+             #repeatedPasswordField="ngModel"
+             (keydown.enter)="registerForm.valid && onRegister()"
+             [(ngModel)]="repeatedPassword"
+             [ngClass]="(repeatedPasswordField.dirty || !validRegistration) && (repeatedPasswordField.invalid) ? 'form-control rounded p-2 mb-2 border-danger' : 'form-control rounded p-2 mb-2'"
+             name="repeatedPassword"
+             placeholder="Re-enter password"
+             required
+             pattern=".{8,}"/>
 
       <div *ngIf="!validRegistration" class="alert alert-danger">
         {{errorMessage}}
       </div>
 
-      <div class="me-2 ms-2 float-end">
-        <button type="button" class="btn btn-primary me-3" (click)="onRegister()">
+      <div class="text-center mt-3 mb-2">
+        <button type="btn btn-primary" class="btn btn-primary me-3 text-uppercase" (click)="onRegister()">
           Sign Up
         </button>
-        <button type="button" class="btn btn-secondary" (click)="login()">
-          Cancel
-        </button>
       </div>
-
-    </div>
-  </form>
+      <div class="text-center mt-3">
+        <span class="pe-1">Already has an account?</span>
+        <a class="link-primary text-decoration-none fs-6" (click)="login()">login</a>
+      </div>
+    </form>
+  </div>
 </div>
+
 

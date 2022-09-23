@@ -9,9 +9,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { VerticalNavComponent } from './components/vertical-nav/vertical-nav.component';
+import { TicketsComponent } from './components/tickets/tickets.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent],
+  declarations: [AppComponent, LoginComponent, RegisterComponent, DashboardComponent, VerticalNavComponent, TicketsComponent, HomeComponent],
   imports: [
     BrowserModule,
     FormsModule,

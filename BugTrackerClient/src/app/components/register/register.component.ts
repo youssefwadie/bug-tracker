@@ -48,6 +48,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   private validFormData(): boolean {
+    if (this.firstName.length === 0) {
+      this.setErrorMessage("Please enter your first name");
+      return false;
+    }
+    if (this.lastName.length === 0) {
+      this.setErrorMessage("Please enter your last name");
+      return false;
+    }
+
     if (!this.email.match(this.emailPattern)) {
       this.setErrorMessage("Please enter a valid email");
       return false;

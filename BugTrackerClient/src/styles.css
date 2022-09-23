@@ -2,3 +2,7 @@
 a {
   cursor: pointer;
 }
+.logo {
+  max-width: 35px;
+  min-width: 35px;
+}
