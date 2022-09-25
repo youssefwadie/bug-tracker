@@ -19,7 +19,7 @@ public class RegistrationController {
         String message = registrationService.register(registrationRequest);
         final SimpleResponseBody responseBody = SimpleResponseBody
                 .builder(HttpStatus.OK)
-                .setMessage("checkout your mail box").build();
+                .message("checkout your mail box").build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
 
@@ -32,7 +32,7 @@ public class RegistrationController {
             String message = registrationService.confirmToken(token);
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException ex) {
-            SimpleResponseBody responseBody = SimpleResponseBody.builder(HttpStatus.BAD_REQUEST).setMessage(ex.getMessage()).build();
+            SimpleResponseBody responseBody = SimpleResponseBody.builder(HttpStatus.BAD_REQUEST).message(ex.getMessage()).build();
             return ResponseEntity.badRequest().body(responseBody);
         }
     }

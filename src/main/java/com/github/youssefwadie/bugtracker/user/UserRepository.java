@@ -12,10 +12,14 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.email = ?1")
     Optional<User> findByEmail(String email);
-    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = ?1")
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM User u WHERE u.email = ?1")
     boolean existsByEmail(String email);
 
     @Modifying
     @Query("UPDATE User u SET u.enabled = true")
     void enableUserById(Long userId);
+
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM User u WHERE u.id = ?1")
+    boolean existsById(Long id);
+
 }

@@ -3,10 +3,11 @@ package com.github.youssefwadie.bugtracker.user;
 import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
 import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
 import com.github.youssefwadie.bugtracker.user.service.UserValidatorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +33,10 @@ public class UserService {
      *
      * @param user the new user details
      * @return the confirmation token for the user email
-     * @throws ConstraintViolationException if the given user's email or password is invalid
+     * @throws ConstraintsViolationException if the given user's email or password is invalid
      */
     @Transactional
-    public String singUpUser(User user) throws ConstraintViolationException {
+    public String singUpUser(User user) throws ConstraintsViolationException {
         user.setRole(DEFAULT_USER_ROLE);
         final User savedUser = this.save(user);
         return generateConfirmationToken(savedUser.getId());
@@ -62,7 +63,7 @@ public class UserService {
     }
 
     @Transactional
-    public User save(User user) throws ConstraintViolationException {
+    public User save(User user) throws ConstraintsViolationException {
         validatorService.validateUser(user);
 
         if (user.getId() == null) {
@@ -83,4 +84,9 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+    public boolean existsAllByIds(Iterable<Long> ids) {
+        return Streamable.of(ids).stream().allMatch(userRepository::existsById);
+    }
+
 }

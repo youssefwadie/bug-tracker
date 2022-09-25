@@ -1,6 +1,6 @@
 package com.github.youssefwadie.bugtracker;
 
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -22,8 +22,8 @@ public class ExceptionHandlerController {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleConstraintViolationException(ConstraintViolationException ex) {
+    @ExceptionHandler(ConstraintsViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleConstraintsViolationException(ConstraintsViolationException ex) {
         final Map<String, Object> response = responseHeader(HttpStatus.BAD_REQUEST);
         response.put("invalidData", ex.getErrors());
         return ResponseEntity.badRequest().body(response);

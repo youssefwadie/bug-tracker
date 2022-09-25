@@ -4,7 +4,7 @@ import com.github.youssefwadie.bugtracker.email.EmailSender;
 import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
 import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import com.github.youssefwadie.bugtracker.user.UserService;
 import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class RegistrationService {
      *
      * @param registrationRequest registration details
      * @return the confirmation url for the user email
-     * @throws ConstraintViolationException if the given email or password (in registrationRequest) is invalid
+     * @throws ConstraintsViolationException if the given email or password (in registrationRequest) is invalid
      */
     public String register(RegistrationRequest registrationRequest) {
         final User newUser = new User();

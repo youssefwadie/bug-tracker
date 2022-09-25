@@ -44,12 +44,12 @@ public class SimpleResponseBody {
             this.timestamp = Instant.now();
         }
 
-        public Builder setMessage(String message) {
+        public Builder message(String message) {
             this.message = message;
             return this;
         }
 
-        public Builder setTimestamp(Instant timestamp) {
+        public Builder timestamp(Instant timestamp) {
             this.timestamp = timestamp;
             return this;
         }

@@ -56,7 +56,7 @@ public class JWTValidatorFilter extends OncePerRequestFilter {
                 log.error("Error while logging in: {}", e.getMessage());
                 SimpleResponseBody simpleResponseBody = SimpleResponseBody
                         .builder(HttpStatus.UNAUTHORIZED)
-                        .setMessage(e.getMessage()).build();
+                        .message(e.getMessage()).build();
 
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);

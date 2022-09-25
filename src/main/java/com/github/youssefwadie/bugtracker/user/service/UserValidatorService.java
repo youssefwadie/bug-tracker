@@ -1,7 +1,7 @@
 package com.github.youssefwadie.bugtracker.user.service;
 
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintViolationException;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import com.github.youssefwadie.bugtracker.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-// TODO: validate name
 @RequiredArgsConstructor
 @Service
 public class UserValidatorService {
@@ -70,7 +69,7 @@ public class UserValidatorService {
         return str == null || str.isBlank();
     }
 
-    public void validateUser(User user) throws ConstraintViolationException {
+    public void validateUser(User user) throws ConstraintsViolationException {
         final Map<String, String> errors = new HashMap<>();
         final String userEmail = user.getEmail();
         if (!isValidEmail(userEmail)) {
@@ -100,7 +99,7 @@ public class UserValidatorService {
         }
 
         if (!errors.isEmpty()) {
-            throw new ConstraintViolationException(errors);
+            throw new ConstraintsViolationException(errors);
         }
     }
 

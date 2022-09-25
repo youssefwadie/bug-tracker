@@ -37,7 +37,7 @@ public class UserAuthController {
         if (userByEmail.isEmpty()) {
             SimpleResponseBody responseBody = SimpleResponseBody
                     .builder(HttpStatus.BAD_REQUEST)
-                    .setMessage("Invalid email")
+                    .message("Invalid email")
                     .build();
             return ResponseEntity.badRequest().body(responseBody);
         }
@@ -47,7 +47,7 @@ public class UserAuthController {
         String confirmationToken = registrationService.resendConfirmationToken(loggedInUser);
         final SimpleResponseBody responseBody = SimpleResponseBody
                 .builder(HttpStatus.OK)
-                .setMessage("checkout your mail box").build();
+                .message("checkout your mail box").build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }

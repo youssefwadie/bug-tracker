@@ -3,15 +3,15 @@ package com.github.youssefwadie.bugtracker.security.exceptions;
 import java.util.Collections;
 import java.util.Map;
 
-public class ConstraintViolationException extends IllegalArgumentException {
+public class ConstraintsViolationException extends IllegalArgumentException {
 
     private final Map<String, String> errors;
 
-    public ConstraintViolationException() {
+    public ConstraintsViolationException() {
         this(Collections.emptyMap());
     }
 
-    public ConstraintViolationException(Map<String, String> errors) {
+    public ConstraintsViolationException(Map<String, String> errors) {
         this.errors = errors;
     }
 

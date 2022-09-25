@@ -28,17 +28,14 @@ public class Ticket {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
-    private Project project;
+    private Long projectId;
 
-    @ManyToOne
-    @JoinColumn(name = "assigned_user_id", referencedColumnName = "id", nullable = true)
-    private User assignedUser;
+    @JoinColumn(name = "assigned_developer_id", referencedColumnName = "id", nullable = true)
+    private Long assignedDeveloperId;
 
-    @ManyToOne
     @JoinColumn(name = "submitter_id", referencedColumnName = "id", nullable = false)
-    private User submitter;
+    private Long submitterId;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)

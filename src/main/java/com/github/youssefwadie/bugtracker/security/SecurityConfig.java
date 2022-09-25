@@ -50,6 +50,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.csrf().disable();
         http.authorizeRequests(auth -> {
             auth.antMatchers("/api/v1/admin/**").hasRole("ADMIN");
+            auth.antMatchers("/api/v1/projects/**").authenticated();
+        	auth.antMatchers("/api/v1/tickets/**").authenticated();
             auth.antMatchers("/api/v1/users/login").authenticated();
             auth.antMatchers("/api/v1/users/resend").permitAll();
             auth.antMatchers("/api/v1/register/**").permitAll();

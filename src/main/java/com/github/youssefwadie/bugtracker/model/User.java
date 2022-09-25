@@ -1,11 +1,12 @@
 package com.github.youssefwadie.bugtracker.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -15,6 +16,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    public User(Long id) {
+        this.id = id;
+    }
 
     @Column(name = "role", nullable = true)
     @Enumerated(EnumType.STRING)
