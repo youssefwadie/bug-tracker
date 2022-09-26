@@ -7,7 +7,6 @@ import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolati
 import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
 import com.github.youssefwadie.bugtracker.user.service.UserValidatorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +61,10 @@ public class UserService {
         return savedConfirmationToken.getToken();
     }
 
+    public boolean doesUserWorkOnProject(Long userId, Long projectId) {
+    	return userRepository.doesUserWorkOnProject(userId, projectId);
+    }
+    
     @Transactional
     public User save(User user) throws ConstraintsViolationException {
         validatorService.validateUser(user);
@@ -85,8 +88,26 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean existsAllByIds(Iterable<Long> ids) {
-        return Streamable.of(ids).stream().allMatch(userRepository::existsById);
+    public boolean existsAllByIds(List<Long> ids) {
+        return ids.stream().allMatch(userRepository::existsById);
     }
+    
+    public void addUsersToProjectTeamMembers(Long projectId, List<Long> userIds) {
+		boolean allTeamMembersExists = existsAllByIds(userIds);
+    	if (!allTeamMembersExists) {
+			throw new IllegalArgumentException("some or all users are unknown");
+		}
+		
+		for (Long userId : userIds) {
+			if (!doesUserWorkOnProject(userId, projectId)) {
+				addUserToProjectTeamMembers(userId, projectId);
+			}
+		}
+
+    }
+    
+	public void addUserToProjectTeamMembers(Long userId, Long projectId) {
+		userRepository.addUserToProjectTeamMembers(userId, projectId);
+	}
 
 }

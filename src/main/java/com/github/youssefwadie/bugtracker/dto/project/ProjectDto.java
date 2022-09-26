@@ -1,6 +1,8 @@
 package com.github.youssefwadie.bugtracker.dto.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.youssefwadie.bugtracker.dto.user.UserDto;
+
 import lombok.Data;
 
 import java.util.List;
@@ -12,5 +14,5 @@ public class ProjectDto {
     private String name;
     private String description;
 
-    private List<Long> teamMembers;
+    private List<UserDto> teamMembers;
 }

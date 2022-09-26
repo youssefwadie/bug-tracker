@@ -25,4 +25,12 @@ public class UserRepositoryTests {
         }
 //        assertThat(exists).isFalse();
     }
+    
+    @Test
+    void doesUserWorkOnProjectTest() {
+    	Long userId = 1L;
+    	Long projectId = 8L;
+    	boolean doesUserWorksOnProject = userRepository.doesUserWorkOnProject(userId, projectId);
+    	assertThat(doesUserWorksOnProject).isTrue();
+    }
 }

@@ -13,33 +13,39 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
-    private final ProjectRepository projectRepository;
-    private final ProjectValidatorService validatorService;
-    private final UserService userService;
+	private static final String PROJECT_NOT_FOUND_MSG = "No project with id %d is found";
 
-    public Optional<Project> findById(Long id) {
-        return projectRepository.findById(id);
-    }
+	private final ProjectRepository projectRepository;
+	private final ProjectValidatorService validatorService;
+	private final UserService userService;
 
-    public List<Project> findAll() {
-        return projectRepository.findAll();
-    }
+	public Optional<Project> findById(Long id) {
+		return projectRepository.findById(id);
+	}
 
-    public void addMemberToProject(Long projectId, List<Long> developerIds) {
+	public List<Project> findAll() {
+		return projectRepository.findAll();
+	}
 
-    }
+	public void addToProjectTeamMembers(Long projectId, List<Long> userIds) {
+		if (!projectRepository.existsById(projectId)) {
+			throw new ProjectNotFoundException(String.format(PROJECT_NOT_FOUND_MSG, projectId));
+		}
+		userService.addUsersToProjectTeamMembers(projectId, userIds);
+	}
 
-    @Transactional
-    public Project addProject(Project project) {
-        validatorService.validateProject(project);
-        List<Long> teamMembersIds = project.getTeamMembers().stream().map(User::getId).toList();
-        boolean allTeamMembersExists = userService.existsAllByIds(teamMembersIds);
-        if (!allTeamMembersExists) {
-            throw new IllegalArgumentException("some or all users are unknown");
-        }
+	@Transactional
+	public Project addProject(Project project) {
+		validatorService.validateProject(project);
+		if (project.getTeamMembers() != null) {
+			List<Long> teamMembersIds = project.getTeamMembers().stream().map(User::getId).toList();
+			boolean allTeamMembersExists = userService.existsAllByIds(teamMembersIds);
+			if (!allTeamMembersExists) {
+				throw new IllegalArgumentException("some or all users are unknown");
+			}
+		}
 
-        return projectRepository.save(project);
-    }
-
+		return projectRepository.save(project);
+	}
 
 }

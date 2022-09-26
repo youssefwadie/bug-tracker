@@ -21,5 +21,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM User u WHERE u.id = ?1")
     boolean existsById(Long id);
-
+    
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 'true' ELSE 'false' END FROM works_on WHERE user_id = ?1 AND project_id = ?2" , nativeQuery = true)
+	boolean doesUserWorkOnProject(Long userId, Long projectId);
+    
+    @Query(value = "INSERT INTO works_on (`project_id`,`user_id`) VALUES (?2, ?1)", nativeQuery = true)
+	void addUserToProjectTeamMembers(Long userId, Long projectId);
 }
