@@ -6,6 +6,8 @@ import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.server.Cookie;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -15,15 +17,25 @@ import static com.github.youssefwadie.bugtracker.security.SecurityConstants.*;
 
 @RequiredArgsConstructor
 @Service
-public class JwtService {
+public class AuthService {
     private final TokenProperties tokenProperties;
 
-    public User parseUser(String jwt) {
-        Assert.notNull(jwt, "jwt should not be null!");
+    public ResponseCookie generateAccessTokenCookie(final User user) {
+        Assert.notNull(user, "user should not be null!");
+        String token = generateAccessToken(user);
+        return accessTokenCookie(token, tokenProperties.getAccessTokenLifeTime());
+    }
+
+    public ResponseCookie removeAccessTokenCookie() {
+        return accessTokenCookie("", 0);
+    }
+
+    public User parseUser(final String accessToken) {
+        Assert.notNull(accessToken, "accessToken should not be null!");
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(this.tokenProperties.getSecretKey()).build()
-                .parseClaimsJws(jwt)
+                .parseClaimsJws(accessToken)
                 .getBody();
 
         Long id = claims.get(USER_ID_CLAIM_NAME, Long.class);
@@ -40,9 +52,7 @@ public class JwtService {
     }
 
 
-    public String generateAccessToken(final User user) {
-        Assert.notNull(user, "user must not be null!");
-
+    private String generateAccessToken(final User user) {
         Date now = new Date();
         Date accessTokenExpirationDate = new Date(now.getTime() + tokenProperties.getAccessTokenLifeTime());
         return Jwts.builder()
@@ -55,5 +65,16 @@ public class JwtService {
                 .setExpiration(accessTokenExpirationDate)
                 .signWith(tokenProperties.getSecretKey())
                 .compact();
+    }
+
+
+    private ResponseCookie accessTokenCookie(String token, long maxAge) {
+        return ResponseCookie.from(tokenProperties.getAccessTokenCookieName(), token)
+                .sameSite(Cookie.SameSite.LAX.attributeValue())
+                .secure(true)
+                .httpOnly(true)
+                .maxAge(maxAge)
+                .path("/api/v1")
+                .build();
     }
 }

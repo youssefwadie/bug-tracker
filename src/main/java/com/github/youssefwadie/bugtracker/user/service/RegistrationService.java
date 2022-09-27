@@ -5,7 +5,6 @@ import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
 import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-import com.github.youssefwadie.bugtracker.user.UserService;
 import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,11 +49,10 @@ public class RegistrationService {
         return confirmationToken;
     }
 
-    public String resendConfirmationToken(User user) {
+    public void resendConfirmationToken(User user) {
         String confirmationToken = userService.regenerateConfirmationCode(user.getId());
         String link = "http://localhost:8080/api/v1/register/confirm?token=%s".formatted(confirmationToken);
         emailSender.send("Confirm your email", buildEmail(link), user.getEmail());
-        return confirmationToken;
     }
 
     @Transactional

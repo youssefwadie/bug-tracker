@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserContextInterceptor implements AsyncHandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("setting user");
+        log.debug("setting user");
         SecurityContext context = SecurityContextHolder.getContext();
         if (context == null) return true;
 
@@ -37,7 +37,7 @@ public class UserContextInterceptor implements AsyncHandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("removing user");
+        log.debug("removing user");
         UserContextHolder.remove();
     }
 

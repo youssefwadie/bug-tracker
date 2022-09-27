@@ -1,17 +1,18 @@
-package com.github.youssefwadie.bugtracker.user.controllers;
+package com.github.youssefwadie.bugtracker.user.controller;
 
 import com.github.youssefwadie.bugtracker.dto.user.UserDto;
 import com.github.youssefwadie.bugtracker.dto.user.UserMapper;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
-import com.github.youssefwadie.bugtracker.user.UserService;
+import com.github.youssefwadie.bugtracker.security.UserContextHolder;
+import com.github.youssefwadie.bugtracker.security.service.AuthService;
+import com.github.youssefwadie.bugtracker.user.service.UserService;
 import com.github.youssefwadie.bugtracker.user.service.RegistrationService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
-import com.github.youssefwadie.bugtracker.security.UserContextHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -23,6 +24,8 @@ public class UserAuthController {
     private final UserMapper userMapper;
     private final RegistrationService registrationService;
     private final UserService userService;
+
+    private final AuthService authService;
 
     @PostMapping("login")
     public ResponseEntity<UserDto> login() {
@@ -44,7 +47,7 @@ public class UserAuthController {
 
         final User loggedInUser = userByEmail.get();
 
-        String confirmationToken = registrationService.resendConfirmationToken(loggedInUser);
+        registrationService.resendConfirmationToken(loggedInUser);
         final SimpleResponseBody responseBody = SimpleResponseBody
                 .builder(HttpStatus.OK)
                 .message("checkout your mail box").build();
@@ -52,8 +55,9 @@ public class UserAuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
-    private User getLoggedInUser() {
-        BugTrackerUserDetails loggedInPrincipal = (BugTrackerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return loggedInPrincipal.getUser();
+    @PostMapping("logout")
+    public ResponseEntity<String> logout() {
+        ResponseCookie cookie = authService.removeAccessTokenCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body("OK");
     }
 }

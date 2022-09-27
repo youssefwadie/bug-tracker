@@ -2,7 +2,7 @@ package com.github.youssefwadie.bugtracker.user.service;
 
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-import com.github.youssefwadie.bugtracker.user.UserRepository;
+import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;

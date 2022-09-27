@@ -1,11 +1,7 @@
 package com.github.youssefwadie.bugtracker.dto.ticket;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.github.youssefwadie.bugtracker.dto.annotations.JsonLocalDateTime;
 import com.github.youssefwadie.bugtracker.model.TicketPriority;
 import com.github.youssefwadie.bugtracker.model.TicketStatus;
 import com.github.youssefwadie.bugtracker.model.TicketType;
@@ -23,13 +19,17 @@ public class TicketDto {
     private String description;
     private Long project;
     private Long assignedDeveloper;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long submitter;
     private TicketType type;
     private TicketPriority priority;
     private TicketStatus status;
     
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonLocalDateTime
     private LocalDateTime createdAt;
+
+    @JsonLocalDateTime
+    private LocalDateTime updatedAt;
 
 }

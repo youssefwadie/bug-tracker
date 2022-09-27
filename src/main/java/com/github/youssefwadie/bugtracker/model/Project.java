@@ -14,14 +14,15 @@ import java.util.Collection;
 @Entity
 @Table(name = "projects")
 public class Project {
+    public Project(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    public Project(Long id) {
-        this.id = id;
-    }
 
     private String name;
 
@@ -33,6 +34,6 @@ public class Project {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Collection<User> teamMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "projectId")
+    @OneToMany(mappedBy = "projectId", fetch = FetchType.LAZY)
     private Collection<Ticket> tickets = new ArrayList<>();
 }

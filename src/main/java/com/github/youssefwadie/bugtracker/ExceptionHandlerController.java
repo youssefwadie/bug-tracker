@@ -42,6 +42,13 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        final Map<String, Object> response = responseHeader(HttpStatus.BAD_REQUEST);
+        response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     private Map<String, Object> responseHeader(HttpStatus httpStatus) {
         return new LinkedHashMap<>() {{
             put("timestamp", LocalDateTime.now().toString());

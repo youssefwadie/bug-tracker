@@ -2,7 +2,7 @@ package com.github.youssefwadie.bugtracker.admin;
 
 import com.github.youssefwadie.bugtracker.dto.user.UserDto;
 import com.github.youssefwadie.bugtracker.dto.user.UserMapper;
-import com.github.youssefwadie.bugtracker.user.UserService;
+import com.github.youssefwadie.bugtracker.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

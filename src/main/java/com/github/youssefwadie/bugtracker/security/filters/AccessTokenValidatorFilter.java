@@ -3,11 +3,10 @@ package com.github.youssefwadie.bugtracker.security.filters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.TokenProperties;
+import com.github.youssefwadie.bugtracker.security.service.AuthService;
 import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
-import com.github.youssefwadie.bugtracker.security.service.JwtService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,11 +25,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 @RequiredArgsConstructor
-@Slf4j
-public class JWTValidatorFilter extends OncePerRequestFilter {
+public class AccessTokenValidatorFilter extends OncePerRequestFilter {
 
+    private final AuthService authService;
     private final TokenProperties tokenProperties;
-    private final JwtService jwtService;
 
 
     @Override
@@ -46,14 +44,13 @@ public class JWTValidatorFilter extends OncePerRequestFilter {
         String jwt = accessCookie.getValue();
         if (jwt != null) {
             try {
-                User user = jwtService.parseUser(jwt);
+                User user = authService.parseUser(jwt);
                 BugTrackerUserDetails userDetails = new BugTrackerUserDetails(user);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
             } catch (Exception e) {
-                log.error("Error while logging in: {}", e.getMessage());
                 SimpleResponseBody simpleResponseBody = SimpleResponseBody
                         .builder(HttpStatus.UNAUTHORIZED)
                         .message(e.getMessage()).build();
@@ -80,16 +77,8 @@ public class JWTValidatorFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean hasAccessTokenCookie(Cookie[] cookies) {
-        if (cookies == null) return false;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(tokenProperties.getAccessTokenCookieName())) return true;
-        }
-        return false;
-    }
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !hasAccessTokenCookie(request.getCookies());
+        return getAccessTokenCookie(request.getCookies()) == null;
     }
 }

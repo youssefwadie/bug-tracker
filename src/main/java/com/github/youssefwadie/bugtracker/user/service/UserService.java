@@ -1,11 +1,11 @@
-package com.github.youssefwadie.bugtracker.user;
+package com.github.youssefwadie.bugtracker.user.service;
 
 import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
 import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
 import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
-import com.github.youssefwadie.bugtracker.user.service.UserValidatorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

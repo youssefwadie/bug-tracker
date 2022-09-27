@@ -2,7 +2,7 @@ package com.github.youssefwadie.bugtracker.security.service;
 
 
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.user.UserRepository;
+import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

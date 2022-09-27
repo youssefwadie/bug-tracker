@@ -1,10 +1,10 @@
 package com.github.youssefwadie.bugtracker.security;
 
-import com.github.youssefwadie.bugtracker.security.filters.JWTGeneratorFilter;
-import com.github.youssefwadie.bugtracker.security.filters.JWTValidatorFilter;
+import com.github.youssefwadie.bugtracker.security.filters.AccessTokenGeneratorFilter;
+import com.github.youssefwadie.bugtracker.security.filters.AccessTokenValidatorFilter;
 import com.github.youssefwadie.bugtracker.security.interceptors.UserContextInterceptor;
 import com.github.youssefwadie.bugtracker.security.service.BugTrackerAuthenticationEntryPoint;
-import com.github.youssefwadie.bugtracker.security.service.JwtService;
+import com.github.youssefwadie.bugtracker.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,7 +31,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     SecurityFilterChain filterChain(
             final HttpSecurity http,
             final BugTrackerAuthenticationEntryPoint authenticationEntryPoint,
-            final JwtService jwtService,
+            final AuthService authService,
             final TokenProperties tokenProperties
     ) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -59,17 +59,17 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         http.httpBasic().authenticationEntryPoint(authenticationEntryPoint);
 
-        http.addFilterBefore(jwtValidatorFilter(jwtService, tokenProperties), BasicAuthenticationFilter.class);
-        http.addFilterAfter(jwtGeneratorFilter(jwtService, tokenProperties), BasicAuthenticationFilter.class);
+        http.addFilterBefore(jwtValidatorFilter(authService, tokenProperties), BasicAuthenticationFilter.class);
+        http.addFilterAfter(jwtGeneratorFilter(authService), BasicAuthenticationFilter.class);
         return http.build();
     }
 
-    Filter jwtValidatorFilter(JwtService jwtService, TokenProperties tokenProperties) {
-        return new JWTValidatorFilter(tokenProperties, jwtService);
+    Filter jwtValidatorFilter(AuthService authService, TokenProperties tokenProperties) {
+        return new AccessTokenValidatorFilter(authService, tokenProperties);
     }
 
-    Filter jwtGeneratorFilter(JwtService jwtService, TokenProperties tokenProperties) {
-        return new JWTGeneratorFilter(tokenProperties, jwtService);
+    Filter jwtGeneratorFilter(AuthService authService) {
+        return new AccessTokenGeneratorFilter(authService);
     }
 
     @Bean

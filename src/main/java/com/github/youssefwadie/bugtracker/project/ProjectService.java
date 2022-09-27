@@ -2,7 +2,7 @@ package com.github.youssefwadie.bugtracker.project;
 
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.user.UserService;
+import com.github.youssefwadie.bugtracker.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.user.controllers;
+package com.github.youssefwadie.bugtracker.user.controller;
 
 import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
 import com.github.youssefwadie.bugtracker.user.service.RegistrationService;

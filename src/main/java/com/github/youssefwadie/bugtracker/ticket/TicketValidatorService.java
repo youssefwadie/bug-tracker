@@ -1,21 +1,32 @@
 package com.github.youssefwadie.bugtracker.ticket;
 
 import com.github.youssefwadie.bugtracker.model.Ticket;
+import com.github.youssefwadie.bugtracker.project.ProjectRepository;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class TicketValidatorService {
     private final static int MIN_TITLE_LENGTH = 10;
     private final static int MAX_TITLE_LENGTH = 255;
     private final static int MIN_DESCRIPTION_LENGTH = 10;
 
-    public static final String INVALID_TITLE_MSG = String.format("title must be at least %d characters and at most %d", MIN_TITLE_LENGTH, MAX_TITLE_LENGTH);
-    public static final String INVALID_DESCRIPTION_MSG = String.format("description must be at least %d characters", MIN_DESCRIPTION_LENGTH);
+    private static final String INVALID_TITLE_MSG = String.format("title must be at least %d characters and at most %d", MIN_TITLE_LENGTH, MAX_TITLE_LENGTH);
+    private static final String INVALID_DESCRIPTION_MSG = String.format("description must be at least %d characters", MIN_DESCRIPTION_LENGTH);
+
+//    private static final String INVALID_TYPE_MSG = String.format("unknown type. must be one of: %s", Arrays.toString(TicketType.values()));
+//    private static final String INVALID_PRIORITY_MSG = String.format("unknown priority. must be one of: %s", Arrays.toString(TicketPriority.values()));
+//    private static final String INVALID_STATUS_MSG = String.format("unknown status. must be one of: %s", Arrays.toString(TicketStatus.values()));
+    private static final String INVALID_PROJECT_MSG = "Invalid project number";
+    private static final String MISSING_PROPERTY_MSG = "cannot be empty";
+
+    private final ProjectRepository projectRepository;
 
     public void validateTicket(Ticket ticket) throws ConstraintsViolationException {
         Assert.notNull(ticket, "ticket cannot be null");
@@ -27,7 +38,26 @@ public class TicketValidatorService {
             errors.put("description", INVALID_DESCRIPTION_MSG);
         }
         if (ticket.getSubmitterId() == null) {
-            errors.put("submitter", "cannot be empty");
+            errors.put("submitter", MISSING_PROPERTY_MSG);
+        }
+        if (ticket.getType() == null) {
+            errors.put("type", MISSING_PROPERTY_MSG);
+        }
+        if (ticket.getPriority() == null) {
+            errors.put("priority", MISSING_PROPERTY_MSG);
+        }
+
+        if (ticket.getStatus() == null) {
+            errors.put("status", MISSING_PROPERTY_MSG);
+        }
+
+        if (ticket.getProjectId() == null) {
+            errors.put("project", MISSING_PROPERTY_MSG);
+        } else {
+            boolean exists = projectRepository.existsById(ticket.getProjectId());
+            if (!exists) {
+                errors.put("project", INVALID_PROJECT_MSG);
+            }
         }
 
         if (!errors.isEmpty()) {

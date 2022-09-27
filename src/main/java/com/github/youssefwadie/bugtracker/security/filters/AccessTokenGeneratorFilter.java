@@ -1,10 +1,8 @@
 package com.github.youssefwadie.bugtracker.security.filters;
 
+import com.github.youssefwadie.bugtracker.security.service.AuthService;
 import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
-import com.github.youssefwadie.bugtracker.security.service.JwtService;
-import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -18,9 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-public class JWTGeneratorFilter extends OncePerRequestFilter {
-    private final TokenProperties tokenProperties;
-    private final JwtService jwtService;
+public class AccessTokenGeneratorFilter extends OncePerRequestFilter {
+    private final AuthService authService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -34,15 +31,8 @@ public class JWTGeneratorFilter extends OncePerRequestFilter {
 
         BugTrackerUserDetails userDetails = (BugTrackerUserDetails) (authentication.getPrincipal());
 
-        String accessToken = jwtService.generateAccessToken(userDetails.getUser());
-        ResponseCookie cookie = ResponseCookie.from(tokenProperties.getAccessTokenCookieName(), accessToken)
-                .sameSite(Cookie.SameSite.LAX.attributeValue())
-                .secure(true)
-                .httpOnly(true)
-                .maxAge(tokenProperties.getAccessTokenLifeTime())
-                .path("/api/v1")
-                .build();
 
+        ResponseCookie cookie = authService.generateAccessTokenCookie(userDetails.getUser());
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         filterChain.doFilter(request, response);
 

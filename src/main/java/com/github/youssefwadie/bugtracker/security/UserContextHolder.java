@@ -9,17 +9,17 @@ import com.github.youssefwadie.bugtracker.model.User;
  */
 
 public final class UserContextHolder {
-    private final static ThreadLocal<User> holder = new ThreadLocal<>();
+    private final static ThreadLocal<User> USER_HOLDER = new ThreadLocal<>();
 
     public static void set(User user) {
-        holder.set(user);
+        USER_HOLDER.set(user);
     }
 
     public static User get() {
-        return holder.get();
+        return USER_HOLDER.get();
     }
 
     public static void remove() {
-        holder.remove();
+        USER_HOLDER.remove();
     }
 }
