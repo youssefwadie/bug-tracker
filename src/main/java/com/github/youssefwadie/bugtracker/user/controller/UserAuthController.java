@@ -1,17 +1,5 @@
 package com.github.youssefwadie.bugtracker.user.controller;
 
-import java.util.Optional;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.github.youssefwadie.bugtracker.dto.user.UserDto;
 import com.github.youssefwadie.bugtracker.dto.user.UserMapper;
 import com.github.youssefwadie.bugtracker.model.User;
@@ -20,8 +8,14 @@ import com.github.youssefwadie.bugtracker.security.service.AuthService;
 import com.github.youssefwadie.bugtracker.user.service.RegistrationService;
 import com.github.youssefwadie.bugtracker.user.service.UserService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,21 +33,32 @@ public class UserAuthController {
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
-
+    @GetMapping(value= "logged-in")
+    public ResponseEntity<Boolean> isLoggdIn() {
+        boolean loggedIn = UserContextHolder.get() != null;
+        return ResponseEntity.ok(loggedIn);
+    }
+    
     @GetMapping(value = "resend", produces = "application/json")
     public ResponseEntity<?> resendConfirmationToken(@RequestParam("email") String email) {
-        Optional<User> userByEmail = userService.findByEmail(email);
-        if (userByEmail.isEmpty()) {
+        Optional<User> userByEmailOptional = userService.findByEmail(email);
+        if (userByEmailOptional.isEmpty()) {
             SimpleResponseBody responseBody = SimpleResponseBody
                     .builder(HttpStatus.BAD_REQUEST)
-                    .message("Invalid email")
+                    .message("invalid email")
                     .build();
             return ResponseEntity.badRequest().body(responseBody);
         }
 
-        final User loggedInUser = userByEmail.get();
+        final User userByEmail = userByEmailOptional.get();
+        if(userByEmail.isEmailVerified()) {
+            final SimpleResponseBody responseBody = SimpleResponseBody
+                .builder(HttpStatus.OK)
+                .message("already confirmed").build();
 
-        registrationService.resendConfirmationToken(loggedInUser);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
+        }
+        registrationService.resendConfirmationToken(userByEmail);
         final SimpleResponseBody responseBody = SimpleResponseBody
                 .builder(HttpStatus.OK)
                 .message("checkout your mail box").build();

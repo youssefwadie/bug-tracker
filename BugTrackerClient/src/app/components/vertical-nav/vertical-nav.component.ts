@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {faComputer, faTicket, faToolbox} from "@fortawesome/free-solid-svg-icons";
 import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-vertical-nav',
@@ -13,13 +14,22 @@ export class VerticalNavComponent implements OnInit {
   faToolbox = faToolbox;
 
   @Input() active: string;
-  constructor(private router: Router) { }
+
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
   ngOnInit(): void {
   }
 
   logout(): void {
-    console.log('logging out...');
+    this.authService.logout().subscribe({
+        next: () => {
+          this.router.navigate(['login']);
+        }, error: () => {
+          this.router.navigate(['login']);
+        }
+      }
+    );
   }
 
   navigateToAdministration() {

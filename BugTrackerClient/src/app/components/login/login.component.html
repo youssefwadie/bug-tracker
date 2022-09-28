@@ -27,6 +27,11 @@
         required
         pattern=".{4,}"
       />
+
+      <div *ngIf="infoMessage" class="alert alert-info">
+        {{ infoMessage }}
+      </div>
+
       <div *ngIf="!validLogin" class="alert alert-danger">
         {{ errorMessage }}
       </div>

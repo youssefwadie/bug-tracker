@@ -1,18 +1,10 @@
 package com.github.youssefwadie.bugtracker.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
@@ -43,7 +35,8 @@ public class User {
 
 	private String password;
 
-	private boolean enabled;
+	@Column(name = "email_verified")
+	private boolean emailVerified;
 
 	@Transient
 	public String getFullName() {

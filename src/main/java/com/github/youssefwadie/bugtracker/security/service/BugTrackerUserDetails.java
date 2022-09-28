@@ -1,16 +1,14 @@
 package com.github.youssefwadie.bugtracker.security.service;
 
-import java.util.Collection;
-import java.util.Collections;
-
+import com.github.youssefwadie.bugtracker.model.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.github.youssefwadie.bugtracker.model.User;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @RequiredArgsConstructor
@@ -50,6 +48,10 @@ public class BugTrackerUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return true;
+    }
+
+    public boolean isEmailVerified() {
+        return user.isEmailVerified();
     }
 }

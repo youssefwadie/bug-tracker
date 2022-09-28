@@ -1,14 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserRegistration} from "../../model/UserRegistration";
+import {HttpErrorResponse} from "@angular/common/http";
+import {RegistrationService} from "../../services/registration.service";
+import {InvalidDataResponse} from "../../model/ResponseBody";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit {
 
   private emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+(\.[a-z]{2,4})+$/g;
   firstName = '';
@@ -19,9 +21,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   validRegistration = true;
   errorMessage = '';
-  private registrationSubscription: Subscription;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private registrationService: RegistrationService) {
   }
 
 
@@ -30,17 +31,30 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   onRegister(): void {
     this.validRegistration = this.validFormData();
-    console.log(this.validRegistration);
-    if (this.validRegistration) {
-      const registration: UserRegistration = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        password: this.password
-      };
-      console.log('sending...');
-      console.log(registration);
+    if (!this.validRegistration) {
+      return;
     }
+
+    const registration: UserRegistration = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      password: this.password
+    };
+    this.registrationService.register(registration).subscribe({
+      next: next => {
+        this.router.navigate(['login'], {state: [next.message]});
+      }, error: (err: HttpErrorResponse) => {
+        const response = err.error as InvalidDataResponse;
+        const firstError = Object.keys(response.invalidData)[0] as string;
+        const firstErrorDescription = Object.values(response.invalidData)[0] as string;
+        if (firstError === 'email') {
+          this.setErrorMessage(`${firstError} is ${firstErrorDescription}, please try a different email.`);
+        } else {
+          this.setErrorMessage(`${firstError}: ${firstErrorDescription}.`);
+        }
+      }
+    });
   }
 
   public login(): void {
@@ -76,12 +90,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private setErrorMessage(errorMessage: string): void {
     this.validRegistration = false;
     this.errorMessage = errorMessage;
-  }
-
-  ngOnDestroy(): void {
-    if (this.registrationSubscription != null) {
-      this.registrationSubscription.unsubscribe();
-    }
   }
 
 }

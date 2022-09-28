@@ -64,7 +64,7 @@
              pattern=".{8,}"/>
 
       <div *ngIf="!validRegistration" class="alert alert-danger">
-        {{errorMessage}}
+        <pre style="white-space: pre-wrap;">{{errorMessage}}</pre>
       </div>
 
       <div class="text-center mt-3 mb-2">

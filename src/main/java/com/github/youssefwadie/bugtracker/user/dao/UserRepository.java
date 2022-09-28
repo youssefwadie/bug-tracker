@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     @Modifying
-    @Query("UPDATE User u SET u.enabled = true")
+    @Query("UPDATE User u SET u.emailVerified = true")
     void enableUserById(Long userId);
 
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM User u WHERE u.id = ?1")
