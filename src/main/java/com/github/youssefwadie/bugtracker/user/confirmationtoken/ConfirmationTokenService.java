@@ -1,10 +1,12 @@
 package com.github.youssefwadie.bugtracker.user.confirmationtoken;
 
-import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
+
+import lombok.RequiredArgsConstructor;
 
 
 @RequiredArgsConstructor

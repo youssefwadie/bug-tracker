@@ -1,13 +1,15 @@
 package com.github.youssefwadie.bugtracker.security;
 
-import io.jsonwebtoken.security.Keys;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import java.nio.charset.StandardCharsets;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

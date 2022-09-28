@@ -1,17 +1,19 @@
 package com.github.youssefwadie.bugtracker.user.service;
 
+import java.time.LocalDateTime;
+import java.util.regex.Pattern;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.github.youssefwadie.bugtracker.email.EmailSender;
 import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
 import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.regex.Pattern;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service

@@ -1,17 +1,19 @@
 package com.github.youssefwadie.bugtracker.security.interceptors;
 
-import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.UserContextHolder;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.UserContextHolder;
+import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Sets and removes the logged-in {@link User} on the current execution thread.

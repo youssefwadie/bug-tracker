@@ -1,10 +1,11 @@
 package com.github.youssefwadie.bugtracker.util;
 
 
-import lombok.Getter;
+import java.time.Instant;
+
 import org.springframework.http.HttpStatus;
 
-import java.time.Instant;
+import lombok.Getter;
 
 @Getter
 public class SimpleResponseBody {

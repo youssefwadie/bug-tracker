@@ -1,15 +1,12 @@
 package com.github.youssefwadie.bugtracker.security;
 
-import com.github.youssefwadie.bugtracker.security.filters.AccessTokenGeneratorFilter;
-import com.github.youssefwadie.bugtracker.security.filters.AccessTokenValidatorFilter;
-import com.github.youssefwadie.bugtracker.security.interceptors.UserContextInterceptor;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerAuthenticationEntryPoint;
-import com.github.youssefwadie.bugtracker.security.service.AuthService;
-import lombok.RequiredArgsConstructor;
+import javax.servlet.Filter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,7 +16,13 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.servlet.Filter;
+import com.github.youssefwadie.bugtracker.security.filters.AccessTokenGeneratorFilter;
+import com.github.youssefwadie.bugtracker.security.filters.AccessTokenValidatorFilter;
+import com.github.youssefwadie.bugtracker.security.interceptors.UserContextInterceptor;
+import com.github.youssefwadie.bugtracker.security.service.AuthService;
+import com.github.youssefwadie.bugtracker.security.service.BugTrackerAuthenticationEntryPoint;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Configuration
@@ -55,6 +58,7 @@ public class SecurityConfig implements WebMvcConfigurer {
             auth.antMatchers("/api/v1/users/login").authenticated();
             auth.antMatchers("/api/v1/users/resend").permitAll();
             auth.antMatchers("/api/v1/register/**").permitAll();
+            auth.antMatchers(HttpMethod.GET, "/actuator/**").permitAll();
         });
 
         http.httpBasic().authenticationEntryPoint(authenticationEntryPoint);

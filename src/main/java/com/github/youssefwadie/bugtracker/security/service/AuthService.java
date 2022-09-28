@@ -1,19 +1,23 @@
 package com.github.youssefwadie.bugtracker.security.service;
 
-import com.github.youssefwadie.bugtracker.model.Role;
-import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.TokenProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
+import static com.github.youssefwadie.bugtracker.security.SecurityConstants.USER_ID_CLAIM_NAME;
+import static com.github.youssefwadie.bugtracker.security.SecurityConstants.USER_NAME_CLAIM_NAME;
+import static com.github.youssefwadie.bugtracker.security.SecurityConstants.USER_ROLES_CLAIM_NAME;
+
+import java.util.Date;
+
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.Date;
+import com.github.youssefwadie.bugtracker.model.Role;
+import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.TokenProperties;
 
-import static com.github.youssefwadie.bugtracker.security.SecurityConstants.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service

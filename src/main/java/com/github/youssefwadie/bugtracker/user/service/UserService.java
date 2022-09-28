@@ -1,20 +1,22 @@
 package com.github.youssefwadie.bugtracker.user.service;
 
-import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
-import com.github.youssefwadie.bugtracker.model.Role;
-import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
-import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
+import com.github.youssefwadie.bugtracker.model.Role;
+import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
+import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service

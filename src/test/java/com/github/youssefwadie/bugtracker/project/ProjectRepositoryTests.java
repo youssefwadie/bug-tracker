@@ -1,24 +1,25 @@
 package com.github.youssefwadie.bugtracker.project;
 
 
-import com.github.youssefwadie.bugtracker.model.Project;
-import com.github.youssefwadie.bugtracker.model.User;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import java.util.Optional;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Optional;
-import java.util.Set;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import com.github.youssefwadie.bugtracker.model.Project;
+import com.github.youssefwadie.bugtracker.model.User;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ProjectRepositoryTests {
     @Autowired
     ProjectRepository projectRepository;
-
+    
     @Test
     void findByIdWithTeamMembers() {
         Long projectId = 1L;

@@ -1,19 +1,22 @@
 package com.github.youssefwadie.bugtracker.security.filters;
 
-import com.github.youssefwadie.bugtracker.security.service.AuthService;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import com.github.youssefwadie.bugtracker.security.service.AuthService;
+import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AccessTokenGeneratorFilter extends OncePerRequestFilter {

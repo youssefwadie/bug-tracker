@@ -1,12 +1,22 @@
 package com.github.youssefwadie.bugtracker.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 @NoArgsConstructor
 @Getter
@@ -32,8 +42,8 @@ public class Project {
     @JoinTable(name = "works_on",
             joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Collection<User> teamMembers = new ArrayList<>();
+    private Set<User> teamMembers = new HashSet<>();
 
     @OneToMany(mappedBy = "projectId", fetch = FetchType.LAZY)
-    private Collection<Ticket> tickets = new ArrayList<>();
+    private Set<Ticket> tickets = new HashSet<>();
 }

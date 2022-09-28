@@ -1,12 +1,13 @@
 package com.github.youssefwadie.bugtracker.dto.user;
 
 
-import com.github.youssefwadie.bugtracker.model.User;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.github.youssefwadie.bugtracker.model.User;
 
 @Mapper
 @Component

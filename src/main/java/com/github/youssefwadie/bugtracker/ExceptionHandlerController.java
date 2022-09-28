@@ -1,6 +1,9 @@
 package com.github.youssefwadie.bugtracker;
 
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -8,9 +11,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {

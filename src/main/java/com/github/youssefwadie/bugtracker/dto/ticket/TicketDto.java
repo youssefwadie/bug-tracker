@@ -1,13 +1,14 @@
 package com.github.youssefwadie.bugtracker.dto.ticket;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.youssefwadie.bugtracker.dto.annotations.JsonLocalDateTime;
 import com.github.youssefwadie.bugtracker.model.TicketPriority;
 import com.github.youssefwadie.bugtracker.model.TicketStatus;
 import com.github.youssefwadie.bugtracker.model.TicketType;
-import lombok.Data;
 
-import java.time.LocalDateTime;
+import lombok.Data;
 
 
 @Data

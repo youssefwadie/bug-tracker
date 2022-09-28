@@ -1,12 +1,14 @@
 package com.github.youssefwadie.bugtracker.security.filters;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.TokenProperties;
-import com.github.youssefwadie.bugtracker.security.service.AuthService;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
-import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,13 +18,14 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.TokenProperties;
+import com.github.youssefwadie.bugtracker.security.service.AuthService;
+import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
+import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AccessTokenValidatorFilter extends OncePerRequestFilter {

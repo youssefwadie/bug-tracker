@@ -1,12 +1,13 @@
 package com.github.youssefwadie.bugtracker.user.confirmationtoken;
 
-import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
 
 @Repository
 public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, Long> {

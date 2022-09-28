@@ -1,17 +1,19 @@
 package com.github.youssefwadie.bugtracker.project;
 
-import com.github.youssefwadie.bugtracker.dto.project.ProjectDto;
-import com.github.youssefwadie.bugtracker.dto.project.ProjectMapper;
-import com.github.youssefwadie.bugtracker.model.Project;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.github.youssefwadie.bugtracker.dto.project.ProjectDto;
+import com.github.youssefwadie.bugtracker.dto.project.ProjectMapper;
+import com.github.youssefwadie.bugtracker.model.Project;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
