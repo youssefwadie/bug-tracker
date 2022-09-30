@@ -1,6 +1,7 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Ticket} from "../../model/Ticket";
 import {TicketService} from "../../services/ticket.service";
+import {ObjectUnsubscribedError, Observable} from "rxjs";
 
 @Component({
   selector: 'app-tickets',
@@ -9,15 +10,29 @@ import {TicketService} from "../../services/ticket.service";
 })
 export class TicketsComponent implements OnInit {
   page: number = 1;
-
   tickets = new Array<Ticket>();
+  ticketsCount = 0;
 
-  constructor(private ticketService: TicketService) {}
+  constructor(private ticketService: TicketService) {
+  }
 
   ngOnInit(): void {
+    this.ticketService.getCount().subscribe(next => {
+      this.ticketsCount = next;
+    });
+    this.ticketService.listByPage(1).subscribe({
+      next: tickets => {
+        this.tickets = tickets;
+      }
+    });
   }
 
   onPageChange(): void {
-    console.log(`page number = ${this.page}`)
+    this.ticketService.listByPage(this.page).subscribe({
+      next: tickets => {
+        this.tickets = tickets;
+      }
+    })
   }
+
 }

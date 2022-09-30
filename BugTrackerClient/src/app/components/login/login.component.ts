@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   forgotPassword(): void {
-    console.log('forgot password');
+    this.router.navigate(['reset'])
   }
 
   register(): void {

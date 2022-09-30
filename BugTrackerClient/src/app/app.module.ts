@@ -10,13 +10,25 @@ import {LoginComponent} from './components/login/login.component';
 import {FormsModule} from '@angular/forms';
 import {RegisterComponent} from './components/register/register.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
-import {VerticalNavComponent} from './components/vertical-nav/vertical-nav.component';
+import {NavbarComponent} from './components/navbar/navbar.component';
 import {TicketsComponent} from './components/tickets/tickets.component';
-import {HomeComponent} from './components/home/home.component';
-import { VerifyEmailComponent } from './components/login/verify-email/verify-email.component';
+import {ResetPasswordComponent} from './components/login/reset-password/reset-password.component';
+import {LocaleDatePipe} from "./pipes/locale-date.pipe";
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent, DashboardComponent, VerticalNavComponent, TicketsComponent, HomeComponent, VerifyEmailComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+    DashboardComponent,
+    NavbarComponent,
+    TicketsComponent,
+    ResetPasswordComponent,
+    LocaleDatePipe,
+    HomeComponent
+  ],
+
   imports: [
     BrowserModule,
     FormsModule,

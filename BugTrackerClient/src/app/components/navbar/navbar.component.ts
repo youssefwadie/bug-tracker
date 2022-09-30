@@ -1,17 +1,18 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {faComputer, faTicket, faToolbox} from "@fortawesome/free-solid-svg-icons";
+import {faComputer, faTicket, faToolbox, faUserShield, faUsersRectangle} from "@fortawesome/free-solid-svg-icons";
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 
 @Component({
-  selector: 'app-vertical-nav',
-  templateUrl: './vertical-nav.component.html',
-  styleUrls: ['./vertical-nav.component.css']
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css']
 })
-export class VerticalNavComponent implements OnInit {
+export class NavbarComponent implements OnInit {
   faComputer = faComputer;
   faTicket = faTicket;
-  faToolbox = faToolbox;
+  faUserShield = faUserShield;
+  faUsersRectangle = faUsersRectangle
 
   @Input() active: string;
 
@@ -33,14 +34,18 @@ export class VerticalNavComponent implements OnInit {
   }
 
   navigateToAdministration() {
-    this.router.navigate(['administration'])
+    this.router.navigate(['administration']);
   }
 
   navigateToTickets() {
-    this.router.navigate(['tickets'])
+    this.router.navigate(['tickets']);
   }
 
   navigateToDashboard() {
     this.router.navigate(['dashboard']);
+  }
+
+  navigateToProjects() {
+
   }
 }

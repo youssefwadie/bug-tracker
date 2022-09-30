@@ -4,16 +4,13 @@
   display: inline-block;
 }
 
-h2 {
-  font-size: 12px;
+.strike-through {
   color: #96999e;
-  text-align: center;
   position: relative;
   z-index: 2;
-
 }
 
-h2:after {
+.strike-through:after {
   content: "";
   position: absolute;
   top: 50%;

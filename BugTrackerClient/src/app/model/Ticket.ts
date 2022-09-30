@@ -1,4 +1,5 @@
 export class Ticket {
+  id: number;
   title: string;
   description: string;
   createdAt: Date;
@@ -7,5 +8,4 @@ export class Ticket {
   type: string;
   priority: string;
   status: string;
-
 }

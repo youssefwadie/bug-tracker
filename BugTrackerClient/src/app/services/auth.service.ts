@@ -40,9 +40,7 @@ export class AuthService {
   }
 
   resendVerificationToken(email: string): Observable<SimpleResponse> {
-    return this.http.get<SimpleResponse>(`${environment.rootUrl}/${this.API_RESEND_VERIFICATION_CODE_PATH}`, {
-      params: {email}, observe: 'body'
-    });
+    return this.http.post<SimpleResponse>(`${environment.rootUrl}/${this.API_RESEND_VERIFICATION_CODE_PATH}`, {email});
   }
 
 }

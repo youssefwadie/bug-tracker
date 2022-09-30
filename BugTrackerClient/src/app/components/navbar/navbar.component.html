@@ -1,0 +1,46 @@
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+  <li ngbNavItem="dashboard">
+    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToDashboard()">
+      <fa-icon [icon]="faComputer" class="me-1"></fa-icon>
+      <span>Dashboard</span>
+    </a>
+    <ng-template ngbNavContent>
+      <app-dashboard></app-dashboard>
+    </ng-template>
+  </li>
+  <li ngbNavItem="projects" class="nav-item">
+    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToProjects()">
+      <fa-icon [icon]="faUsersRectangle" class="me-1"></fa-icon>
+      <span>Projects</span>
+    </a>
+    <ng-template ngbNavContent>
+      <p>Projects section</p>
+    </ng-template>
+  </li>
+  <li ngbNavItem="tickets" class="nav-item">
+    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToTickets()">
+      <fa-icon [icon]="faTicket" class="me-1"></fa-icon>
+      <span>Tickets</span>
+    </a>
+    <ng-template ngbNavContent>
+      <app-tickets></app-tickets>
+    </ng-template>
+  </li>
+  <li ngbNavItem="administration" class="nav-item">
+    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToAdministration()">
+      <fa-icon [icon]="faUserShield" class="me-1"></fa-icon>
+      <span>Administration</span>
+    </a>
+    <ng-template ngbNavContent>
+      <p>Administration Section</p>
+    </ng-template>
+  </li>
+
+  <li ngbNavItem="logout" class="nav-item ms-auto">
+    <a ngbNavLink class="text-center border-0">
+      <button class="btn btn-sm btn-outline-danger" (click)="logout()">Logout</button>
+    </a>
+  </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

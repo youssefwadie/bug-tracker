@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="table table-light table-striped table-bordered">
   <thead>
   <tr>
     <th scope="col">Title</th>
@@ -8,7 +8,6 @@
     <th scope="col">Ticket Priority</th>
     <th scope="col">Ticket Status</th>
     <th scope="col">Created At</th>
-    <th scope="col"></th>
   </tr>
   </thead>
   <tbody>
@@ -19,12 +18,11 @@
     <td>{{ ticket.type }}</td>
     <td>{{ ticket.priority }}</td>
     <td>{{ ticket.status }}</td>
-    <td>{{ ticket.createdAt }}</td>
-
+    <td>{{ ticket.createdAt | localedate }}</td>
   </tr>
   </tbody>
 </table>
 <div class="d-flex justify-content-between p-2">
-  <ngb-pagination [collectionSize]="120" [(page)]="page" [maxSize]="5" (pageChange)="onPageChange()"
+  <ngb-pagination [collectionSize]="ticketsCount" [(page)]="page" [maxSize]="5" (pageChange)="onPageChange()"
                   [boundaryLinks]="true"></ngb-pagination>
 </div>

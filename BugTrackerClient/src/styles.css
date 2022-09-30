@@ -2,7 +2,18 @@
 a {
   cursor: pointer;
 }
+
 .logo {
   max-width: 35px;
   min-width: 35px;
+}
+
+.form-box {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.08);
+}
+
+.form-title {
+  border-bottom: 1px solid rgba(192, 192, 192, 0.5);
 }

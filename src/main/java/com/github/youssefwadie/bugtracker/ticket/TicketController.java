@@ -32,13 +32,21 @@ public class TicketController {
 
     private final TicketMapper ticketMapper;
 
+    // TODO: delete -- just for testing
     @GetMapping("")
     public ResponseEntity<List<TicketDto>> getAllTickets() {
         User loggedInUser = UserContextHolder.get();
-        List<Ticket> usersTickets = ticketService.findAllBySubmittedUserId(loggedInUser.getId());
+        List<Ticket> usersTickets = ticketService.findAllBySubmitterId(loggedInUser.getId());
         return ResponseEntity.ok(ticketMapper.modelsToDtos(usersTickets));
     }
-
+    
+    @GetMapping("/page/{pageNumber:\\d+}")
+    public ResponseEntity<List<TicketDto>> getTicketsPageAfter(@PathVariable("pageNumber") Integer pageNumber) {
+        User loggedInUser = UserContextHolder.get();
+    	List<Ticket> tickets = ticketService.listByPage(loggedInUser.getId(), pageNumber);
+    	return ResponseEntity.ok(ticketMapper.modelsToDtos(tickets));
+    }
+    
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Ticket> createTicket(@RequestBody TicketDto newTicket) throws ConstraintsViolationException, URISyntaxException {
         newTicket.setSubmitter(UserContextHolder.get().getId());
@@ -66,5 +74,12 @@ public class TicketController {
         Ticket savedTicket = ticketService.update(ticket);
         return ResponseEntity.ok(ticketMapper.modelToDto(savedTicket));
     }
-
+    
+    @GetMapping("/count")
+    public ResponseEntity<Long> getTicketsCount() {
+    	User loggedInUser = UserContextHolder.get();
+    	return ResponseEntity.ok(ticketService.countBySubmitterId(loggedInUser.getId()));
+    }
+    
+    
 }

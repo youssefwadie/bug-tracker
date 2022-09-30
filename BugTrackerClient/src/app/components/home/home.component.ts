@@ -7,13 +7,13 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
   active: string = 'dashboard';
 
   constructor(private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    console.log('home...');
     this.setCurrentPage();
   }
 
@@ -21,8 +21,12 @@ export class HomeComponent implements OnInit {
   private setCurrentPage(): void {
     const currentPath = this.route.snapshot.url[0]?.path;
     if (currentPath == null) return;
-    if (currentPath === "dashboard" || currentPath === "tickets" || currentPath === "administration") {
+    if (currentPath === "dashboard"
+      || currentPath === "tickets"
+      || currentPath === "administration"
+      || currentPath === "projects") {
       this.active = currentPath;
+      console.log(this.active);
     }
   }
 
