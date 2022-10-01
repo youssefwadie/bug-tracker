@@ -11,10 +11,14 @@ import {FormsModule} from '@angular/forms';
 import {RegisterComponent} from './components/register/register.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {NavbarComponent} from './components/navbar/navbar.component';
-import {TicketsComponent} from './components/tickets/tickets.component';
+import {TicketListComponent} from './components/ticket-list/ticket.list.component';
 import {ResetPasswordComponent} from './components/login/reset-password/reset-password.component';
 import {LocaleDatePipe} from "./pipes/locale-date.pipe";
 import { HomeComponent } from './components/home/home.component';
+import { ProjectListComponent } from './components/project-list/project.list.component';
+import {NgxChartsModule} from "@swimlane/ngx-charts";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { ChartComponent } from './components/dashboard/chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -23,10 +27,12 @@ import { HomeComponent } from './components/home/home.component';
     RegisterComponent,
     DashboardComponent,
     NavbarComponent,
-    TicketsComponent,
+    TicketListComponent,
     ResetPasswordComponent,
     LocaleDatePipe,
-    HomeComponent
+    HomeComponent,
+    ProjectListComponent,
+    ChartComponent
   ],
 
   imports: [
@@ -36,6 +42,8 @@ import { HomeComponent } from './components/home/home.component';
     AppRoutingModule,
     NgbModule,
     FontAwesomeModule,
+    NgxChartsModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

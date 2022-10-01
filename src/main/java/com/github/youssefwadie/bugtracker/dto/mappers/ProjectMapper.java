@@ -1,16 +1,18 @@
-package com.github.youssefwadie.bugtracker.dto.project;
+package com.github.youssefwadie.bugtracker.dto.mappers;
 
 import java.util.List;
 
+import com.github.youssefwadie.bugtracker.dto.model.ProjectDto;
+import com.github.youssefwadie.bugtracker.dto.model.UserDto;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 import com.github.youssefwadie.bugtracker.model.Project;
 
-@Mapper(imports = com.github.youssefwadie.bugtracker.dto.user.UserDto.class,
+@Mapper(imports = UserDto.class,
         uses = {
-                com.github.youssefwadie.bugtracker.dto.user.UserMapper.class,
-                com.github.youssefwadie.bugtracker.dto.ticket.TicketMapper.class
+                UserMapper.class,
+                TicketMapper.class
         }
 )
 @Component

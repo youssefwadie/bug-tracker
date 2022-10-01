@@ -44,6 +44,6 @@ public class Project {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> teamMembers = new HashSet<>();
 
-    @OneToMany(mappedBy = "projectId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private Set<Ticket> tickets = new HashSet<>();
 }

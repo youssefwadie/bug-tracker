@@ -15,6 +15,11 @@ public class ConstraintsViolationException extends IllegalArgumentException {
         this.errors = errors;
     }
 
+    public ConstraintsViolationException(Map<String, String> errors, Throwable cause) {
+        super(cause);
+        this.errors = errors;
+    }
+
     public Map<String, String> getErrors() {
         return errors;
     }

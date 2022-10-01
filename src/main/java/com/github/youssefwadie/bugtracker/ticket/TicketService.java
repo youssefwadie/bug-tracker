@@ -1,24 +1,22 @@
 package com.github.youssefwadie.bugtracker.ticket;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
+import com.github.youssefwadie.bugtracker.model.Ticket;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.github.youssefwadie.bugtracker.model.Ticket;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class TicketService {
-	private static final int TIKCETS_PER_PAGE = 10;
-	
+    private static final int TICKETS_PER_PAGE = 10;
+
     public static final String TICKET_NOT_FOUND_MSG = "no ticket with id %d is found";
 
     private final TicketRepository ticketRepository;
@@ -36,7 +34,7 @@ public class TicketService {
     }
 
     public Long countBySubmitterId(Long userId) {
-        return ticketRepository.countBySumbitterId(userId);
+        return ticketRepository.countBySubmitterId(userId);
     }
 
 
@@ -53,16 +51,15 @@ public class TicketService {
         if (!isCreatedByUser(ticket.getId(), ticket.getSubmitterId())) {
             throw new TicketNotFoundException(String.format(TICKET_NOT_FOUND_MSG, ticket.getId()));
         }
-
-        validatorService.validateTicket(ticket);
+        validatorService.validateTicketBeforeUpdate(ticket);
 
         ticket.setUpdatedAt(LocalDateTime.now());
         return ticketRepository.save(ticket);
     }
 
-	public List<Ticket> listByPage(long userId, int pageNumber) {
-		Pageable pageable = PageRequest.of(pageNumber - 1, TIKCETS_PER_PAGE);
-		Page<Ticket> ticketsPage = ticketRepository.findAllByUserId(userId, pageable);
-		return ticketsPage.getContent();
-	}
+    public List<Ticket> listByPage(long userId, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, TICKETS_PER_PAGE);
+        Page<Ticket> ticketsPage = ticketRepository.findAllByUserId(userId, pageable);
+        return ticketsPage.getContent();
+    }
 }

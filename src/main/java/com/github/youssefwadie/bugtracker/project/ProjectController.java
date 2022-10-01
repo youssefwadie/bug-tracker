@@ -1,19 +1,17 @@
 package com.github.youssefwadie.bugtracker.project;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.github.youssefwadie.bugtracker.dto.model.ProjectDto;
+import com.github.youssefwadie.bugtracker.dto.mappers.ProjectMapper;
+import com.github.youssefwadie.bugtracker.model.Project;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.youssefwadie.bugtracker.dto.project.ProjectDto;
-import com.github.youssefwadie.bugtracker.dto.project.ProjectMapper;
-import com.github.youssefwadie.bugtracker.model.Project;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,6 +25,15 @@ public class ProjectController {
         return ResponseEntity.ok(projectMapper.modelsToDtos(projectService.findAll()));
     }
 
+    @GetMapping("/page/{pageNumber:\\d+}")
+    public ResponseEntity<List<ProjectDto>> listByPage(@PathVariable("pageNumber") Integer pageNumber) {
+        return ResponseEntity.ok(projectMapper.modelsToDtos(projectService.listByPage(pageNumber)));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        return ResponseEntity.ok(projectService.count());
+    }
 
     @GetMapping("/{id:\\d+}")
     public ResponseEntity<ProjectDto> findById(@PathVariable Long id) {

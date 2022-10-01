@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.youssefwadie.bugtracker.dto.user.UserDto;
-import com.github.youssefwadie.bugtracker.dto.user.UserMapper;
+import com.github.youssefwadie.bugtracker.dto.model.UserDto;
+import com.github.youssefwadie.bugtracker.dto.mappers.UserMapper;
 import com.github.youssefwadie.bugtracker.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;

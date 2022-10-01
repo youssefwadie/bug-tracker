@@ -18,10 +18,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -37,27 +40,27 @@ public class SecurityConfig implements WebMvcConfigurer {
     SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-//        http.cors().configurationSource(request -> {
-//            CorsConfiguration configuration = new CorsConfiguration();
-//            configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-//            configuration.setAllowCredentials(true);
-//            configuration.setAllowedHeaders(Collections.singletonList("*"));
-//            configuration.setAllowedMethods(Collections.singletonList("*"));
-//            configuration.setExposedHeaders(List.of("Authorization"));
-//            configuration.setMaxAge(3600L);
-//            return configuration;
-//        });
+        http.cors().configurationSource(request -> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+            configuration.setAllowCredentials(true);
+            configuration.setAllowedHeaders(Collections.singletonList("*"));
+            configuration.setAllowedMethods(Collections.singletonList("*"));
+            configuration.setExposedHeaders(List.of("Authorization"));
+            configuration.setMaxAge(3600L);
+            return configuration;
+        });
 
 
         http.csrf().disable();
         http.authorizeRequests(auth -> {
             auth.antMatchers("/api/v1/admin/**").hasRole("ADMIN");
-            auth.antMatchers("/api/v1/projects/**").authenticated();
-            auth.antMatchers("/api/v1/tickets/**").authenticated();
             auth.antMatchers("/api/v1/users/login").authenticated();
-            auth.antMatchers("/api/v1/users/resend").permitAll();
-            auth.antMatchers("/api/v1/users/logged-in").permitAll();
-            auth.antMatchers("/api/v1/register/**").permitAll();
+            auth.antMatchers("/api/v1/users/role").authenticated();
+
+            auth.antMatchers("/api/v1/projects/**", "/api/v1/tickets/**", "/api/v1/dashboard/**").hasAnyRole("ADMIN", "DEVELOPER");
+
+            auth.antMatchers("/api/v1/register/**", "/api/v1/users/resend", "/api/v1/users/logged-in").permitAll();
             auth.antMatchers(HttpMethod.GET, "/actuator/**").permitAll();
             auth.anyRequest().authenticated();
         });

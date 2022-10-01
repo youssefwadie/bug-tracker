@@ -1,10 +1,8 @@
-package com.github.youssefwadie.bugtracker.dto.project;
+package com.github.youssefwadie.bugtracker.dto.model;
 
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.youssefwadie.bugtracker.dto.ticket.TicketDto;
-import com.github.youssefwadie.bugtracker.dto.user.UserDto;
 
 import lombok.Data;
 

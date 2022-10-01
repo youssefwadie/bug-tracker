@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {User} from 'src/app/model/User';
+import {User} from 'src/app/model/user';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {map, Subscription} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
-import {SimpleResponse} from "../../model/ResponseBody";
+import {SimpleResponse} from "../../model/response.body";
 
 @Component({
   selector: 'app-login',

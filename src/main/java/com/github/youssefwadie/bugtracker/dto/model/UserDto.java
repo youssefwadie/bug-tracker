@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.dto.user;
+package com.github.youssefwadie.bugtracker.dto.model;
 
 import com.github.youssefwadie.bugtracker.model.Role;
 

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {UserRegistration} from "../../model/UserRegistration";
+import {UserRegistrationRequest} from "../../model/user.registration.request";
 import {HttpErrorResponse} from "@angular/common/http";
 import {RegistrationService} from "../../services/registration.service";
-import {InvalidDataResponse} from "../../model/ResponseBody";
+import {InvalidDataResponse} from "../../model/response.body";
 
 @Component({
   selector: 'app-register',
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const registration: UserRegistration = {
+    const registration: UserRegistrationRequest = {
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,

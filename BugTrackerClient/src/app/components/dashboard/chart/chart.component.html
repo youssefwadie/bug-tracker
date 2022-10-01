@@ -1,0 +1,11 @@
+<div>
+  <h4 class="mb-2 ps-2 chart-header">Tickets by {{category}}</h4>
+  <ngx-charts-pie-chart [results]="content"
+                        [doughnut]="showDoughnut"
+                        [legend]="true"
+                        [legendPosition]="legendPosition"
+                        [legendTitle]="category"
+                        [view]="view">
+
+  </ngx-charts-pie-chart>
+</div>

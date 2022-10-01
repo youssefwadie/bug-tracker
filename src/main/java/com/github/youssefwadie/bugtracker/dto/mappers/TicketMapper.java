@@ -1,20 +1,21 @@
-package com.github.youssefwadie.bugtracker.dto.ticket;
+package com.github.youssefwadie.bugtracker.dto.mappers;
 
-import java.util.List;
-
+import com.github.youssefwadie.bugtracker.dto.model.TicketDto;
+import com.github.youssefwadie.bugtracker.model.Ticket;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-import com.github.youssefwadie.bugtracker.model.Ticket;
+import java.util.List;
 
 @Mapper
 @Component
 public interface TicketMapper {
 
     @Mapping(source = "assignedDeveloperId", target = "assignedDeveloper")
-    @Mapping(source = "projectId", target = "project")
+    @Mapping(source = "project.id", target = "projectId")
+    @Mapping(source = "project.name", target = "projectName")
     @Mapping(source = "submitterId", target = "submitter")
 //    @Mapping(source = "type.description", target = "type")
 //    @Mapping(source = "priority.description", target = "priority")

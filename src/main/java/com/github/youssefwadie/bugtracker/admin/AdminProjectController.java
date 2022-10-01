@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.youssefwadie.bugtracker.dto.project.ProjectDto;
-import com.github.youssefwadie.bugtracker.dto.project.ProjectMapper;
+import com.github.youssefwadie.bugtracker.dto.model.ProjectDto;
+import com.github.youssefwadie.bugtracker.dto.mappers.ProjectMapper;
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.project.ProjectService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;

@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {Ticket} from "../../model/Ticket";
+import {Ticket} from "../../model/ticket";
 import {TicketService} from "../../services/ticket.service";
-import {ObjectUnsubscribedError, Observable} from "rxjs";
 
 @Component({
-  selector: 'app-tickets',
-  templateUrl: './tickets.component.html',
-  styleUrls: ['./tickets.component.css']
+  selector: 'app-ticket-list',
+  templateUrl: './ticket.list.component.html',
+  styleUrls: ['./ticket.list.component.css']
 })
-export class TicketsComponent implements OnInit {
+export class TicketListComponent implements OnInit {
   page: number = 1;
   tickets = new Array<Ticket>();
   ticketsCount = 0;

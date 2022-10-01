@@ -1,8 +1,9 @@
-package com.github.youssefwadie.bugtracker.dto.user;
+package com.github.youssefwadie.bugtracker.dto.mappers;
 
 
 import java.util.List;
 
+import com.github.youssefwadie.bugtracker.dto.model.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;

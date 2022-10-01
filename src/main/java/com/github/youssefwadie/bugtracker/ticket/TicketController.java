@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.youssefwadie.bugtracker.dto.ticket.TicketDto;
-import com.github.youssefwadie.bugtracker.dto.ticket.TicketMapper;
+import com.github.youssefwadie.bugtracker.dto.model.TicketDto;
+import com.github.youssefwadie.bugtracker.dto.mappers.TicketMapper;
 import com.github.youssefwadie.bugtracker.model.Ticket;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.UserContextHolder;

@@ -24,9 +24,8 @@ export class HomeComponent implements OnInit {
     if (currentPath === "dashboard"
       || currentPath === "tickets"
       || currentPath === "administration"
-      || currentPath === "projects") {
+      || currentPath === "project-list") {
       this.active = currentPath;
-      console.log(this.active);
     }
   }
 
