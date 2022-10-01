@@ -1,5 +1,15 @@
+.chart-container {
+  min-width: 500px;
+  min-height: 250px;
+}
+
+.chart {
+  width: 350px;
+  height: 150px;
+}
+
 .chart-header {
-  text-align: left;
+  align-self: flex-start;
   font-size: 1rem;
   border-bottom: 1px solid rgba(192, 192, 192, 0.5);
 }

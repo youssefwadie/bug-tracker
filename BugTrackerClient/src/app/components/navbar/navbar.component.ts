@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {faComputer, faTicket, faToolbox, faUserShield, faUsersRectangle} from "@fortawesome/free-solid-svg-icons";
+import {faComputer, faTicket, faUserShield, faUsersRectangle} from "@fortawesome/free-solid-svg-icons";
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 
@@ -12,14 +12,19 @@ export class NavbarComponent implements OnInit {
   faComputer = faComputer;
   faTicket = faTicket;
   faUserShield = faUserShield;
-  faUsersRectangle = faUsersRectangle
-
   @Input() active: string;
+
+  isAdmin = false;
 
   constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
+    this.authService.getUserRole().subscribe({
+      next: role => {
+        this.isAdmin = (role.role === 'ADMIN');
+      }
+    });
   }
 
   logout(): void {

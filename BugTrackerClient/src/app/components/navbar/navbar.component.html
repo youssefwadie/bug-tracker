@@ -1,4 +1,4 @@
-<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mb-3 bg-white">
   <li ngbNavItem="dashboard">
     <a ngbNavLink class="nav-link link-secondary" (click)="navigateToDashboard()">
       <fa-icon [icon]="faComputer" class="me-1"></fa-icon>
@@ -6,15 +6,6 @@
     </a>
     <ng-template ngbNavContent>
       <app-dashboard></app-dashboard>
-    </ng-template>
-  </li>
-  <li ngbNavItem="projects" class="nav-item">
-    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToProjects()">
-      <fa-icon [icon]="faUsersRectangle" class="me-1"></fa-icon>
-      <span>Projects</span>
-    </a>
-    <ng-template ngbNavContent>
-      <app-project-list></app-project-list>
     </ng-template>
   </li>
   <li ngbNavItem="tickets" class="nav-item">
@@ -26,7 +17,7 @@
       <app-ticket-list></app-ticket-list>
     </ng-template>
   </li>
-  <li ngbNavItem="administration" class="nav-item">
+  <li *ngIf="isAdmin" ngbNavItem="administration" class="nav-item">
     <a ngbNavLink class="nav-link link-secondary" (click)="navigateToAdministration()">
       <fa-icon [icon]="faUserShield" class="me-1"></fa-icon>
       <span>Administration</span>

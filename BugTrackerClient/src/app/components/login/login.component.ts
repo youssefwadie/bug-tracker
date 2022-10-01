@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.validLogin = false;
         const error = errorResponse.error as SimpleResponse;
         if (error) {
-          this.authService.loggedInEmail = this.user.email;
           this.errorMessage = error.message;
         } else {
           this.errorMessage = 'Invalid email or password';

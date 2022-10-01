@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {User} from "../model/user";
+import {User, UserRole} from "../model/user";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {SimpleResponse} from "../model/response.body";
@@ -13,7 +13,7 @@ export class AuthService {
   private readonly API_LOGOUT_PATH = 'users/logout'
   private readonly API_IS_LOGGED_IN_PATH = 'users/logged-in';
   private readonly API_RESEND_VERIFICATION_CODE_PATH = "users/resend";
-  public loggedInEmail: string;
+  private readonly API_USER_ROLE_PATH = "users/role";
 
   constructor(private http: HttpClient) {
   }
@@ -41,6 +41,9 @@ export class AuthService {
 
   resendVerificationToken(email: string): Observable<SimpleResponse> {
     return this.http.post<SimpleResponse>(`${environment.rootUrl}/${this.API_RESEND_VERIFICATION_CODE_PATH}`, {email});
+  }
+  getUserRole(): Observable<UserRole> {
+    return this.http.get<UserRole>(`${environment.rootUrl}/${this.API_USER_ROLE_PATH}`, {withCredentials: true});
   }
 
 }

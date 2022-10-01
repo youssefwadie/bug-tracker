@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project.service";
 import {Project} from "../../model/project";
+import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-project-list',
@@ -8,6 +9,7 @@ import {Project} from "../../model/project";
   styleUrls: ['./project.list.component.css']
 })
 export class ProjectListComponent implements OnInit {
+  faEllipsisV = faEllipsisV
   projects = new Array<Project>();
   projectsCount = 0;
   page = 1;
@@ -35,5 +37,9 @@ export class ProjectListComponent implements OnInit {
         this.projects = projects;
       }
     })
+  }
+
+  editProject(project: Project) {
+    console.log(`editing ...`, project.id);
   }
 }

@@ -1,0 +1,35 @@
+.dashboard-container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.project-list-container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  flex-direction: row;
+  flex-basis: 100%;
+  margin-bottom: 3rem;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-basis: 100%;
+}
+
+.charts-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chart-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0 1rem 1rem;
+}

@@ -1,25 +1,30 @@
-<div class="d-flex flex-row justify-content-center flex-wrap">
-  <div class="d-flex flex-column bg-white align-items-center rounded mb-2 me-2">
-    <app-chart [content]="report.type"
-               [category]="'Type'"
-               [showDoughnut]="showDoughnut"
-               [view]="view"
-               [legendPosition]="legendPosition"></app-chart>
-  </div>
-  <div class="d-flex flex-column bg-white  align-items-center rounded mb-2 me-2">
-    <app-chart [content]="report.priority"
-               [category]="'Priority'"
-               [showDoughnut]="showDoughnut"
-               [view]="view"
-               [legendPosition]="legendPosition"></app-chart>
+<div class="dashboard-container">
+  <div class="project-list-container">
+    <app-project-list class="flex-grow-1 flex-column"></app-project-list>
   </div>
 
-  <div class="d-flex flex-column bg-white align-items-center rounded mb-2 me-2">
-    <app-chart [category]="'Status'"
-               [content]="report.status"
-               [showDoughnut]="showDoughnut"
-               [view]="view"
-               [legendPosition]="legendPosition"></app-chart>
-  </div>
+  <div class="charts-container">
+    <div class="chart-item bg-white rounded">
+      <app-chart [chartData]="typeChartData"
+                 [chartOptions]="chartOptions"
+                 [category]="'Type'">
 
+      </app-chart>
+    </div>
+
+    <div class="chart-item bg-white rounded">
+      <app-chart [chartData]="priorityChartData"
+                 [chartOptions]="chartOptions"
+                 [category]="'Priority'">
+      </app-chart>
+    </div>
+
+    <div class="chart-item bg-white rounded">
+      <app-chart [chartData]="statusChartData"
+                 [chartOptions]="chartOptions"
+                 [category]="'Status'">
+      </app-chart>
+    </div>
+
+  </div>
 </div>

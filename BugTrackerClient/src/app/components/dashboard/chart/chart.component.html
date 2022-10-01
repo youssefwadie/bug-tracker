@@ -1,11 +1,11 @@
-<div>
-  <h4 class="mb-2 ps-2 chart-header">Tickets by {{category}}</h4>
-  <ngx-charts-pie-chart [results]="content"
-                        [doughnut]="showDoughnut"
-                        [legend]="true"
-                        [legendPosition]="legendPosition"
-                        [legendTitle]="category"
-                        [view]="view">
+<div class="chart-container d-flex align-items-center justify-content-center">
 
-  </ngx-charts-pie-chart>
+  <h5 class="mb-2 chart-header">Tickets by {{category}}</h5>
+
+  <div class="chart">
+    <canvas baseChart
+            [data]="chartData"
+            [type]="'pie'"
+            [options]="chartOptions"></canvas>
+  </div>
 </div>

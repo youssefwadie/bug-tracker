@@ -16,9 +16,9 @@ import {ResetPasswordComponent} from './components/login/reset-password/reset-pa
 import {LocaleDatePipe} from "./pipes/locale-date.pipe";
 import { HomeComponent } from './components/home/home.component';
 import { ProjectListComponent } from './components/project-list/project.list.component';
-import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ChartComponent } from './components/dashboard/chart/chart.component';
+import {NgChartsModule} from "ng2-charts";
 
 @NgModule({
   declarations: [
@@ -42,8 +42,8 @@ import { ChartComponent } from './components/dashboard/chart/chart.component';
     AppRoutingModule,
     NgbModule,
     FontAwesomeModule,
-    NgxChartsModule,
     BrowserAnimationsModule,
+    NgChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

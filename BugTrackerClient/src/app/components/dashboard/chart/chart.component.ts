@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ReportEntry} from "../../../model/tickets.report";
-import {LegendPosition} from "@swimlane/ngx-charts/lib/common/types/legend.model";
+import {ChartConfiguration, ChartData} from "chart.js";
 
 @Component({
   selector: 'app-chart',
@@ -10,20 +9,13 @@ import {LegendPosition} from "@swimlane/ngx-charts/lib/common/types/legend.model
 export class ChartComponent implements OnInit {
 
   @Input()
-  content: Array<ReportEntry>;
-
-
-  @Input()
-  showDoughnut: boolean;
-
-  @Input()
   category: string;
 
   @Input()
-  view: [number, number];
+  chartData: ChartData<'pie', number[], string>;
 
   @Input()
-  legendPosition: LegendPosition;
+  chartOptions: ChartConfiguration<'pie', number[], string>['options'];
 
   constructor() {
   }
