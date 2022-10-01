@@ -39,6 +39,7 @@ export class ProjectListComponent implements OnInit {
     })
   }
 
+  // TODO: to be implemented
   editProject(project: Project) {
     console.log(`editing ...`, project.id);
   }

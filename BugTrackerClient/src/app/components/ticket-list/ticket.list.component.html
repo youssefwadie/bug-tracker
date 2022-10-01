@@ -1,28 +1,36 @@
-<table class="table table-light table-striped table-bordered">
-  <thead>
-  <tr>
-    <th scope="col">Title</th>
-    <th scope="col">Project Name</th>
-    <th scope="col">Developer Assigned</th>
-    <th scope="col">Ticket Type</th>
-    <th scope="col">Ticket Priority</th>
-    <th scope="col">Ticket Status</th>
-    <th scope="col">Created At</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let ticket of tickets">
-    <th scope="row">{{ ticket.title }}</th>
-    <td>{{ ticket.projectName }}</td>
-    <td>{{ ticket.assignedDeveloper }}</td>
-    <td>{{ ticket.type }}</td>
-    <td>{{ ticket.priority }}</td>
-    <td>{{ ticket.status }}</td>
-    <td>{{ ticket.createdAt | localedate }}</td>
-  </tr>
-  </tbody>
-</table>
-<div class="d-flex justify-content-between p-2">
-  <ngb-pagination [collectionSize]="ticketsCount" [(page)]="page" [maxSize]="5" (pageChange)="onPageChange()"
-                  [boundaryLinks]="true"></ngb-pagination>
+<div class="bg-white rounded">
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Project Name</th>
+      <th scope="col">Developer Assigned</th>
+      <th scope="col">Ticket Type</th>
+      <th scope="col">Ticket Priority</th>
+      <th scope="col">Ticket Status</th>
+      <th scope="col">Created At</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ticket of tickets">
+      <th scope="row">{{ ticket.title }}</th>
+      <td>{{ ticket.projectName }}</td>
+      <td>{{ ticket.assignedDeveloper }}</td>
+      <td>{{ ticket.type }}</td>
+      <td>{{ ticket.priority }}</td>
+      <td>{{ ticket.status }}</td>
+      <td>{{ ticket.createdAt | localedate }}</td>
+      <td class="text-center">
+        <a (click)="editTicket(ticket)" [title]="'Edit ' + ticket.title">
+          <fa-icon [icon]="faEllipsisV"></fa-icon>
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination [collectionSize]="ticketsCount" [(page)]="page" [maxSize]="5" (pageChange)="onPageChange()"
+                    [boundaryLinks]="true"></ngb-pagination>
+  </div>
 </div>

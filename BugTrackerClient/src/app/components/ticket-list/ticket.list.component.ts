@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import {Ticket} from "../../model/ticket";
 import {TicketService} from "../../services/ticket.service";
 
@@ -11,6 +12,7 @@ export class TicketListComponent implements OnInit {
   page: number = 1;
   tickets = new Array<Ticket>();
   ticketsCount = 0;
+  faEllipsisV = faEllipsisV
 
   constructor(private ticketService: TicketService) {
   }
@@ -34,4 +36,8 @@ export class TicketListComponent implements OnInit {
     })
   }
 
+  // TODO: to be implemented
+  editTicket(ticket: Ticket) {
+    console.log(`editing ... ${ticket.id}`);
+  }
 }
