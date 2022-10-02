@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {User, UserRole} from "../model/user";
+import {User, UserLogin, UserRole} from "../../model/user";
 import {Observable} from "rxjs";
-import {environment} from "../../environments/environment";
-import {SimpleResponse} from "../model/response.body";
+import {environment} from "../../../environments/environment";
+import {SimpleResponse} from "../../model/response.body";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  login(user: User): Observable<User> {
+  login(user: UserLogin): Observable<User> {
     return this.http.post<User>(`${environment.rootUrl}/${this.API_LOGIN_PATH}`, {}, {
       withCredentials: true,
       headers: {

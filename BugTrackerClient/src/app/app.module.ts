@@ -21,6 +21,7 @@ import { ChartComponent } from './components/dashboard/chart/chart.component';
 import {NgChartsModule} from "ng2-charts";
 import {ProjectDetailsComponent} from "./components/project-list/project-details/project-details.component";
 import {ProjectEditComponent} from "./components/project-list/project-edit/project.edit.component";
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import {ProjectEditComponent} from "./components/project-list/project-edit/proje
     FontAwesomeModule,
     BrowserAnimationsModule,
     NgChartsModule,
+    NgSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent],

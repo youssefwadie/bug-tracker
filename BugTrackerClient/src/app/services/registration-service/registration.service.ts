@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {UserRegistrationRequest} from "../model/user.registration.request";
-import {environment} from "../../environments/environment";
+import {UserRegistrationRequest} from "../../model/user.registration.request";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import {Ticket} from "../../model/ticket";
-import {TicketService} from "../../services/ticket.service";
+import {TicketService} from "../../services/ticket-service/ticket.service";
 
 @Component({
   selector: 'app-ticket-list',

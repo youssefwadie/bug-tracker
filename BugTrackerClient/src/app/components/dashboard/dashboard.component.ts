@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DashboardService} from "../../services/dashboard.service";
+import {DashboardService} from "../../services/dashboard-service/dashboard.service";
 import {ReportEntry, TicketsReport} from "../../model/tickets.report";
 import {ChartConfiguration, ChartData} from "chart.js";
 

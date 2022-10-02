@@ -39,7 +39,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project addProject(Project project) {
+    public Project save(Project project) {
         validatorService.validateProject(project);
         if (project.getTeamMembers() != null) {
             List<Long> teamMembersIds = project.getTeamMembers().stream().map(User::getId).toList();

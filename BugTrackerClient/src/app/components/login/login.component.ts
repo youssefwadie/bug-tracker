@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {User} from 'src/app/model/user';
+import {UserLogin} from 'src/app/model/user';
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/auth-service/auth.service";
 import {map, Subscription} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
 import {SimpleResponse} from "../../model/response.body";
@@ -12,7 +12,7 @@ import {SimpleResponse} from "../../model/response.body";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  user: User = new User();
+  user: UserLogin = new UserLogin();
   validLogin = true;
   errorMessage: string;
   infoMessage: string;

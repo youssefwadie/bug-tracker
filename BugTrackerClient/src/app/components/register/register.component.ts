@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserRegistrationRequest} from "../../model/user.registration.request";
 import {HttpErrorResponse} from "@angular/common/http";
-import {RegistrationService} from "../../services/registration.service";
+import {RegistrationService} from "../../services/registration-service/registration.service";
 import {InvalidDataResponse} from "../../model/response.body";
 
 @Component({

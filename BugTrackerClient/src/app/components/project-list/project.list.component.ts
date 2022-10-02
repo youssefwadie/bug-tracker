@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProjectService} from "../../services/project.service";
+import {ProjectService} from "../../services/project-service/project.service";
 import {Project} from "../../model/project";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {ActivatedRoute, Router} from "@angular/router";

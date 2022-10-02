@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Project} from "../../../model/project";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {ProjectService} from "../../../services/project.service";
+import {ProjectService} from "../../../services/project-service/project.service";
+import {User} from "../../../model/user";
+import {UserService} from "../../../services/user-service/user.service";
 
 @Component({
   selector: 'app-project-edit',
@@ -12,14 +14,27 @@ import {ProjectService} from "../../../services/project.service";
 export class ProjectEditComponent implements OnInit {
   project: Project;
   formProject: Project;
-  private validTitle: boolean = false;
-  private validDescription: boolean = false;
 
-  constructor(private projectService: ProjectService, private router: Router, public activeModal: NgbActiveModal) {
+  selectedUsersIds: Array<number>;
+  users: Array<User>;
+  private validTitle = false;
+  private validDescription = false;
+
+  constructor(private projectService: ProjectService,
+              private userService: UserService,
+              private router: Router,
+              private route: ActivatedRoute,
+              public activeModal: NgbActiveModal) {
   }
 
   ngOnInit(): void {
     this.formProject = Object.assign({}, this.project);
+    this.userService.getUsers().subscribe({
+      next: users => {
+        this.users = users;
+        this.selectedUsersIds = this.project.teamMembers.map(user => user.id);
+      }
+    })
   }
 
   onSubmit() {
@@ -27,6 +42,12 @@ export class ProjectEditComponent implements OnInit {
     this.formProject.description = this.formProject.description.trim();
 
     console.log(`submitting`, this.formProject);
+    console.log(this.selectedUsersIds);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+    });
+
   }
 
   checkIfNameIsValid(): void {

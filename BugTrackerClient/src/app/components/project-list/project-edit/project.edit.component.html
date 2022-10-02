@@ -28,6 +28,15 @@
         required/>
     </div>
 
+    <div class="mb-3">
+      <ng-select name="users"
+                 [multiple]="true"
+                 [items]="users"
+                 bindLabel="fullName"
+                 bindValue="id"
+                 [(ngModel)]="selectedUsersIds">
+      </ng-select>
+    </div>
   </div>
 
   <div class="modal-footer">

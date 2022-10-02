@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
-import {Project} from "../model/project";
-import {environment} from "../../environments/environment";
-import {TicketService} from "./ticket.service";
+import {Project} from "../../model/project";
+import {environment} from "../../../environments/environment";
+import {TicketService} from "../ticket-service/ticket.service";
 
 @Injectable({
   providedIn: 'root'
