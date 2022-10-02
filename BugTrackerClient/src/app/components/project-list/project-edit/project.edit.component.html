@@ -1,0 +1,40 @@
+<form class="p-3" #projectForm="ngForm">
+  <div class="modal-header">
+    <h4 *ngIf="formProject.id != null" class="modal-title">Editing</h4>
+    <h4 *ngIf="formProject.id == null" class="modal-title">New</h4>
+    <button type="button" class="btn-close" aria-label="Close"
+            (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      <input
+        id="title"
+        name="title"
+        type="text"
+        class="form-control rounded p-2"
+        [(ngModel)]="formProject.name"
+        placeholder="Title"
+        required/>
+    </div>
+
+    <div class="mb-3">
+      <input
+        id="description"
+        name="description"
+        type="text"
+        class="form-control rounded p-2"
+        [(ngModel)]="formProject.description"
+        placeholder="Title"
+        required/>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-full mt-3" [disabled]="projectForm.invalid"
+            (click)="activeModal.close('Save Click');onSubmit();">
+      Save
+    </button>
+  </div>
+
+</form>

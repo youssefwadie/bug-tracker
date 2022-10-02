@@ -14,6 +14,7 @@ const routes: Routes = [
   {path: '', canActivate: [HomeRouteGuard], component: HomeComponent},
   {path: 'dashboard', canActivate: [HomeRouteGuard], component: HomeComponent},
   {path: 'tickets', canActivate: [HomeRouteGuard], component: HomeComponent},
+  {path: 'projects', canActivate: [HomeRouteGuard], component: HomeComponent},
   {path: 'administration', canActivate: [HomeRouteGuard], component: HomeComponent},
 ];
 

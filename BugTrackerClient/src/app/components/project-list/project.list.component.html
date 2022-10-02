@@ -1,34 +1,43 @@
-<div class="bg-white p-3 rounded">
-  <div class="d-flex mb-2">
-    <h4 class="flex-column text-uppercase fw-bold">Projects</h4>
-    <button class="btn btn-primary flex-column ms-auto">New Project</button>
+<div class="p-4">
+  <ng-template #content let-modal>
+    <h4 class="modal-title" id="modal-basic-title">{{action}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+
+    <app-project-edit></app-project-edit>
+  </ng-template>
+
+  <div class="bg-white p-3 rounded">
+    <div class="d-flex mb-2">
+      <h4 class="flex-column text-uppercase fw-bold">Projects</h4>
+      <button class="btn btn-primary flex-column ms-auto" (click)="addProject()">New Project</button>
+    </div>
+
+    <div class="d-flex">
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Project</th>
+          <th scope="col">Description</th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let project of projects">
+          <th scope="row" class="clickable" (click)="projectDetails(project.id)">{{ project.name }}</th>
+          <td class="clickable" (click)="projectDetails(project.id)">{{ project.description }}</td>
+          <td class="text-center">
+            <a (click)="editProject(project)" [title]="'Edit ' + project.name" class="link-success">
+              <fa-icon [icon]="faPenToSquareIcon" [size]="'lg'"></fa-icon>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex-container p-2">
+      <ngb-pagination [collectionSize]="projectsCount" [(page)]="page" [maxSize]="5" (pageChange)="onPageChange()"
+                      [boundaryLinks]="true"></ngb-pagination>
+    </div>
   </div>
 
-  <div class="d-flex">
-    <table class="table table-striped table-hover">
-      <thead>
-      <tr>
-        <th scope="col">Project</th>
-        <th scope="col">Description</th>
-        <th scope="col"></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let project of projects">
-        <th scope="row">{{ project.name }}</th>
-        <td>{{ project.description }}</td>
-        <td class="text-center">
-          <a (click)="editProject(project)" [title]="'Edit ' + project.name">
-            <fa-icon [icon]="faEllipsisV"></fa-icon>
-          </a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="flex-container p-2">
-    <ngb-pagination [collectionSize]="projectsCount" [(page)]="page" [maxSize]="5" (pageChange)="onPageChange()"
-                    [boundaryLinks]="true"></ngb-pagination>
-  </div>
 </div>
-

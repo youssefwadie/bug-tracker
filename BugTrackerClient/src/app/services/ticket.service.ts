@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {EMPTY, map, Observable} from "rxjs";
 import {Ticket} from "../model/ticket";
 import {environment} from "../../environments/environment";
+import {TicketsReport} from "../model/tickets.report";
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +22,10 @@ export class TicketService {
 
   listByPage(pageNumber: number): Observable<Array<Ticket>> {
     return this.http.get<Array<Ticket>>(`${environment.rootUrl}/${this.API_LIST_BY_PAGE}/${pageNumber}`, {withCredentials: true})
-      .pipe(map(tickets => tickets.map(this.fromHttp)));
+      .pipe(map(tickets => tickets.map(TicketService.fromHttp)));
   }
 
-  fromHttp(ticket: Ticket): Ticket {
+  public static fromHttp(ticket: Ticket): Ticket {
     if (ticket.createdAt) {
       ticket.createdAt = new Date(ticket.createdAt);
     }

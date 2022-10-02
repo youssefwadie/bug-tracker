@@ -51,6 +51,6 @@ export class NavbarComponent implements OnInit {
   }
 
   navigateToProjects() {
-
+    this.router.navigate(['projects']);
   }
 }

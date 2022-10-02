@@ -19,21 +19,26 @@ import { ProjectListComponent } from './components/project-list/project.list.com
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ChartComponent } from './components/dashboard/chart/chart.component';
 import {NgChartsModule} from "ng2-charts";
+import {ProjectDetailsComponent} from "./components/project-list/project-details/project-details.component";
+import {ProjectEditComponent} from "./components/project-list/project-edit/project.edit.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    DashboardComponent,
-    NavbarComponent,
-    TicketListComponent,
-    ResetPasswordComponent,
-    LocaleDatePipe,
-    HomeComponent,
-    ProjectListComponent,
-    ChartComponent
-  ],
+    declarations: [
+        AppComponent,
+        LoginComponent,
+        RegisterComponent,
+        NavbarComponent,
+        HomeComponent,
+        DashboardComponent,
+        ChartComponent,
+        TicketListComponent,
+        ResetPasswordComponent,
+        LocaleDatePipe,
+        HomeComponent,
+        ProjectListComponent,
+        ProjectDetailsComponent,
+        ProjectEditComponent,
+    ],
 
   imports: [
     BrowserModule,
