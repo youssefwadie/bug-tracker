@@ -1,3 +1,5 @@
-<div class="bg-light container-fluid min-vh-100">
+<div class="bg-light min-vh-100">
+  <app-navbar *ngIf="authenticated"></app-navbar>
   <router-outlet></router-outlet>
 </div>
+

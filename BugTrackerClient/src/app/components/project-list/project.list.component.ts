@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project-service/project.service";
 import {Project} from "../../model/project";
-import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ProjectEditComponent} from "./project-edit/project.edit.component";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-project-list',
@@ -12,12 +12,12 @@ import {ProjectEditComponent} from "./project-edit/project.edit.component";
   styleUrls: ['./project.list.component.css']
 })
 export class ProjectListComponent implements OnInit {
-  faPenToSquareIcon = faPenToSquare;
   projects = new Array<Project>();
   projectsCount = 0;
-  page = 1;
   action: string;
   selectedProject: Project;
+  isAdmin = false;
+  displayedColumns: string[] = ["name", "description", "edit"];
 
   constructor(private projectService: ProjectService,
               private modalService: NgbModal,
@@ -53,8 +53,8 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  onPageChange() {
-    this.loadPageContent(this.page);
+  onPageChange(pageEvent: PageEvent) {
+    this.loadPageContent(pageEvent.pageIndex + 1);
   }
 
 

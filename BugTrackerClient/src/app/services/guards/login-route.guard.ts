@@ -8,17 +8,18 @@ import {AuthService} from "../auth-service/auth.service";
 })
 export class LoginRouteGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    return this.authService.isLoggedIn().pipe(map(value => !value)).pipe(tap(notLoggedIn => {
-      // Logged in
-      if (!notLoggedIn) {
+    return this.authService.isLoggedIn().pipe(map(loggedIn => {
+      if (loggedIn) {
+        console.log('navigating..');
         this.router.navigate(['']);
       }
+      return !loggedIn;
     }));
   }
 

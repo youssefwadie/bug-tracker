@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {faComputer, faTicket, faUserShield, faUsersRectangle} from "@fortawesome/free-solid-svg-icons";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {faTicket, faUserShield} from "@fortawesome/free-solid-svg-icons";
+import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../services/auth-service/auth.service";
 
 @Component({
@@ -9,48 +9,24 @@ import {AuthService} from "../../services/auth-service/auth.service";
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  faComputer = faComputer;
-  faTicket = faTicket;
-  faUserShield = faUserShield;
-  @Input() active: string;
+  faTicketIcon = faTicket;
+  faUserShieldIcon = faUserShield;
 
   isAdmin = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService,
+              public route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.authService.getUserRole().subscribe({
-      next: role => {
-        this.isAdmin = (role.role === 'ADMIN');
+    this.authService.roleSetEvent.subscribe({
+      next: (role: string) => {
+        this.isAdmin = (role === 'ADMIN');
       }
-    });
+    })
   }
 
   logout(): void {
-    this.authService.logout().subscribe({
-        next: () => {
-          this.router.navigate(['login']);
-        }, error: () => {
-          this.router.navigate(['login']);
-        }
-      }
-    );
-  }
-
-  navigateToAdministration() {
-    this.router.navigate(['administration']);
-  }
-
-  navigateToTickets() {
-    this.router.navigate(['tickets']);
-  }
-
-  navigateToDashboard() {
-    this.router.navigate(['dashboard']);
-  }
-
-  navigateToProjects() {
-    this.router.navigate(['projects']);
+    this.authService.logout();
   }
 }

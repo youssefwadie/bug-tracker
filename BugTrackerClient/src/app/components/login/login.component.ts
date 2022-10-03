@@ -3,8 +3,6 @@ import {UserLogin} from 'src/app/model/user';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../services/auth-service/auth.service";
 import {map, Subscription} from "rxjs";
-import {HttpErrorResponse} from "@angular/common/http";
-import {SimpleResponse} from "../../model/response.body";
 
 @Component({
   selector: 'app-login',
@@ -18,6 +16,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   infoMessage: string;
 
   registrationSub: Subscription;
+  authenticationMessageSubscription: Subscription;
 
   constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService) {
   }
@@ -29,36 +28,44 @@ export class LoginComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.authenticationMessageSubscription = this.authService.authenticationMessageEvent.subscribe({
+      next: (msg: string) => {
+        this.errorMessage = msg;
+      }
+    });
   }
 
   onLogin(): void {
     this.infoMessage = '';
-    this.authService.login(this.user).subscribe({
-      next: () => {
-        this.router.navigate(['']);
-      }, error: (errorResponse: HttpErrorResponse) => {
-        this.validLogin = false;
-        const error = errorResponse.error as SimpleResponse;
-        if (error) {
-          this.errorMessage = error.message;
-        } else {
-          this.errorMessage = 'Invalid email or password';
+    this.authService.authenticate(this.user);
+    this.authService.authenticationResultEvent.subscribe({
+        next: (result: boolean) => {
+          if (result) {
+            this.router.navigate(['']);
+          } else {
+            this.validLogin = false;
+          }
         }
       }
-    });
+    );
   }
 
   forgotPassword(): void {
     this.router.navigate(['reset'])
   }
 
-  register(): void {
+  register()
+    :
+    void {
     this.router.navigate(['register']);
   }
 
   ngOnDestroy(): void {
     if (this.registrationSub != null) {
       this.registrationSub.unsubscribe();
+    }
+    if (this.authenticationMessageSubscription != null) {
+      this.authenticationMessageSubscription.unsubscribe();
     }
   }
 

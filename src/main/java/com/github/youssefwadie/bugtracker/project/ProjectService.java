@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 public class ProjectService {
     private static final String PROJECT_NOT_FOUND_MSG = "No project with id %d is found";
-    private static final int PROJECTS_PER_PAGE = 10;
+    private static final int PROJECTS_PER_PAGE = 5;
 
     private final ProjectRepository projectRepository;
     private final ProjectValidatorService validatorService;

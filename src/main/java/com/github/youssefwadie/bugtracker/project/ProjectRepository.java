@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * TODO: Hibernate fetches all the collections so, a transition to JDBC based repositories will be done
+ * TODO: Hibernate fetches all the collections so, a transition to JDBC based repositories will be made
 */
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {

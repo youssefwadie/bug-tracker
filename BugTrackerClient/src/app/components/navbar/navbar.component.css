@@ -1,0 +1,7 @@
+.brand {
+  flex: 1 1 auto;
+}
+
+span.icon-label {
+  margin-left:.25rem;
+}

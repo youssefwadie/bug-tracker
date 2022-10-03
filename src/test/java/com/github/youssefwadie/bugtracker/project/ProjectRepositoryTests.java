@@ -1,18 +1,17 @@
 package com.github.youssefwadie.bugtracker.project;
 
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import java.util.Optional;
-import java.util.Set;
-
+import com.github.youssefwadie.bugtracker.model.Project;
+import com.github.youssefwadie.bugtracker.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.github.youssefwadie.bugtracker.model.Project;
-import com.github.youssefwadie.bugtracker.model.User;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

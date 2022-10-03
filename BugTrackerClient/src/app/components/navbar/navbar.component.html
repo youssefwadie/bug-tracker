@@ -1,46 +1,22 @@
-<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mb-3 bg-white">
-  <li ngbNavItem="dashboard">
-    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToDashboard()">
-      <fa-icon [icon]="faComputer" class="me-1"></fa-icon>
-      <span>Dashboard</span>
-    </a>
-    <ng-template ngbNavContent>
-      <app-dashboard></app-dashboard>
-    </ng-template>
-  </li>
-  <li ngbNavItem="tickets" class="nav-item">
-    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToTickets()">
-      <fa-icon [icon]="faTicket" class="me-1"></fa-icon>
-      <span>Tickets</span>
-    </a>
-    <ng-template ngbNavContent>
-      <app-ticket-list></app-ticket-list>
-    </ng-template>
-  </li>
-  <li ngbNavItem="projects" class="nav-item">
-    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToProjects()">
-      <fa-icon [icon]="faTicket" class="me-1"></fa-icon>
-      <span>Projects</span>
-    </a>
-    <ng-template ngbNavContent>
-      <app-project-list></app-project-list>
-    </ng-template>
-  </li>
-  <li *ngIf="isAdmin" ngbNavItem="administration" class="nav-item">
-    <a ngbNavLink class="nav-link link-secondary" (click)="navigateToAdministration()">
-      <fa-icon [icon]="faUserShield" class="me-1"></fa-icon>
-      <span>Administration</span>
-    </a>
-    <ng-template ngbNavContent>
-      <p>Administration Section</p>
-    </ng-template>
-  </li>
+<mat-toolbar color="primary" class="mb-3">
+  <div class="brand">
+    <span>Bug Tracker</span>
+  </div>
 
-  <li ngbNavItem="logout" class="nav-item ms-auto">
-    <a ngbNavLink class="text-center border-0">
-      <button class="btn btn-sm btn-outline-danger" (click)="logout()">Logout</button>
-    </a>
-  </li>
-</ul>
+  <a mat-flat-button color="primary" routerLink="dashboard">
+    <mat-icon>computer</mat-icon>
+    <span class="icon-label">Dashboard</span>
+  </a>
+  <a mat-flat-button color="primary" routerLink="tickets">
+    <fa-icon [icon]="faTicketIcon"></fa-icon>
+    <span class="icon-label">Tickets</span>
+  </a>
+  <a mat-flat-button color="primary">
+    <fa-icon [icon]="faUserShieldIcon"></fa-icon>
+    <span class="icon-label">Administration</span>
+  </a>
+  <a mat-raised-button (click)="logout()" color="accent">
+    Logout
+  </a>
+</mat-toolbar>
 
-<div [ngbNavOutlet]="nav" class="mt-2"></div>

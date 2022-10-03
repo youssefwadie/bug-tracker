@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import {faEllipsisV} from '@fortawesome/free-solid-svg-icons';
 import {Ticket} from "../../model/ticket";
 import {TicketService} from "../../services/ticket-service/ticket.service";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-ticket-list',
@@ -9,10 +10,10 @@ import {TicketService} from "../../services/ticket-service/ticket.service";
   styleUrls: ['./ticket.list.component.css']
 })
 export class TicketListComponent implements OnInit {
-  page: number = 1;
   tickets = new Array<Ticket>();
+  displayedColumns: string[] = ['title', 'project', 'developer', 'type', "priority", "status", "created"];
   ticketsCount = 0;
-  faEllipsisV = faEllipsisV
+  faEllipsisV = faEllipsisV;
 
   constructor(private ticketService: TicketService) {
   }
@@ -28,12 +29,12 @@ export class TicketListComponent implements OnInit {
     });
   }
 
-  onPageChange(): void {
-    this.ticketService.listByPage(this.page).subscribe({
+  onPageChange(pageEvent: PageEvent): void {
+    this.ticketService.listByPage(pageEvent.pageIndex + 1).subscribe({
       next: tickets => {
         this.tickets = tickets;
       }
-    })
+    });
   }
 
   // TODO: to be implemented
