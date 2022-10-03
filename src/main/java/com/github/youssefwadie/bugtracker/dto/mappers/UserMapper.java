@@ -1,25 +1,24 @@
 package com.github.youssefwadie.bugtracker.dto.mappers;
 
 
-import java.util.List;
-
 import com.github.youssefwadie.bugtracker.dto.model.UserDto;
+import com.github.youssefwadie.bugtracker.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-import com.github.youssefwadie.bugtracker.model.User;
+import java.util.List;
 
 @Mapper
 @Component
 public interface UserMapper {
     @Mapping(target = "fullName", source = "fullName")
-    UserDto modelToDto(User user);
+    UserDto userToUserDto(User user);
 
     @Mapping(target = "fullName", source = "fullName")
-    User dtoToModel(UserDto userDto);
+    User userDtoToUser(UserDto userDto);
 
 
-    List<UserDto> modelsToDtos(List<User> users);
+    List<UserDto> usersToUsersDto(List<User> users);
 
 }

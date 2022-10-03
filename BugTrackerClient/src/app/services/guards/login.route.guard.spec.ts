@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HomeRouteGuard } from './home-route.guard';
+import { LoginRouteGuard } from './login.route.guard';
 
-describe('HomeRouteGuard', () => {
-  let guard: HomeRouteGuard;
+describe('LoginRouteGuard', () => {
+  let guard: LoginRouteGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(HomeRouteGuard);
+    guard = TestBed.inject(LoginRouteGuard);
   });
 
   it('should be created', () => {

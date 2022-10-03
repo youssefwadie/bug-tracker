@@ -22,6 +22,6 @@ public class AdminUserController {
 
     @GetMapping("")
     public ResponseEntity<List<UserDto>> listUsers() {
-        return ResponseEntity.ok(userMapper.modelsToDtos(userService.findAll()));
+        return ResponseEntity.ok(userMapper.usersToUsersDto(userService.findAll()));
     }
 }

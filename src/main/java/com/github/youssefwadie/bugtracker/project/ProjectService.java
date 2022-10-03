@@ -18,6 +18,7 @@ import java.util.Optional;
 public class ProjectService {
     private static final String PROJECT_NOT_FOUND_MSG = "No project with id %d is found";
     private static final int PROJECTS_PER_PAGE = 5;
+    private static final int USERS_PER_PAGE = 5;
 
     private final ProjectRepository projectRepository;
     private final ProjectValidatorService validatorService;
@@ -60,5 +61,15 @@ public class ProjectService {
 
     public long count() {
         return projectRepository.count();
+    }
+
+    public Long countTeamMembersByProjectId(Long projectId) {
+        return projectRepository.countTeamMembersByProjectId(projectId);
+    }
+
+    public List<User> listTeamMembersByPage(Long projectId, Integer pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE);
+        Page<User> userPage = projectRepository.findAllTeamMembers(projectId, pageable);
+        return userPage.getContent();
     }
 }

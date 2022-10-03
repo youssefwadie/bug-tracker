@@ -81,6 +81,11 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
+  viewProject(projectId: number) {
+    this.router.navigate(["project", projectId]);
+  }
+
+
   open() {
     const modalRef = this.modalService.open(ProjectEditComponent);
     const component = modalRef.componentInstance as ProjectEditComponent;

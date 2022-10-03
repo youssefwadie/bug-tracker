@@ -20,10 +20,10 @@ public interface TicketMapper {
 //    @Mapping(source = "type.description", target = "type")
 //    @Mapping(source = "priority.description", target = "priority")
 //    @Mapping(source = "status.description", target = "status")
-    TicketDto modelToDto(Ticket ticket);
+    TicketDto ticketToTicketDto(Ticket ticket);
 
     @InheritInverseConfiguration
-    Ticket dtoToModel(TicketDto ticketDto);
+    Ticket ticketDtoToTicket(TicketDto ticketDto);
 
-    List<TicketDto> modelsToDtos(List<Ticket> tickets);
+    List<TicketDto> ticketsToTicketsDto(List<Ticket> tickets);
 }

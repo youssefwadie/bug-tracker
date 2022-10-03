@@ -22,11 +22,12 @@ import {ProjectListComponent} from './components/project-list/project.list.compo
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ChartComponent} from './components/dashboard/chart/chart.component';
 import {NgChartsModule} from "ng2-charts";
-import {ProjectDetailsComponent} from "./components/project-list/project-details/project-details.component";
+import {ProjectDetailsComponent} from "./components/project-list/project-details/project.details.component";
 import {ProjectEditComponent} from "./components/project-list/project-edit/project.edit.component";
 import {NgSelectModule} from '@ng-select/ng-select';
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { UserListComponent } from './components/user-list/user.list.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     ProjectListComponent,
     ProjectDetailsComponent,
     ProjectEditComponent,
+    UserListComponent,
   ],
 
   imports: [

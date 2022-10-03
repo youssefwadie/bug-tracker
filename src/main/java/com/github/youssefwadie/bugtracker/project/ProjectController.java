@@ -1,7 +1,9 @@
 package com.github.youssefwadie.bugtracker.project;
 
+import com.github.youssefwadie.bugtracker.dto.mappers.UserMapper;
 import com.github.youssefwadie.bugtracker.dto.model.ProjectDto;
 import com.github.youssefwadie.bugtracker.dto.mappers.ProjectMapper;
+import com.github.youssefwadie.bugtracker.dto.model.UserDto;
 import com.github.youssefwadie.bugtracker.model.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +21,16 @@ import java.util.Optional;
 public class ProjectController {
     private final ProjectService projectService;
     private final ProjectMapper projectMapper;
-
+    private final UserMapper userMapper;
+    
     @GetMapping
     public ResponseEntity<List<ProjectDto>> getAll() {
-        return ResponseEntity.ok(projectMapper.modelsToDtos(projectService.findAll()));
+        return ResponseEntity.ok(projectMapper.projectsToProjectsDto(projectService.findAll()));
     }
 
     @GetMapping("/page/{pageNumber:\\d+}")
     public ResponseEntity<List<ProjectDto>> listByPage(@PathVariable("pageNumber") Integer pageNumber) {
-        return ResponseEntity.ok(projectMapper.modelsToDtos(projectService.listByPage(pageNumber)));
+        return ResponseEntity.ok(projectMapper.projectsToProjectsDto(projectService.listByPage(pageNumber)));
     }
 
     @GetMapping("/count")
@@ -41,7 +44,17 @@ public class ProjectController {
         if (projectById.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(projectMapper.modelToDto(projectById.get()));
+        return ResponseEntity.ok(projectMapper.projectToProjectDto(projectById.get()));
     }
 
+    @GetMapping("/{id:\\d+}/members/count")
+    public ResponseEntity<Long> getTeamMembersCount(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(projectService.countTeamMembersByProjectId(id));
+    }
+
+    @GetMapping("/{projectId:\\d}/members/page/{pageNumber:\\d}")
+    public ResponseEntity<List<UserDto>> listTeamMembersByPage(@PathVariable("projectId") Long projectId,
+                                                               @PathVariable("pageNumber") Integer pageNumber) {
+        return ResponseEntity.ok(userMapper.usersToUsersDto(projectService.listTeamMembersByPage(projectId, pageNumber)));
+    }
 }

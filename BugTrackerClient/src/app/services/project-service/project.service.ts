@@ -4,6 +4,7 @@ import {map, Observable} from "rxjs";
 import {Project} from "../../model/project";
 import {environment} from "../../../environments/environment";
 import {TicketService} from "../ticket-service/ticket.service";
+import {User} from "../../model/user";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,13 @@ export class ProjectService {
   private readonly API_NUMBER_OF_PROJECT_PATH = 'projects/count';
   private readonly API_LIST_BY_PAGE_PATH = 'projects/page';
   private readonly API_FIND_BY_ID_PATH = 'projects';
+
+  private apiCountTeamMembersPath(projectId: number): string {
+    return `projects/${projectId}/members/count`;
+  }
+  private apiListTeamMembersByPagePath(projectId: number, pageNumber: number): string {
+    return `projects/${projectId}/members/page/${pageNumber}`;
+  }
 
   constructor(private http: HttpClient) {
   }
@@ -33,5 +41,15 @@ export class ProjectService {
   private static fromHttp(project: Project) {
     project.tickets = project.tickets.map(TicketService.fromHttp);
     return project;
+  }
+
+  getTeamMembers(projectId: number, pageNumber: number): Observable<Array<User>> {
+    return this.http.get<Array<User>>(`${environment.rootUrl}/${this.apiListTeamMembersByPagePath(projectId, pageNumber)}`,
+      {withCredentials: true});
+  }
+
+  getTeamMembersCount(projectId: number) {
+    return this.http.get<number>(`${environment.rootUrl}/${this.apiCountTeamMembersPath(projectId)}`,
+      {withCredentials: true});
   }
 }

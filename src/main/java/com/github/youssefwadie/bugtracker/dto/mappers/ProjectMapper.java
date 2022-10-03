@@ -1,13 +1,12 @@
 package com.github.youssefwadie.bugtracker.dto.mappers;
 
-import java.util.List;
-
 import com.github.youssefwadie.bugtracker.dto.model.ProjectDto;
 import com.github.youssefwadie.bugtracker.dto.model.UserDto;
+import com.github.youssefwadie.bugtracker.model.Project;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
-import com.github.youssefwadie.bugtracker.model.Project;
+import java.util.List;
 
 @Mapper(imports = UserDto.class,
         uses = {
@@ -18,10 +17,10 @@ import com.github.youssefwadie.bugtracker.model.Project;
 @Component
 public interface ProjectMapper {
 
-    ProjectDto modelToDto(Project project);
+    ProjectDto projectToProjectDto(Project project);
 
 
-    Project dtoToProject(ProjectDto projectDto);
+    Project projectDtoToProject(ProjectDto projectDto);
 
-    List<ProjectDto> modelsToDtos(List<Project> projects);
+    List<ProjectDto> projectsToProjectsDto(List<Project> projects);
 }

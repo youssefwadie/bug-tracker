@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoginRouteGuard } from './login-route.guard';
+import { DashboardRouteGuard } from './dashboard.route.guard';
 
-describe('LoginRouteGuard', () => {
-  let guard: LoginRouteGuard;
+describe('HomeRouteGuard', () => {
+  let guard: DashboardRouteGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(LoginRouteGuard);
+    guard = TestBed.inject(DashboardRouteGuard);
   });
 
   it('should be created', () => {

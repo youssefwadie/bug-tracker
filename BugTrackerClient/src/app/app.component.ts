@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.router.navigate(['login']);
           }
         }
-      })
+      });
   }
 
   ngOnDestroy(): void {

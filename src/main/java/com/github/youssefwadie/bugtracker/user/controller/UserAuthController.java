@@ -31,7 +31,7 @@ public class UserAuthController {
 
     @PostMapping("login")
     public ResponseEntity<UserDto> login() {
-        UserDto userDto = userMapper.modelToDto(UserContextHolder.get());
+        UserDto userDto = userMapper.userToUserDto(UserContextHolder.get());
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 

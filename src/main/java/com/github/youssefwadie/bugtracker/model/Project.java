@@ -20,6 +20,10 @@ public class Project {
         this.description = description;
     }
 
+    public Project(Long id, String name, String description, Set<User> teamMembers) {
+        this(id, name, description);
+        this.teamMembers = teamMembers;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

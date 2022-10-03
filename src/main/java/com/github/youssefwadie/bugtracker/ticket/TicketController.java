@@ -37,20 +37,20 @@ public class TicketController {
     public ResponseEntity<List<TicketDto>> getAllTickets() {
         User loggedInUser = UserContextHolder.get();
         List<Ticket> usersTickets = ticketService.findAllBySubmitterId(loggedInUser.getId());
-        return ResponseEntity.ok(ticketMapper.modelsToDtos(usersTickets));
+        return ResponseEntity.ok(ticketMapper.ticketsToTicketsDto(usersTickets));
     }
     
     @GetMapping("/page/{pageNumber:\\d+}")
     public ResponseEntity<List<TicketDto>> getTicketsPageAfter(@PathVariable("pageNumber") Integer pageNumber) {
         User loggedInUser = UserContextHolder.get();
     	List<Ticket> tickets = ticketService.listByPage(loggedInUser.getId(), pageNumber);
-    	return ResponseEntity.ok(ticketMapper.modelsToDtos(tickets));
+    	return ResponseEntity.ok(ticketMapper.ticketsToTicketsDto(tickets));
     }
     
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Ticket> createTicket(@RequestBody TicketDto newTicket) throws ConstraintsViolationException, URISyntaxException {
         newTicket.setSubmitter(UserContextHolder.get().getId());
-        Ticket savedTicket = ticketService.save(ticketMapper.dtoToModel(newTicket));
+        Ticket savedTicket = ticketService.save(ticketMapper.ticketDtoToTicket(newTicket));
         URI resourceUri = new URI("http://localhost:8080/api/v1/tickets/" + savedTicket.getId());
         return ResponseEntity.created(resourceUri).build();
     }
@@ -62,17 +62,17 @@ public class TicketController {
         if (ticketOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(ticketMapper.modelToDto(ticketOptional.get()));
+        return ResponseEntity.ok(ticketMapper.ticketToTicketDto(ticketOptional.get()));
     }
 
     @PutMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TicketDto> updateTicketById(@PathVariable("id") Long id, @RequestBody TicketDto ticketDto) {
-        Ticket ticket = ticketMapper.dtoToModel(ticketDto);
+        Ticket ticket = ticketMapper.ticketDtoToTicket(ticketDto);
         User loggedInUser = UserContextHolder.get();
         ticket.setId(id);
         ticket.setSubmitterId(loggedInUser.getId());
         Ticket savedTicket = ticketService.update(ticket);
-        return ResponseEntity.ok(ticketMapper.modelToDto(savedTicket));
+        return ResponseEntity.ok(ticketMapper.ticketToTicketDto(savedTicket));
     }
     
     @GetMapping("/count")

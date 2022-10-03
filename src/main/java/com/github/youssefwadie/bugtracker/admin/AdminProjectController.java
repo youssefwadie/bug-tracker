@@ -32,7 +32,7 @@ public class AdminProjectController {
 	@PostMapping("")
 	public ResponseEntity<Object> createProject(@RequestBody ProjectDto projectDto) throws URISyntaxException {
 		try {
-			Project savedProject = projectService.save(projectMapper.dtoToProject(projectDto));
+			Project savedProject = projectService.save(projectMapper.projectDtoToProject(projectDto));
 			URI resourceURI = new URI("http://localhost:8080/api/v1/projects/" + savedProject.getId());
 			return ResponseEntity.created(resourceURI).build();
 		} catch (IllegalArgumentException ex) {
@@ -47,7 +47,7 @@ public class AdminProjectController {
 			@RequestBody List<Long> developerIds) {
 		try {
 			projectService.addToProjectTeamMembers(id, developerIds);
-			return ResponseEntity.ok(projectMapper.modelToDto(projectService.findById(id).get()));
+			return ResponseEntity.ok(projectMapper.projectToProjectDto(projectService.findById(id).get()));
 		} catch (IllegalArgumentException ex) {
 			SimpleResponseBody responseBody = SimpleResponseBody.builder(HttpStatus.BAD_REQUEST)
 					.message(ex.getMessage()).build();
