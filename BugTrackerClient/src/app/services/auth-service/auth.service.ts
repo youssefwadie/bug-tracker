@@ -63,6 +63,7 @@ export class AuthService {
     if (this.isAuthenticated) {
       return of(true);
     }
+
     if (!this.checked) {
       return this.http.get<boolean>(`${environment.rootUrl}/${this.API_IS_LOGGED_IN_PATH}`,
         {withCredentials: true})

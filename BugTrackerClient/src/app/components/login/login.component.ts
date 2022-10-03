@@ -54,9 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.router.navigate(['reset'])
   }
 
-  register()
-    :
-    void {
+  register(): void {
     this.router.navigate(['register']);
   }
 
