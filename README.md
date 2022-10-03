@@ -15,15 +15,14 @@ Bug tracker is project management tool, that is intended to be used as an intern
 
 ---
 
+#### Tickets
+<img alt="ticket-list" src="/img/front-end/ticket-list.png">
+
+---
+
 #### Login and Registration
 <img alt="login" src="/img/front-end/login.png">
 <br><br>
 <img alt="sign up" src="/img/front-end/sign-up.png">
-
----
-
-
-#### Tickets
-<img alt="ticket-list" src="/img/front-end/ticket-list.png">
 
 ---
