@@ -29,12 +29,14 @@
     </div>
 
     <div class="mb-3">
-      <ng-select name="users"
+      <label for="teamMembers" class="form-label">Team Members</label>
+      <ng-select name="teamMembers"
+                 id="teamMembers"
                  [multiple]="true"
-                 [items]="users"
+                 [items]="organizationTeamMembers"
                  bindLabel="fullName"
                  bindValue="id"
-                 [(ngModel)]="selectedUsersIds">
+                 [(ngModel)]="projectTeamMemberIds">
       </ng-select>
     </div>
   </div>

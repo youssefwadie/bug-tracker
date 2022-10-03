@@ -15,8 +15,8 @@ export class ProjectEditComponent implements OnInit {
   project: Project;
   formProject: Project;
 
-  selectedUsersIds: Array<number>;
-  users: Array<User>;
+  projectTeamMemberIds: Array<number>;
+  organizationTeamMembers: Array<User>;
   private validTitle = false;
   private validDescription = false;
 
@@ -31,8 +31,8 @@ export class ProjectEditComponent implements OnInit {
     this.formProject = Object.assign({}, this.project);
     this.userService.getUsers().subscribe({
       next: users => {
-        this.users = users;
-        this.selectedUsersIds = this.project.teamMembers.map(user => user.id);
+        this.organizationTeamMembers = users;
+        this.projectTeamMemberIds = this.project.teamMembers.map(user => user.id);
       }
     })
   }
@@ -42,7 +42,7 @@ export class ProjectEditComponent implements OnInit {
     this.formProject.description = this.formProject.description.trim();
 
     console.log(`submitting`, this.formProject);
-    console.log(this.selectedUsersIds);
+    console.log(this.projectTeamMemberIds);
 
     this.router.navigate([], {
       relativeTo: this.route,
