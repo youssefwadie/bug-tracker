@@ -26,7 +26,7 @@ public class ProjectService {
     private final UserService userService;
 
     public Optional<Project> findById(Long id) {
-        return projectRepository.findById(id);
+        return projectRepository.findByIdFetchTeamMembers(id, Pageable.unpaged());
     }
 
     public List<Project> findAll() {

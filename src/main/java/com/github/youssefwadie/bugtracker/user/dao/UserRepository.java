@@ -161,4 +161,11 @@ public interface UserRepository {
      */
     long countTeamMembersByProjectId(Long projectId);
 
+    /**
+     * retrieves all the users works on a given project with its id
+     * @param projectId must not be null
+     * @return all the users for the given project
+     * @throws IllegalArgumentException if the given {@code projectId} is null
+     */
+    List<User> findAllByProjectId(Long projectId);
 }

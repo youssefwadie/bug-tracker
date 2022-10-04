@@ -47,6 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private static final String QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ? ORDER BY %s LIMIT ? OFFSET ?";
     private static final String QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ? LIMIT ? OFFSET ?";
+    private static final String QUERY_FIND_ALL_BY_PROJECT_ID_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ?";
     private static final String QUERY_COUNT_TEAM_MEMBERS_BY_PROJECT_ID = "SELECT COUNT(*) FROM works_on WHERE project_id = ?";
 
 
@@ -196,7 +197,7 @@ public class UserRepositoryImpl implements UserRepository {
         Assert.notNull(pageable, "pageable must not be null!");
 
         if (pageable.isUnpaged()) {
-            return new PageImpl<>((List<User>) findAll());
+            return new PageImpl<>(findAllByProjectId(projectId));
         }
 
         Sort sort = pageable.getSort();
@@ -220,8 +221,11 @@ public class UserRepositoryImpl implements UserRepository {
         return teamMembersCount == null ? 0 : teamMembersCount;
     }
 
-
-
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findAllByProjectId(Long projectId) {
+        return jdbcTemplate.query(QUERY_FIND_ALL_BY_PROJECT_ID_TEMPLATE, rowMapper, projectId);
+    }
 
     private void setPreparedStatementDetails(User user, final PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, user.getEmail());
