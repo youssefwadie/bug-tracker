@@ -1,22 +1,22 @@
-package com.github.youssefwadie.bugtracker.user.service;
+package com.github.youssefwadie.bugtracker.user.services;
+
+import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
+import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
+import com.github.youssefwadie.bugtracker.model.Role;
+import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import com.github.youssefwadie.bugtracker.confirmationtoken.ConfirmationTokenService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
-import com.github.youssefwadie.bugtracker.model.Role;
-import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
-import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -63,10 +63,6 @@ public class UserService {
         return savedConfirmationToken.getToken();
     }
 
-    public boolean doesUserWorkOnProject(Long userId, Long projectId) {
-    	return userRepository.doesUserWorkOnProject(userId, projectId);
-    }
-    
     @Transactional
     public User save(User user) throws ConstraintsViolationException {
         validatorService.validateUser(user);
@@ -93,23 +89,13 @@ public class UserService {
     public boolean existsAllByIds(List<Long> ids) {
         return ids.stream().allMatch(userRepository::existsById);
     }
-    
-    public void addUsersToProjectTeamMembers(Long projectId, List<Long> userIds) {
-		boolean allTeamMembersExists = existsAllByIds(userIds);
-    	if (!allTeamMembersExists) {
-			throw new IllegalArgumentException("some or all users are unknown");
-		}
-		
-		for (Long userId : userIds) {
-			if (!doesUserWorkOnProject(userId, projectId)) {
-				addUserToProjectTeamMembers(userId, projectId);
-			}
-		}
 
+
+    public Long countTeamMembersByProjectId(Long projectId) {
+        return userRepository.countTeamMembersByProjectId(projectId);
     }
-    
-	public void addUserToProjectTeamMembers(Long userId, Long projectId) {
-		userRepository.addUserToProjectTeamMembers(userId, projectId);
-	}
 
+    public Page<User> findAllTeamMembers(Long projectId, Pageable pageable) {
+        return userRepository.findAllTeamMembers(projectId, pageable);
+    }
 }

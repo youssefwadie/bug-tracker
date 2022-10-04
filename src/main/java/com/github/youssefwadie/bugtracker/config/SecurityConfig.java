@@ -1,6 +1,7 @@
-package com.github.youssefwadie.bugtracker.security;
+package com.github.youssefwadie.bugtracker.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import com.github.youssefwadie.bugtracker.security.filters.AccessTokenGeneratorFilter;
 import com.github.youssefwadie.bugtracker.security.filters.AccessTokenValidatorFilter;
 import com.github.youssefwadie.bugtracker.security.interceptors.UserContextInterceptor;

@@ -1,7 +1,7 @@
 package com.github.youssefwadie.bugtracker.ticket;
 
 import com.github.youssefwadie.bugtracker.model.Ticket;
-import com.github.youssefwadie.bugtracker.project.ProjectRepository;
+import com.github.youssefwadie.bugtracker.project.dao.ProjectRepository;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

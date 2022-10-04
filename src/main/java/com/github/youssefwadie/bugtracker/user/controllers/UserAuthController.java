@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.user.controller;
+package com.github.youssefwadie.bugtracker.user.controllers;
 
 import com.github.youssefwadie.bugtracker.dto.mappers.UserMapper;
 import com.github.youssefwadie.bugtracker.dto.model.UserDto;
@@ -6,8 +6,8 @@ import com.github.youssefwadie.bugtracker.model.ResendEmailRequest;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.UserContextHolder;
 import com.github.youssefwadie.bugtracker.security.service.AuthService;
-import com.github.youssefwadie.bugtracker.user.service.RegistrationService;
-import com.github.youssefwadie.bugtracker.user.service.UserService;
+import com.github.youssefwadie.bugtracker.user.services.RegistrationService;
+import com.github.youssefwadie.bugtracker.user.services.UserService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

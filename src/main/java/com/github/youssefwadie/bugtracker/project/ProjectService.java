@@ -1,8 +1,9 @@
 package com.github.youssefwadie.bugtracker.project;
 
+import com.github.youssefwadie.bugtracker.project.dao.ProjectRepository;
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.user.service.UserService;
+import com.github.youssefwadie.bugtracker.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +37,21 @@ public class ProjectService {
         if (!projectRepository.existsById(projectId)) {
             throw new ProjectNotFoundException(String.format(PROJECT_NOT_FOUND_MSG, projectId));
         }
-        userService.addUsersToProjectTeamMembers(projectId, userIds);
+        addUsersToProjectTeamMembers(projectId, userIds);
+    }
+
+    public void addUsersToProjectTeamMembers(Long projectId, List<Long> userIds) {
+        boolean allTeamMembersExists = userService.existsAllByIds(userIds);
+        if (!allTeamMembersExists) {
+            throw new IllegalArgumentException("some or all users are unknown");
+        }
+
+        for (Long userId : userIds) {
+            if (!projectRepository.doesUserWorkOnProject(userId, projectId)) {
+                projectRepository.addUserToProjectTeamMembers(userId, projectId);
+            }
+        }
+
     }
 
     @Transactional
@@ -64,12 +79,12 @@ public class ProjectService {
     }
 
     public Long countTeamMembersByProjectId(Long projectId) {
-        return projectRepository.countTeamMembersByProjectId(projectId);
+        return userService.countTeamMembersByProjectId(projectId);
     }
 
     public List<User> listTeamMembersByPage(Long projectId, Integer pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE);
-        Page<User> userPage = projectRepository.findAllTeamMembers(projectId, pageable);
+        Page<User> userPage = userService.findAllTeamMembers(projectId, pageable);
         return userPage.getContent();
     }
 }

@@ -1,11 +1,13 @@
 package com.github.youssefwadie.bugtracker.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -17,13 +19,9 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	public User(Long id) {
-		this.id = id;
-	}
+	private String email;
 
-	@Column(name = "role", nullable = true)
-	@Enumerated(EnumType.STRING)
-	private Role role;
+	private String password;
 
 	@Column(name = "first_name", length = 255)
 	private String firstName;
@@ -31,12 +29,16 @@ public class User {
 	@Column(name = "last_name", length = 255)
 	private String lastName;
 
-	private String email;
-
-	private String password;
+	@Column(name = "role", nullable = true)
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
 	@Column(name = "email_verified")
 	private boolean emailVerified;
+
+	public User(Long id) {
+		this.id = id;
+	}
 
 	@Transient
 	public String getFullName() {

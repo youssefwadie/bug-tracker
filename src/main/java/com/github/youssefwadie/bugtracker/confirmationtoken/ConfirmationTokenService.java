@@ -1,12 +1,11 @@
-package com.github.youssefwadie.bugtracker.user.confirmationtoken;
-
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
+package com.github.youssefwadie.bugtracker.confirmationtoken;
 
 import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
-
+import com.github.youssefwadie.bugtracker.confirmationtoken.dao.ConfirmationTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -28,6 +27,6 @@ public class ConfirmationTokenService {
     }
 
     public void setConfirmedById(Long id) {
-        repository.setEnabledById(id);
+        repository.setConfirmedStatus(id, true);
     }
 }

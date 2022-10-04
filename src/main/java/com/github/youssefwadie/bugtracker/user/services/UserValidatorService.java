@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.user.service;
+package com.github.youssefwadie.bugtracker.user.services;
 
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
@@ -40,30 +40,6 @@ public class UserValidatorService {
         return emailValidator.isValid(email);
     }
 
-//    public void validateRegistrationRequest(RegistrationRequest registrationRequest) throws ConstraintViolationException {
-//        final Map<String, String> errors = new HashMap<>();
-//        String email = registrationRequest.getEmail();
-//        if (isBlank(email)) {
-//            errors.put("email", BLANK_INPUT_MSG);
-//        } else if (!emailAlreadyInUser(registrationRequest.getEmail())) {
-//            errors.put("email", ALREADY_TAKEN_EMAIL_MSG);
-//        } else if (!isValidEmail(registrationRequest.getEmail())) {
-//            errors.put("email", INVALID_EMAIL_MSG);
-//        }
-//
-//        if (!isValidPassword(registrationRequest.getPassword())) {
-//            errors.put("password", PASSWORD_VALIDATION_MSG);
-//        }
-//        if (isBlank(registrationRequest.getFirstName())) {
-//            errors.put("firstName", BLANK_INPUT_MSG);
-//        }
-//        if (isBlank(registrationRequest.getLastName())) {
-//            errors.put("lastName", BLANK_INPUT_MSG);
-//        }
-//        if (!errors.isEmpty()) {
-//            throw new ConstraintViolationException(errors);
-//        }
-//    }
 
     public boolean isBlank(String str) {
         return str == null || str.isBlank();

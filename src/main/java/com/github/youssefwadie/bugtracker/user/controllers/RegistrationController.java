@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.user.controller;
+package com.github.youssefwadie.bugtracker.user.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
-import com.github.youssefwadie.bugtracker.user.service.RegistrationService;
+import com.github.youssefwadie.bugtracker.user.services.RegistrationService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
 
 import lombok.RequiredArgsConstructor;

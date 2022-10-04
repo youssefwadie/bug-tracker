@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.youssefwadie.bugtracker.dto.model.UserDto;
 import com.github.youssefwadie.bugtracker.dto.mappers.UserMapper;
-import com.github.youssefwadie.bugtracker.user.service.UserService;
+import com.github.youssefwadie.bugtracker.user.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 

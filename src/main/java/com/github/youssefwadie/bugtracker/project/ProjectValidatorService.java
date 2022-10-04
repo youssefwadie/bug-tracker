@@ -3,7 +3,7 @@ package com.github.youssefwadie.bugtracker.project;
 
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-import com.github.youssefwadie.bugtracker.user.service.UserValidatorService;
+import com.github.youssefwadie.bugtracker.user.services.UserValidatorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

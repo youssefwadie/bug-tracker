@@ -1,21 +1,14 @@
 package com.github.youssefwadie.bugtracker;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.project.ProjectService;
 import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
+
+import java.util.*;
 
 @RequiredArgsConstructor
 //@Component
@@ -27,7 +20,7 @@ public class DefaultBugTrackerBootStrap implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		final List<User> users = generateUsers(1, 50);
-		userRepository.saveAllAndFlush(users);
+		userRepository.saveAll(users);
 		final List<Project> projects = generateProjects(2, 50);
 		setTeamMembersForProjects(projects, users);
 		for (Project project : projects) {

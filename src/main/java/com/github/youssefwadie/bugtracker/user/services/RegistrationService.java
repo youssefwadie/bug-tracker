@@ -1,4 +1,4 @@
-package com.github.youssefwadie.bugtracker.user.service;
+package com.github.youssefwadie.bugtracker.user.services;
 
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
@@ -11,7 +11,7 @@ import com.github.youssefwadie.bugtracker.model.ConfirmationToken;
 import com.github.youssefwadie.bugtracker.model.RegistrationRequest;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-import com.github.youssefwadie.bugtracker.user.confirmationtoken.ConfirmationTokenService;
+import com.github.youssefwadie.bugtracker.confirmationtoken.ConfirmationTokenService;
 
 import lombok.RequiredArgsConstructor;
 

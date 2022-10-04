@@ -1,8 +1,12 @@
-package com.github.youssefwadie.bugtracker.jdbc.project;
+package com.github.youssefwadie.bugtracker.project.dao;
 
+import com.github.youssefwadie.bugtracker.util.JdbcUtils;
+import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
 import com.github.youssefwadie.bugtracker.model.Project;
+import com.github.youssefwadie.bugtracker.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -20,12 +25,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Repository
 @RequiredArgsConstructor
-public class ProjectRepositoryJdbcImpl implements ProjectRepositoryJdbc {
+public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String INSERT_PROJECT_TEMPLATE = "INSERT INTO projects (name, description)" +
             "VALUES(?, ?)";
+    private static final String INSERT_ADD_USER_TO_PROJECT_TEAM_MEMBERS_TEMPLATE = "INSERT INTO works_on (`project_id`,`user_id`) VALUES (?, ?)";
 
     private static final String UPDATE_PROJECT_TEMPLATE = "UPDATE projects SET name = ?, description = ? WHERE id = ?";
     private static final String QUERY_FIND_BY_ID_TEMPLATE = "SELECT * FROM projects WHERE id = ?";
@@ -33,8 +42,19 @@ public class ProjectRepositoryJdbcImpl implements ProjectRepositoryJdbc {
     public static final String QUERY_CHECK_IF_EXISTS_BY_ID_TEMPLATE = "SELECT COUNT(*) > 0 FROM projects WHERE id = ?";
     private static final String QUERY_FIND_ALL = "SELECT * FROM projects";
 
+    private static final String QUERY_FIND_ALL_WITH_SORT_TEMPLATE = "SELECT * FROM projects ORDER BY %s";
+
+    private static final String QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE = "SELECT * FROM projects ORDER BY %s LIMIT ? OFFSET ?";
+    private static final String QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE = "SELECT * FROM projects LIMIT ? OFFSET ?";
+
     private static final String QUERY_COUNT_ALL = "SELECT COUNT(*) FROM projects";
+
+    private static final String DELETE_BY_ID_TEMPLATE = "DELETE FROM projects WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM projects";
+
+    public static final String QUERY_CHECK_IF_USER_WORKS_ON_PROJECT_BY_ID_TEMPLATE = "SELECT COUNT(*) > 0 FROM works_on WHERE user_id = ?1 AND project_id = ?2";
     private final JdbcTemplate jdbcTemplate;
+    private final UserRepository userRepository;
     private final RowMapper<Project> rowMapper = new ProjectRowMapper();
 
 
@@ -88,7 +108,7 @@ public class ProjectRepositoryJdbcImpl implements ProjectRepositoryJdbc {
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<Project> findAll() {
+    public List<Project> findAll() {
         return jdbcTemplate.query(QUERY_FIND_ALL, rowMapper);
     }
 
@@ -107,47 +127,105 @@ public class ProjectRepositoryJdbcImpl implements ProjectRepositoryJdbc {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-
+        Assert.notNull(id, "id must not be null!");
+        jdbcTemplate.update(DELETE_BY_ID_TEMPLATE, id);
     }
 
     @Override
+    @Transactional
     public void delete(Project project) {
-
+        Assert.notNull(project, "project must not be null!");
+        deleteById(project.getId());
     }
 
     @Override
+    @Transactional
     public void deleteAllById(Iterable<? extends Long> ids) {
-
+        Assert.notNull(ids, "IDs must not be null!");
+        ids.forEach(this::deleteById);
     }
 
     @Override
+    @Transactional
     public void deleteAll(Iterable<Project> projects) {
-
+        Assert.notNull(projects, "project must not be null!");
+        projects.forEach(this::delete);
     }
 
     @Override
+    @Transactional
     public void deleteAll() {
-
+        jdbcTemplate.update(DELETE_ALL);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Iterable<Project> findAll(Sort sort) {
-        return null;
+        Assert.notNull(sort, "sort must not be null!");
+        if (sort.isUnsorted()) {
+            return this.findAll();
+        }
+        Stream<Sort.Order> orderStream = sort.get();
+        String sortString = JdbcUtils.buildSortString(orderStream);
+        return jdbcTemplate.query(String.format(QUERY_FIND_ALL_WITH_SORT_TEMPLATE, sortString), rowMapper);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Project> findAll(Pageable pageable) {
-        return null;
+        Assert.notNull(pageable, "pageable cannot be null");
+        final long count = count();
+
+        if (pageable.isUnpaged()) {
+            return new PageImpl<>((List<Project>) findAll(), pageable, count);
+        }
+
+        Sort sort = pageable.getSort();
+        if (sort.isUnsorted()) {
+            List<Project> projects =
+                    jdbcTemplate.query(QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE, rowMapper, pageable.getPageSize(), pageable.getOffset());
+            return new PageImpl<>(projects, pageable, count);
+        }
+
+        String sortString = JdbcUtils.buildSortString(sort.get());
+        List<Project> projects =
+                jdbcTemplate.query(String.format(QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE, sortString),
+                        rowMapper, pageable.getPageSize(), pageable.getOffset());
+        return new PageImpl<>(projects, pageable, count);
     }
 
     @Override
-    public Optional<Project> findByIdFetchTeamMembers(Long id) {
-        return Optional.empty();
+    @Transactional(readOnly = true)
+    public Optional<Project> findByIdFetchTeamMembers(Long id, Pageable pageable) {
+        Optional<Project> project = findById(id);
+        project.ifPresent(p -> {
+            Page<User> users = userRepository.findAllTeamMembers(id, pageable);
+            p.setTeamMembers(Set.copyOf(users.getContent()));
+        });
+        return project;
     }
 
     @Override
-    public long countTeamMembersByProjectId(Long projectId) {
-        return 0;
+    @Transactional
+    public void addUserToProjectTeamMembers(Long userId, Long projectId) {
+        Assert.notNull(userId, "userId must not be null!");
+        Assert.notNull(projectId, "projectId must not be null!");
+        if (!existsById(projectId)) {
+            throw new IllegalArgumentException("projectId doesn't exist");
+        }
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("userId doesn't exist");
+        }
+        jdbcTemplate.update(INSERT_ADD_USER_TO_PROJECT_TEAM_MEMBERS_TEMPLATE, projectId, userId);
     }
+    @Override
+    @Transactional(readOnly = true)
+    public boolean doesUserWorkOnProject(Long userId, Long projectId) {
+        Assert.notNull(userId, "userId must not be null!");
+        Assert.notNull(projectId, "projectId must not be null!");
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(QUERY_CHECK_IF_USER_WORKS_ON_PROJECT_BY_ID_TEMPLATE, Boolean.class, userId, projectId));
+    }
+
 }

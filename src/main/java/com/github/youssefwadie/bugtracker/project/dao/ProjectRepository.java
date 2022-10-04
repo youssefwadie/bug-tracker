@@ -1,13 +1,14 @@
-package com.github.youssefwadie.bugtracker.jdbc.project;
+package com.github.youssefwadie.bugtracker.project.dao;
 
 import com.github.youssefwadie.bugtracker.model.Project;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface ProjectRepositoryJdbc {
+public interface ProjectRepository {
 
     /**
      * Saves a given project. Use the returned instance for further operations as the save operation might have changed the
@@ -54,7 +55,7 @@ public interface ProjectRepositoryJdbc {
      *
      * @return all projects
      */
-    Iterable<Project> findAll();
+    List<Project> findAll();
 
     /**
      * Returns all instances of the type {@link  Project} with the given IDs.
@@ -136,15 +137,28 @@ public interface ProjectRepositoryJdbc {
      * Retrieves a project with its team members by its id.
      *
      * @param id must not be {@literal null}.
+     * @param pageable the pageable to request a paged result, can be {@link Pageable#unpaged()}, must not be {@literal null}.
      * @return the {@link Project} with the given id or {@literal Optional#empty()} if none found.
      * @throws IllegalArgumentException if {@literal id} is {@literal null}.
      */
-    Optional<Project> findByIdFetchTeamMembers(Long id);
+    Optional<Project> findByIdFetchTeamMembers(Long id, Pageable pageable);
 
     /**
-     * Returns the number of team members of a given project's id.
-     *
-     * @return the number of projects.
+     * Make a user with the given id works on a project with the given id.
+     * @param userId must not be {@literal null}.
+     * @param projectId must not be {@literal null}.
+     * @throws IllegalArgumentException if the {@code userId} or {@code projectId} is null.
+     * or the given {@code userId} or {@code projectId} doesn't exist.
      */
-    long countTeamMembersByProjectId(Long projectId);
+    void addUserToProjectTeamMembers(Long userId, Long projectId);
+
+
+    /**
+     * Checks if a user with the given id works on a project with a given id.
+     * @param userId must not be {@literal null}.
+     * @param projectId must not be {@literal null}.
+     * @throws IllegalArgumentException if the {@code userId} or {@code projectId} is null
+     * @return {@literal true} if the user with the given id works on the project with the given id. {@literal false} otherwise.
+     */
+    boolean doesUserWorkOnProject(Long userId, Long projectId);
 }
