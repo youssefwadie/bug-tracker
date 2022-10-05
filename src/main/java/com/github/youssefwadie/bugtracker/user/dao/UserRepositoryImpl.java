@@ -195,23 +195,23 @@ public class UserRepositoryImpl implements UserRepository {
     public Page<User> findAllTeamMembers(Long projectId, Pageable pageable) {
         Assert.notNull(projectId, "projectId must not be null!");
         Assert.notNull(pageable, "pageable must not be null!");
-
+        final long count = countTeamMembersByProjectId(projectId);
         if (pageable.isUnpaged()) {
-            return new PageImpl<>(findAllByProjectId(projectId));
+            return new PageImpl<>(findAllByProjectId(projectId), pageable, count);
         }
 
         Sort sort = pageable.getSort();
         if (sort.isUnsorted()) {
-            List<User> users =
+            final List<User> users =
                     jdbcTemplate.query(QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE, rowMapper, projectId, pageable.getPageSize(), pageable.getOffset());
-            return new PageImpl<>(users);
+            return new PageImpl<>(users, pageable, count);
         }
 
         String sortString = JdbcUtils.buildSortString(sort.get());
-        List<User> users =
+        final List<User> users =
                 jdbcTemplate.query(String.format(QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE, sortString),
                         rowMapper, projectId, pageable.getPageSize(), pageable.getOffset());
-        return new PageImpl<>(users);
+        return new PageImpl<>(users, pageable, count);
     }
 
     @Override

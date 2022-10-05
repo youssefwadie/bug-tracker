@@ -4,7 +4,6 @@ package com.github.youssefwadie.bugtracker.user.dao;
 import com.github.youssefwadie.bugtracker.AbstractJdbcTest;
 import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

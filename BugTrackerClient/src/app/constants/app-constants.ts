@@ -12,4 +12,8 @@ export abstract class AppConstants {
       minute: 'numeric'
     }
   }
+
+  public static get TOTAL_COUNT_HEADER_NAME(): string {
+    return "X-Total-Count";
+  }
 }

@@ -136,7 +136,7 @@ public interface ProjectRepository {
     /**
      * Retrieves a project with its team members by its id.
      *
-     * @param id must not be {@literal null}.
+     * @param id       must not be {@literal null}.
      * @param pageable the pageable to request a paged result, can be {@link Pageable#unpaged()}, must not be {@literal null}.
      * @return the {@link Project} with the given id or {@literal Optional#empty()} if none found.
      * @throws IllegalArgumentException if {@literal id} is {@literal null}.
@@ -145,20 +145,39 @@ public interface ProjectRepository {
 
     /**
      * Make a user with the given id works on a project with the given id.
-     * @param userId must not be {@literal null}.
+     *
+     * @param newTeamMember    must not be {@literal null}.
      * @param projectId must not be {@literal null}.
-     * @throws IllegalArgumentException if the {@code userId} or {@code projectId} is null.
-     * or the given {@code userId} or {@code projectId} doesn't exist.
+     * @throws IllegalArgumentException if the {@code newTeamMember} or {@code projectId} is null.
+     *                                  or the given {@code newTeamMember} or {@code projectId} doesn't exist.
      */
-    void addUserToProjectTeamMembers(Long userId, Long projectId);
+    void addUserToProjectTeamMembers(Long newTeamMember, Long projectId);
 
 
     /**
      * Checks if a user with the given id works on a project with a given id.
-     * @param userId must not be {@literal null}.
+     *
+     * @param teamMemberId    must not be {@literal null}.
      * @param projectId must not be {@literal null}.
-     * @throws IllegalArgumentException if the {@code userId} or {@code projectId} is null
      * @return {@literal true} if the user with the given id works on the project with the given id. {@literal false} otherwise.
+     * @throws IllegalArgumentException if the {@code teamMemberId} or {@code projectId} is null
      */
-    boolean doesUserWorkOnProject(Long userId, Long projectId);
+    boolean userWorksOnProject(Long teamMemberId, Long projectId);
+
+    /**
+     * Removes the user with a given id from project's team members
+     * @param teamMemberId must not be {@literal null}.
+     * @param projectId must not be {@literal null}.
+     * @throws IllegalArgumentException if the {@code teamMemberId} or {@code projectId} is {@literal null}.
+     */
+    void removeUserFromProjectTeamMembers(Long teamMemberId, Long projectId);
+
+    /**
+     * Retrieves all team members ids for a given project by its id
+     * @param projectId must not be {@literal null}.
+     * @throws IllegalArgumentException if the {@code projectId} is {@literal null}.
+     * @return all team members of the given project sorted in ascending order.
+     */
+    List<Long> getTeamMemberIds(Long projectId);
+
 }

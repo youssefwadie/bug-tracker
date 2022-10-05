@@ -27,6 +27,8 @@ import javax.servlet.Filter;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.youssefwadie.bugtracker.constants.ResponseConstants.TOTAL_COUNT_HEADER_NAME;
+
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(TokenProperties.class)
@@ -47,7 +49,7 @@ public class SecurityConfig implements WebMvcConfigurer {
             configuration.setAllowCredentials(true);
             configuration.setAllowedHeaders(Collections.singletonList("*"));
             configuration.setAllowedMethods(Collections.singletonList("*"));
-            configuration.setExposedHeaders(List.of("Authorization"));
+            configuration.setExposedHeaders(Collections.singletonList(TOTAL_COUNT_HEADER_NAME));
             configuration.setMaxAge(3600L);
             return configuration;
         });

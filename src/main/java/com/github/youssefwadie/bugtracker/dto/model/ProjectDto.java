@@ -1,14 +1,11 @@
 package com.github.youssefwadie.bugtracker.dto.model;
 
-import java.util.Collection;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
+
+import java.util.Collection;
 
 @Data
 public class ProjectDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     private String name;
     private String description;

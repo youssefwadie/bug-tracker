@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ProjectEditComponent} from "./project-edit/project.edit.component";
 import {PageEvent} from "@angular/material/paginator";
+import {AppConstants} from "../../constants/app-constants";
 
 @Component({
   selector: 'app-project-list',
@@ -26,11 +27,6 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.projectService.getCount().subscribe({
-      next: count => {
-        this.projectsCount = count;
-      }
-    });
     this.loadPageContent(1);
     this.processQueryParams();
   }
@@ -60,8 +56,12 @@ export class ProjectListComponent implements OnInit {
 
   loadPageContent(pageNumber: number): void {
     this.projectService.listByPage(pageNumber).subscribe({
-      next: projects => {
-        this.projects = projects;
+      next: response => {
+        const projectCount = Number(response.headers.get(AppConstants.TOTAL_COUNT_HEADER_NAME));
+        if (!isNaN(projectCount)) this.projectsCount = projectCount;
+
+        const responseBody = response.body;
+        if (responseBody != null) this.projects = responseBody;
       }
     })
   }

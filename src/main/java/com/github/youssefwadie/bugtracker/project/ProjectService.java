@@ -1,9 +1,11 @@
 package com.github.youssefwadie.bugtracker.project;
 
-import com.github.youssefwadie.bugtracker.project.dao.ProjectRepository;
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.project.dao.ProjectRepository;
 import com.github.youssefwadie.bugtracker.user.services.UserService;
+import com.github.youssefwadie.bugtracker.util.ListDiff;
+import com.github.youssefwadie.bugtracker.util.ListUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,10 +36,14 @@ public class ProjectService {
     }
 
     public void addToProjectTeamMembers(Long projectId, List<Long> userIds) {
-        if (!projectRepository.existsById(projectId)) {
+        if (!this.existsById(projectId)) {
             throw new ProjectNotFoundException(String.format(PROJECT_NOT_FOUND_MSG, projectId));
         }
         addUsersToProjectTeamMembers(projectId, userIds);
+    }
+
+    public boolean existsById(Long projectId) {
+        return projectId != null && projectRepository.existsById(projectId);
     }
 
     public void addUsersToProjectTeamMembers(Long projectId, List<Long> userIds) {
@@ -47,7 +53,7 @@ public class ProjectService {
         }
 
         for (Long userId : userIds) {
-            if (!projectRepository.doesUserWorkOnProject(userId, projectId)) {
+            if (!projectRepository.userWorksOnProject(userId, projectId)) {
                 projectRepository.addUserToProjectTeamMembers(userId, projectId);
             }
         }
@@ -57,21 +63,60 @@ public class ProjectService {
     @Transactional
     public Project save(Project project) {
         validatorService.validateProject(project);
-        if (project.getTeamMembers() != null) {
-            List<Long> teamMembersIds = project.getTeamMembers().stream().map(User::getId).toList();
-            boolean allTeamMembersExists = userService.existsAllByIds(teamMembersIds);
-            if (!allTeamMembersExists) {
-                throw new IllegalArgumentException("some or all users are unknown");
+        final Long projectId = project.getId();
+
+        if (project.getTeamMembers() == null || project.getTeamMembers().isEmpty()) {
+            if (projectId != null) {
+                final List<Long> teamMemberIds = projectRepository.getTeamMemberIds(projectId);
+                teamMemberIds.forEach(teamMemberId -> projectRepository.removeUserFromProjectTeamMembers(teamMemberId, projectId));
             }
+            return projectRepository.save(project);
         }
 
-        return projectRepository.save(project);
+        final List<Long> teamMemberIds = project.getTeamMembers().stream().map(User::getId).sorted().toList();
+        boolean allTeamMembersExists = userService.existsAllByIds(teamMemberIds);
+        if (!allTeamMembersExists) {
+            throw new IllegalArgumentException("some or all users are unknown");
+        }
+
+        if (projectId == null) {
+            Project savedProject = projectRepository.save(project);
+            final long savedProjectId = savedProject.getId();
+            teamMemberIds.forEach(teamMemberId -> projectRepository.addUserToProjectTeamMembers(teamMemberId, savedProjectId));
+            return savedProject;
+        }
+
+        Project savedProject = projectRepository.save(project);
+        this.retainTeamMembers(savedProject.getId(), teamMemberIds);
+
+        return savedProject;
     }
 
-    public List<Project> listByPage(int pageNumber) {
+
+    /**
+     * Removes all team members of a given project except the ones in the {@code teamMembersIds} list.
+     *
+     * @param projectId      must not be {@literal null}.
+     * @param teamMembersIds must not be {@literal null} and sorted in ascending order.
+     */
+    public void retainTeamMembers(Long projectId, List<Long> teamMembersIds) {
+        List<Long> teamMembersIdsInDb = projectRepository.getTeamMemberIds(projectId);
+
+        final ListDiff<Long> diffLists = ListUtils.diffLists(teamMembersIdsInDb, teamMembersIds);
+        final List<Long> teamMembersToDelete = diffLists.getElementsInFirstListOnly();
+        for (final Long teamMemberId : teamMembersToDelete) {
+            projectRepository.removeUserFromProjectTeamMembers(teamMemberId, projectId);
+        }
+
+        final List<Long> teamMembersToAdd = diffLists.getElementsInSecondListOnly();
+        for (final Long newTeamMemberId : teamMembersToAdd) {
+            projectRepository.addUserToProjectTeamMembers(newTeamMemberId, projectId);
+        }
+    }
+
+    public Page<Project> getPage(int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, PROJECTS_PER_PAGE);
-        Page<Project> projectsPage = projectRepository.findAll(pageable);
-        return projectsPage.getContent();
+        return projectRepository.findAll(pageable);
     }
 
     public long count() {
@@ -82,9 +127,8 @@ public class ProjectService {
         return userService.countTeamMembersByProjectId(projectId);
     }
 
-    public List<User> listTeamMembersByPage(Long projectId, Integer pageNumber) {
+    public Page<User> listTeamMembersByPage(Long projectId, Integer pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE);
-        Page<User> userPage = userService.findAllTeamMembers(projectId, pageable);
-        return userPage.getContent();
+        return userService.findAllTeamMembers(projectId, pageable);
     }
 }

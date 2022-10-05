@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 
-@ComponentScan("com.github.youssefwadie.bugtracker.jdbc")
+@ComponentScan({"com.github.youssefwadie.bugtracker.project.dao", "com.github.youssefwadie.bugtracker.user.dao"})
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class AbstractJdbcTest {

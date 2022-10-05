@@ -57,9 +57,8 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
-    public List<Ticket> listByPage(long userId, int pageNumber) {
+    public Page<Ticket> getPage(long userId, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, TICKETS_PER_PAGE);
-        Page<Ticket> ticketsPage = ticketRepository.findAllByUserId(userId, pageable);
-        return ticketsPage.getContent();
+        return ticketRepository.findAllByUserId(userId, pageable);
     }
 }

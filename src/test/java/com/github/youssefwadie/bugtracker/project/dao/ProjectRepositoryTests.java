@@ -2,9 +2,8 @@ package com.github.youssefwadie.bugtracker.project.dao;
 
 
 import com.github.youssefwadie.bugtracker.AbstractJdbcTest;
-import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.project.dao.ProjectRepository;
 import com.github.youssefwadie.bugtracker.model.Project;
+import com.github.youssefwadie.bugtracker.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,10 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class ProjectRepositoryTests extends AbstractJdbcTest {
     @Autowired
@@ -89,6 +90,8 @@ public class ProjectRepositoryTests extends AbstractJdbcTest {
         project.setTeamMembers(teamMembers);
 
         Project savedProject = projectRepository.save(project);
+        teamMembers.forEach(teamMember -> projectRepository.addUserToProjectTeamMembers(teamMember.getId(), savedProject.getId()));
+
         Optional<Project> projectWithTeamMembersOptional
                 = projectRepository.findByIdFetchTeamMembers(savedProject.getId(), Pageable.unpaged());
         assertThat(projectWithTeamMembersOptional.isPresent()).isTrue();
@@ -98,10 +101,55 @@ public class ProjectRepositoryTests extends AbstractJdbcTest {
     }
 
     @Test
+    void addUserToProjectTeamMembersTest() {
+        assertThatThrownBy(() -> {
+            final long userId = 50L;
+            final long projectId = 5500L;
+            projectRepository.addUserToProjectTeamMembers(userId, projectId);
+        }).isInstanceOf(IllegalArgumentException.class).hasMessage("projectId doesn't exist");
+
+        assertThatThrownBy(() -> {
+            final long userId = 50000L;
+            final long projectId = 1L;
+            projectRepository.addUserToProjectTeamMembers(userId, projectId);
+        }).isInstanceOf(IllegalArgumentException.class).hasMessage("userId doesn't exist");
+
+        final long userId = 1L;
+        final long projectId = 40L;
+        boolean worksBeforeAdding = projectRepository.userWorksOnProject(userId, projectId);
+        assertThat(worksBeforeAdding).isFalse();
+
+        projectRepository.addUserToProjectTeamMembers(userId, projectId);
+        boolean worksAfterAdding = projectRepository.userWorksOnProject(userId, projectId);
+        assertThat(worksAfterAdding).isTrue();
+    }
+
+
+    @Test
+    void getTeamMembersIdsTests() {
+        final long projectId = 1;
+        final List<Long> teamMemberIds = projectRepository.getTeamMemberIds(projectId);
+        assertThat(teamMemberIds.size()).isEqualTo(1);
+    }
+
+    @Test
+    void removeUserFromProjectTeamMembersTest() {
+        final long userId = 1L;
+        final long projectId = 1L;
+        boolean worksBeforeRemoving = projectRepository.userWorksOnProject(userId, projectId);
+        assertThat(worksBeforeRemoving).isTrue();
+
+        projectRepository.removeUserFromProjectTeamMembers(userId, projectId);
+        boolean worksAfterRemoving = projectRepository.userWorksOnProject(userId, projectId);
+        assertThat(worksAfterRemoving).isFalse();
+    }
+
+
+    @Test
     void doesUserWorkOnProjectTest() {
         Long userId = 1L;
         Long projectId = 8L;
-        boolean doesUserWorksOnProject = projectRepository.doesUserWorkOnProject(userId, projectId);
-        assertThat(doesUserWorksOnProject).isTrue();
+        boolean doesUserWorksOnProject = projectRepository.userWorksOnProject(userId, projectId);
+        assertThat(doesUserWorksOnProject).isFalse();
     }
 }

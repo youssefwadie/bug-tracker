@@ -1,6 +1,6 @@
 <div class="bg-light min-vh-100">
   <app-navbar *ngIf="authenticated"></app-navbar>
-  <div class="m-5">
+  <div [ngClass]="authenticated ? 'm-5' : ''">
     <router-outlet></router-outlet>
   </div>
 </div>

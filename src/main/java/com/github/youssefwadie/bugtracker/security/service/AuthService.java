@@ -1,8 +1,8 @@
 package com.github.youssefwadie.bugtracker.security.service;
 
-import static com.github.youssefwadie.bugtracker.security.SecurityConstants.USER_ID_CLAIM_NAME;
-import static com.github.youssefwadie.bugtracker.security.SecurityConstants.USER_NAME_CLAIM_NAME;
-import static com.github.youssefwadie.bugtracker.security.SecurityConstants.USER_ROLES_CLAIM_NAME;
+import static com.github.youssefwadie.bugtracker.constants.SecurityConstants.USER_ID_CLAIM_NAME;
+import static com.github.youssefwadie.bugtracker.constants.SecurityConstants.USER_NAME_CLAIM_NAME;
+import static com.github.youssefwadie.bugtracker.constants.SecurityConstants.USER_ROLES_CLAIM_NAME;
 
 import java.util.Date;
 

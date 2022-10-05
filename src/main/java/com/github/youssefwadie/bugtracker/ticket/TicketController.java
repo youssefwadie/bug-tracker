@@ -1,28 +1,23 @@
 package com.github.youssefwadie.bugtracker.ticket;
 
+import com.github.youssefwadie.bugtracker.dto.mappers.TicketMapper;
+import com.github.youssefwadie.bugtracker.dto.model.TicketDto;
+import com.github.youssefwadie.bugtracker.model.Ticket;
+import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.security.UserContextHolder;
+import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.github.youssefwadie.bugtracker.dto.model.TicketDto;
-import com.github.youssefwadie.bugtracker.dto.mappers.TicketMapper;
-import com.github.youssefwadie.bugtracker.model.Ticket;
-import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.security.UserContextHolder;
-import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
-
-import lombok.RequiredArgsConstructor;
+import static com.github.youssefwadie.bugtracker.constants.ResponseConstants.TOTAL_COUNT_HEADER_NAME;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,14 +34,16 @@ public class TicketController {
         List<Ticket> usersTickets = ticketService.findAllBySubmitterId(loggedInUser.getId());
         return ResponseEntity.ok(ticketMapper.ticketsToTicketsDto(usersTickets));
     }
-    
+
     @GetMapping("/page/{pageNumber:\\d+}")
-    public ResponseEntity<List<TicketDto>> getTicketsPageAfter(@PathVariable("pageNumber") Integer pageNumber) {
+    public ResponseEntity<List<TicketDto>> listByPage(@PathVariable("pageNumber") Integer pageNumber) {
         User loggedInUser = UserContextHolder.get();
-    	List<Ticket> tickets = ticketService.listByPage(loggedInUser.getId(), pageNumber);
-    	return ResponseEntity.ok(ticketMapper.ticketsToTicketsDto(tickets));
+        Page<Ticket> ticketsPage = ticketService.getPage(loggedInUser.getId(), pageNumber);
+        return ResponseEntity.ok()
+                .header(TOTAL_COUNT_HEADER_NAME, Long.toString(ticketsPage.getTotalElements()))
+                .body(ticketMapper.ticketsToTicketsDto(ticketsPage.getContent()));
     }
-    
+
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Ticket> createTicket(@RequestBody TicketDto newTicket) throws ConstraintsViolationException, URISyntaxException {
         newTicket.setSubmitter(UserContextHolder.get().getId());
@@ -74,12 +71,12 @@ public class TicketController {
         Ticket savedTicket = ticketService.update(ticket);
         return ResponseEntity.ok(ticketMapper.ticketToTicketDto(savedTicket));
     }
-    
+
     @GetMapping("/count")
     public ResponseEntity<Long> getTicketsCount() {
-    	User loggedInUser = UserContextHolder.get();
-    	return ResponseEntity.ok(ticketService.countBySubmitterId(loggedInUser.getId()));
+        User loggedInUser = UserContextHolder.get();
+        return ResponseEntity.ok(ticketService.countBySubmitterId(loggedInUser.getId()));
     }
-    
-    
+
+
 }

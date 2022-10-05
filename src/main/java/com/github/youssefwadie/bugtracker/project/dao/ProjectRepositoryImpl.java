@@ -1,15 +1,14 @@
 package com.github.youssefwadie.bugtracker.project.dao;
 
-import com.github.youssefwadie.bugtracker.util.JdbcUtils;
-import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.user.dao.UserRepository;
+import com.github.youssefwadie.bugtracker.util.JdbcUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.util.Streamable;
 import org.springframework.jdbc.IncorrectResultSetColumnCountException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,25 +46,27 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE = "SELECT * FROM projects ORDER BY %s LIMIT ? OFFSET ?";
     private static final String QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE = "SELECT * FROM projects LIMIT ? OFFSET ?";
 
+    private static final String QUERY_FIND_ALL_TEAM_MEMBERS_IDS_BY_PROJECT_ID_TEMPLATE = "SELECT wo.user_id FROM works_on wo WHERE wo.project_id = ? ORDER BY wo.user_id ASC";
+
     private static final String QUERY_COUNT_ALL = "SELECT COUNT(*) FROM projects";
 
     private static final String DELETE_BY_ID_TEMPLATE = "DELETE FROM projects WHERE id = ?";
+    private static final String DELETE_TEAM_MEMBER_BY_ID_TEMPLATE = "DELETE FROM works_on WHERE project_id = ? AND user_id = ?";
     private static final String DELETE_ALL = "DELETE FROM projects";
 
-    public static final String QUERY_CHECK_IF_USER_WORKS_ON_PROJECT_BY_ID_TEMPLATE = "SELECT COUNT(*) > 0 FROM works_on WHERE user_id = ?1 AND project_id = ?2";
+    public static final String QUERY_CHECK_IF_USER_WORKS_ON_PROJECT_BY_ID_TEMPLATE = "SELECT COUNT(*) > 0 FROM works_on WHERE user_id = ? AND project_id = ?";
     private final JdbcTemplate jdbcTemplate;
     private final UserRepository userRepository;
     private final RowMapper<Project> rowMapper = new ProjectRowMapper();
 
 
     @Override
-    @Modifying
     @Transactional
     public Project save(Project project) {
         Assert.notNull(project, "Todo must not be null!");
         if (project.getId() != null) {
             jdbcTemplate.update(UPDATE_PROJECT_TEMPLATE, project.getName(), project.getDescription(), project.getId());
-            return project;
+            return findById(project.getId()).orElseThrow(() -> new IncorrectResultSetColumnCountException(1, 0));
         }
         final KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -179,7 +180,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         final long count = count();
 
         if (pageable.isUnpaged()) {
-            return new PageImpl<>((List<Project>) findAll(), pageable, count);
+            return new PageImpl<>(findAll(), pageable, count);
         }
 
         Sort sort = pageable.getSort();
@@ -209,23 +210,41 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     @Transactional
-    public void addUserToProjectTeamMembers(Long userId, Long projectId) {
-        Assert.notNull(userId, "userId must not be null!");
+    public void addUserToProjectTeamMembers(Long newTeamMember, Long projectId) {
+        Assert.notNull(newTeamMember, "newTeamMember must not be null!");
         Assert.notNull(projectId, "projectId must not be null!");
         if (!existsById(projectId)) {
             throw new IllegalArgumentException("projectId doesn't exist");
         }
-        if (!userRepository.existsById(userId)) {
+        if (!userRepository.existsById(newTeamMember)) {
             throw new IllegalArgumentException("userId doesn't exist");
         }
-        jdbcTemplate.update(INSERT_ADD_USER_TO_PROJECT_TEAM_MEMBERS_TEMPLATE, projectId, userId);
-    }
-    @Override
-    @Transactional(readOnly = true)
-    public boolean doesUserWorkOnProject(Long userId, Long projectId) {
-        Assert.notNull(userId, "userId must not be null!");
-        Assert.notNull(projectId, "projectId must not be null!");
-        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(QUERY_CHECK_IF_USER_WORKS_ON_PROJECT_BY_ID_TEMPLATE, Boolean.class, userId, projectId));
+
+        if (!userWorksOnProject(newTeamMember, projectId)) {
+            jdbcTemplate.update(INSERT_ADD_USER_TO_PROJECT_TEAM_MEMBERS_TEMPLATE, projectId, newTeamMember);
+        }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean userWorksOnProject(Long teamMemberId, Long projectId) {
+        Assert.notNull(teamMemberId, "teamMemberId must not be null!");
+        Assert.notNull(projectId, "projectId must not be null!");
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(QUERY_CHECK_IF_USER_WORKS_ON_PROJECT_BY_ID_TEMPLATE, Boolean.class, teamMemberId, projectId));
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Long> getTeamMemberIds(Long projectId) {
+        return jdbcTemplate.queryForList(QUERY_FIND_ALL_TEAM_MEMBERS_IDS_BY_PROJECT_ID_TEMPLATE, Long.class, projectId);
+    }
+
+    @Override
+    @Transactional
+    public void removeUserFromProjectTeamMembers(Long teamMemberId, Long projectId) {
+        Assert.notNull(teamMemberId, "teamMemberId must not be null!");
+        Assert.notNull(projectId, "projectId must not be null!");
+        jdbcTemplate.update(DELETE_TEAM_MEMBER_BY_ID_TEMPLATE, projectId, teamMemberId);
+    }
 }

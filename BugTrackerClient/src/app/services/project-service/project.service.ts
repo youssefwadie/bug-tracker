@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {Project} from "../../model/project";
 import {environment} from "../../../environments/environment";
@@ -24,13 +24,10 @@ export class ProjectService {
   constructor(private http: HttpClient) {
   }
 
-
-  getCount(): Observable<number> {
-    return this.http.get<number>(`${environment.rootUrl}/${this.API_NUMBER_OF_PROJECT_PATH}`, {withCredentials: true});
-  }
-
-  listByPage(pageNumber: number): Observable<Array<Project>> {
-    return this.http.get<Array<Project>>(`${environment.rootUrl}/${this.API_LIST_BY_PAGE_PATH}/${pageNumber}`, {withCredentials: true});
+  listByPage(pageNumber: number): Observable<HttpResponse<Array<Project>>> {
+    return this.http.get<Array<Project>>(`${environment.rootUrl}/${this.API_LIST_BY_PAGE_PATH}/${pageNumber}`,
+      {withCredentials: true, observe: 'response'}
+    );
   }
 
   findById(id: number): Observable<Project> {
