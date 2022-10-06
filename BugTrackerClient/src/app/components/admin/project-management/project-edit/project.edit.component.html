@@ -3,7 +3,7 @@
     <h4 *ngIf="formProject.id != null" class="modal-title">{{"Editing " + project.name}}</h4>
     <h4 *ngIf="formProject.id == null" class="modal-title">New</h4>
     <button type="button" class="btn-close" aria-label="Close"
-            (click)="activeModal.dismiss('Cross click')"></button>
+            (click)="closeModal('Cross click')"></button>
   </div>
   <div class="modal-body">
     <div class="mb-3">
@@ -13,8 +13,15 @@
         type="text"
         class="form-control rounded p-2"
         [(ngModel)]="formProject.name"
+        #titleField="ngModel"
         placeholder="Title"
+        (change)="checkIfTitleIsValid()"
         required/>
+
+      <div class="text-danger" *ngIf="titleField.dirty && !validTitle">
+        <span>{{invalidTitleMessage}}</span>
+      </div>
+
     </div>
 
     <div class="mb-3">
@@ -25,7 +32,13 @@
         class="form-control rounded p-2"
         [(ngModel)]="formProject.description"
         placeholder="Title"
+        #descriptionField="ngModel"
+        (change)="checkIfDescriptionIsValid()"
         required/>
+
+      <div class="text-danger" *ngIf="descriptionField.touched && !validDescription">
+        <span>{{invalidDescriptionMessage}}</span>
+      </div>
     </div>
 
     <div class="mb-3">
@@ -39,11 +52,14 @@
                  [(ngModel)]="projectTeamMemberIds">
       </ng-select>
     </div>
+    <div class="mb-3 text-danger text-capitalize text-center" *ngIf="errorMessage.length !== 0">
+      <span>{{errorMessage}}</span>
+    </div>
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary btn-full mt-3" [disabled]="projectForm.invalid"
-            (click)="activeModal.close('Save Click');onSubmit();">
+    <button type="button" class="btn btn-primary btn-full mt-3" [disabled]="projectForm.invalid || !validTitle || !validDescription"
+            (click)="onSubmit();">
       Save
     </button>
   </div>

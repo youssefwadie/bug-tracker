@@ -3,18 +3,41 @@
     <span>Bug Tracker</span>
   </div>
 
-  <a mat-flat-button color="primary" routerLink="dashboard">
+  <!-- Dashboard Button -->
+  <button mat-flat-button color="primary" routerLink="dashboard">
     <mat-icon>computer</mat-icon>
     <span class="icon-label">Dashboard</span>
-  </a>
-  <a mat-flat-button color="primary" routerLink="tickets">
+  </button>
+
+  <!-- Tickets Button -->
+  <button mat-flat-button color="primary" routerLink="tickets">
     <fa-icon [icon]="faTicketIcon"></fa-icon>
     <span class="icon-label">Tickets</span>
-  </a>
-  <a mat-flat-button color="primary">
+  </button>
+
+  <!-- Project List Button -->
+  <button mat-flat-button color="primary" routerLink="projects">
+    <mat-icon>airplay</mat-icon>
+    <span class="icon-label">Projects</span>
+  </button>
+
+  <!-- Administration List Button -->
+  <button mat-flat-button color="primary" *ngIf="isAdmin" [matMenuTriggerFor]="administrationMenu">
     <fa-icon [icon]="faUserShieldIcon"></fa-icon>
     <span class="icon-label">Administration</span>
-  </a>
+  </button>
+
+  <mat-menu #administrationMenu="matMenu">
+    <button mat-menu-item routerLink="admin/projects">
+      <mat-icon>group_work</mat-icon>
+      <span class="icon-label">Manage Projects</span>
+    </button>
+    <button mat-menu-item routerLink="admin/users">
+      <mat-icon>manage_accounts</mat-icon>
+      <span class="icon-label">Manage Users</span>
+    </button>
+  </mat-menu>
+
   <a mat-raised-button (click)="logout()" color="accent">
     Logout
   </a>

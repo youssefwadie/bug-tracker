@@ -24,22 +24,19 @@ public final class ListUtils {
             throw new IllegalArgumentException();
         }
         ListDiff<T> listDiff = new ListDiff<>();
-        final int firstListSize = firstList.size();
-        final int secondListSize = secondList.size();
-        int i = 0, j = 0;
-        while (i < firstListSize && j < secondListSize) {
-            final T item = (T) firstList.get(i);
+
+        for (Comparable<? super T> value : firstList) {
+            final T item = (T) value;
             int indexInSecondList = Collections.binarySearch(secondList, item);
             if (indexInSecondList < 0) {
                 listDiff.addToFirstList(item);
             } else {
                 listDiff.addToDuplicatedItems(item);
-                j++;
             }
-            i++;
         }
-        for (i = 0; i < secondListSize; i++) {
-            final T item = (T) secondList.get(i);
+
+        for (Comparable<? super T> value : secondList) {
+            final T item = (T) value;
             if (Collections.binarySearch(firstList, item) < 0) {
                 listDiff.addToSecondList(item);
             }

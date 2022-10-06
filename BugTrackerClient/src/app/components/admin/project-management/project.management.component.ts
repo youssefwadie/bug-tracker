@@ -1,30 +1,33 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProjectService} from "../../services/project-service/project.service";
-import {Project} from "../../model/project";
-import {ActivatedRoute, Router} from "@angular/router";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ProjectEditComponent} from "../admin/project-management/project-edit/project.edit.component";
-import {PageEvent} from "@angular/material/paginator";
-import {AppConstants} from "../../constants/app-constants";
+import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {AuthService} from "../../services/auth-service/auth.service";
+import {Project} from "../../../model/project";
+import {ProjectService} from "../../../services/project-service/project.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AuthService} from "../../../services/auth-service/auth.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {PageEvent} from "@angular/material/paginator";
+import {ProjectEditComponent} from "./project-edit/project.edit.component";
+import {AppConstants} from "../../../constants/app-constants";
+import {User} from "../../../model/user";
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project.list.component.html',
-  styleUrls: ['./project.list.component.css']
+  selector: 'app-project-management',
+  templateUrl: './project.management.component.html',
+  styleUrls: ['./project.management.component.css']
 })
-export class ProjectListComponent implements OnInit, OnDestroy {
+export class ProjectManagementComponent implements OnInit {
+
   projects = new Array<Project>();
   projectsCount = 0;
   action: string;
   selectedProject: Project;
-  displayedColumns: string[] = ["name", "description"];
+  displayedColumns: string[] = ["name", "description", "edit"];
   pageSize = 5;
   pageNumber = 1;
 
 
   private queryParamsSubscription: Subscription;
+  organizationTeamMembers: Array<User>;
 
   constructor(private projectService: ProjectService,
               private modalService: NgbModal,
@@ -40,8 +43,18 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
   private processQueryParams() {
     this.queryParamsSubscription = this.route.queryParams.subscribe((params) => {
+      const id = params['id'];
       const page = +params['page'];
-      if (!isNaN(page)) {
+      this.action = params['action'];
+      if (id != null) {
+        this.projectService.findById(+id).subscribe((fetchedProject) => {
+          this.selectedProject = fetchedProject;
+          this.open();
+        });
+      } else if (id == null && this.action === "add") {
+        this.selectedProject = new Project();
+        this.open();
+      } else if (!isNaN(page)) {
         this.loadPageContent(page);
       }
     });
@@ -69,12 +82,27 @@ export class ProjectListComponent implements OnInit, OnDestroy {
             this.pageNumber = pageNumber;
           }
         }
+
         const responseBody = response.body;
         if (responseBody != null) this.projects = responseBody;
       }
     })
   }
 
+  editProject(project: Project) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {"action": "edit", "id": project.id, "page": this.pageNumber},
+    });
+
+  }
+
+  addProject(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {"action": "add", "page": this.pageNumber},
+    });
+  }
 
   viewProject(projectId: number) {
     this.router.navigate(["project", projectId]);
@@ -97,6 +125,12 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     );
   }
 
+  projectDetails(id: number) {
+    this.projectService.findById(id).subscribe(project => {
+      this.selectedProject = project;
+      console.log(project);
+    });
+  }
 
   ngOnDestroy(): void {
     if (this.queryParamsSubscription != null) {

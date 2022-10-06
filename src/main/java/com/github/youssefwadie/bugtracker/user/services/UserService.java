@@ -6,8 +6,10 @@ import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.exceptions.ConstraintsViolationException;
 import com.github.youssefwadie.bugtracker.confirmationtoken.ConfirmationTokenService;
+import com.github.youssefwadie.bugtracker.user.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,11 +25,15 @@ import java.util.UUID;
 public class UserService {
     private static final Role DEFAULT_USER_ROLE = Role.ROLE_DEVELOPER;
     private static final int EXPIRES_AFTER_MINUTES = 15;
+    private final static int USERS_PER_PAGE = 5;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserValidatorService validatorService;
 
     private final ConfirmationTokenService confirmationTokenService;
+
+    private final String USER_NOT_FOUND_MSG = "no user with id %d is found.";
 
     /**
      * Register a user registration request
@@ -66,12 +72,25 @@ public class UserService {
     @Transactional
     public User save(User user) throws ConstraintsViolationException {
         validatorService.validateUser(user);
-
-        if (user.getId() == null) {
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
+        boolean isUpdatingUser = user.getId() != null;
+        if (isUpdatingUser) {
+            User existingUser = userRepository.findById(user.getId())
+                    .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MSG, user.getId())));
+            user.setEmailVerified(existingUser.isEmailVerified());
+            if (user.getPassword() == null || user.getPassword().isBlank()) {
+                user.setPassword(existingUser.getPassword());
+            } else {
+                encodePassword(user);
+            }
+        } else {
+            encodePassword(user);
         }
         return userRepository.save(user);
+    }
+
+    private void encodePassword(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
     }
 
     public void enableUserById(Long userId) {
@@ -97,5 +116,15 @@ public class UserService {
 
     public Page<User> findAllTeamMembers(Long projectId, Pageable pageable) {
         return userRepository.findAllTeamMembers(projectId, pageable);
+    }
+
+    public User findById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MSG, id)));
+    }
+
+    public Page<User> listByPage(Integer pageNumber) {
+        final Pageable pageable = PageRequest.of(pageNumber, USERS_PER_PAGE);
+        return userRepository.findAll(pageable);
     }
 }

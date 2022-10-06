@@ -1,8 +1,8 @@
 export class User {
   id: number;
-  fullName: string;
-  email: string;
-  role: string;
+  fullName: string = '';
+  email: string = '';
+  role: Role;
 }
 
 export class UserLogin {
@@ -10,11 +10,7 @@ export class UserLogin {
   password: string;
 }
 
-export class UserSelection {
-  id: number;
-  name: string;
-}
-
-export interface UserRole {
-  role: string;
+export enum Role {
+  ROLE_ADMIN = "Admin",
+  ROLE_DEVELOPER = "Developer",
 }

@@ -10,13 +10,14 @@ import {User} from "../../model/user";
   providedIn: 'root'
 })
 export class ProjectService {
-  private readonly API_NUMBER_OF_PROJECT_PATH = 'projects/count';
-  private readonly API_LIST_BY_PAGE_PATH = 'projects/page';
-  private readonly API_FIND_BY_ID_PATH = 'projects';
+  private readonly API_LIST_BY_PAGE_PATH = "projects/page";
+  private readonly API_FIND_BY_ID_PATH = "projects";
+  private readonly API_UPDATE_PROJECT: string = "admin/projects";
 
   private apiCountTeamMembersPath(projectId: number): string {
     return `projects/${projectId}/members/count`;
   }
+
   private apiListTeamMembersByPagePath(projectId: number, pageNumber: number): string {
     return `projects/${projectId}/members/page/${pageNumber}`;
   }
@@ -47,6 +48,11 @@ export class ProjectService {
 
   getTeamMembersCount(projectId: number) {
     return this.http.get<number>(`${environment.rootUrl}/${this.apiCountTeamMembersPath(projectId)}`,
+      {withCredentials: true});
+  }
+
+  update(formProject: Project): Observable<Project> {
+    return this.http.put<Project>(`${environment.rootUrl}/${this.API_UPDATE_PROJECT}`, formProject,
       {withCredentials: true});
   }
 }

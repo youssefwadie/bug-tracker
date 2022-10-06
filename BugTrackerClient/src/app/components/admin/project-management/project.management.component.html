@@ -1,3 +1,9 @@
+<ng-template let-modal>
+  <h4 class="modal-title" id="modal-basic-title">{{action}}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  <app-project-edit [organizationTeamMembers]="organizationTeamMembers"></app-project-edit>
+</ng-template>
+
 <h1 class="mat-h1">Projects</h1>
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="projects" class="w-100">
@@ -11,6 +17,16 @@
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef>Description</th>
       <td mat-cell *matCellDef="let project"> {{project.description}}</td>
+    </ng-container>
+
+    <!-- Edit Column -->
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let project">
+        <a (click)="editProject(project)" [title]="'Edit ' + project.name" class="link-success">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </td>
     </ng-container>
 
     <!--    No Records -->

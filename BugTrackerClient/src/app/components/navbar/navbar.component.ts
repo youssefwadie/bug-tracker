@@ -19,11 +19,9 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.roleSetEvent.subscribe({
-      next: (role: string) => {
-        this.isAdmin = (role === 'ADMIN');
-      }
-    })
+    this.authService.isAdmin().subscribe({
+      next: isAdmin => this.isAdmin = isAdmin
+    });
   }
 
   logout(): void {

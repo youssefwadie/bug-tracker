@@ -1,0 +1,73 @@
+<form class="p-3" #userForm="ngForm">
+  <div class="modal-header">
+    <h4 *ngIf="formUser.id != null" class="modal-title">{{"Editing " + user.fullName}}</h4>
+    <button type="button" class="btn-close" aria-label="Close"
+            (click)="activeModal.dismiss(false)"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="mb-3">
+      <input
+        id="fullName"
+        name="fullName"
+        type="text"
+        class="form-control rounded p-2"
+        [(ngModel)]="formUser.fullName"
+        #fullNameField="ngModel"
+        placeholder="Full Name"
+        (change)="checkIfFullNameIsValid()"
+        required/>
+
+      <div class="text-danger" *ngIf="fullNameField.touched && !validFullName">
+        <span>{{invalidFullNameMessage}}</span>
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <input
+        id="email"
+        name="email"
+        type="email"
+        class="form-control rounded p-2"
+        [(ngModel)]="formUser.email"
+        placeholder="Email"
+        #emailField="ngModel"
+        (change)="checkIfEmailIsValid()"
+        required/>
+
+      <div class="text-danger" *ngIf="emailField.touched && !validEmail">
+        <span>{{invalidEmailMessage}}</span>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="userRole" class="form-label">Role</label>
+      <ng-select name="userRole"
+                 id="userRole"
+                 [multiple]="false"
+                 [items]="availableRoles"
+                 #roleField="ngModel"
+                 [(ngModel)]="userRole"
+                 (change)="checkIfRoleIsValid()">
+      </ng-select>
+
+      <div class="text-danger" *ngIf="roleField.touched && !validRole">
+        <span>{{invalidRoleMessage}}</span>
+      </div>
+
+    </div>
+    <div class="mb-3 text-danger text-capitalize text-center" *ngIf="errorMessage.length !== 0">
+      <span>{{errorMessage}}</span>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-full mt-3"
+            [disabled]="userForm.invalid || !validFullName || !validEmail || !validRole"
+            (click)="onSubmit();">
+      Save
+    </button>
+  </div>
+
+</form>

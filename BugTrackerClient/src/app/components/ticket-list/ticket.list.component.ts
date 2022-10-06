@@ -3,6 +3,7 @@ import {faEllipsisV} from '@fortawesome/free-solid-svg-icons';
 import {Ticket} from "../../model/ticket";
 import {TicketService} from "../../services/ticket-service/ticket.service";
 import {PageEvent} from "@angular/material/paginator";
+import {AppConstants} from "../../constants/app-constants";
 
 @Component({
   selector: 'app-ticket-list',
@@ -23,21 +24,25 @@ export class TicketListComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.dataSet) {
-      this.ticketService.getCount().subscribe(next => {
-        this.ticketsCount = next;
-      });
-      this.ticketService.listByPage(1).subscribe({
-        next: tickets => {
-          this.tickets = tickets;
-        }
-      });
+      this.loadPage(1);
     }
   }
 
   onPageChange(pageEvent: PageEvent): void {
-    this.ticketService.listByPage(pageEvent.pageIndex + 1).subscribe({
-      next: tickets => {
-        this.tickets = tickets;
+    this.loadPage(pageEvent.pageIndex + 1);
+  }
+
+  loadPage(pageNumber: number): void {
+    this.ticketService.listByPage(pageNumber).subscribe({
+      next: response => {
+        const ticketsCount = Number(response.headers.get(AppConstants.TOTAL_COUNT_HEADER_NAME));
+        if (!isNaN(ticketsCount)) {
+          this.ticketsCount = ticketsCount;
+        }
+        const body = response.body;
+        if (body) {
+          this.tickets = body;
+        }
       }
     });
   }

@@ -58,9 +58,7 @@ public class ProjectController {
     @GetMapping("/{projectId:\\d}/members/page/{pageNumber:\\d}")
     public ResponseEntity<List<UserDto>> listTeamMembersByPage(@PathVariable("projectId") Long projectId,
                                                                @PathVariable("pageNumber") Integer pageNumber) {
-
         final Page<User> usersPage = projectService.listTeamMembersByPage(projectId, pageNumber);
-
         return ResponseEntity.ok()
                 .header(TOTAL_COUNT_HEADER_NAME, Long.toString(usersPage.getTotalElements()))
                 .body(userMapper.usersToUsersDto(usersPage.getContent()));

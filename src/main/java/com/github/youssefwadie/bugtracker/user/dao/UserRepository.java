@@ -49,6 +49,17 @@ public interface UserRepository {
      */
     List<User> findAll();
 
+
+    /**
+     * Returns a {@link Page} of projects meeting the paging restriction provided in the {@link Pageable} object.
+     *
+     * @param pageable the pageable to request a paged result, can be {@link Pageable#unpaged()}, must not be
+     *                 {@literal null}.
+     * @return a page of users
+     */
+    Page<User> findAll(Pageable pageable);
+
+
     /**
      * Returns all {@link User users} with the given IDs.
      * <p>

@@ -4,6 +4,7 @@ import com.github.youssefwadie.bugtracker.dto.mappers.UserMapper;
 import com.github.youssefwadie.bugtracker.dto.model.UserDto;
 import com.github.youssefwadie.bugtracker.model.ResendEmailRequest;
 import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.security.UserContextHolder;
 import com.github.youssefwadie.bugtracker.security.service.AuthService;
 import com.github.youssefwadie.bugtracker.user.services.RegistrationService;
@@ -42,10 +43,9 @@ public class UserAuthController {
     }
 
     @GetMapping(value = "role")
-    public ResponseEntity<Map<String, String>> getCurrentUsersRole() {
+    public ResponseEntity<Role> getCurrentUsersRole() {
         User loggedInUser = UserContextHolder.get();
-        String role = loggedInUser.getRole().name().replace("ROLE_", "");
-        return ResponseEntity.ok(Map.of("role", role));
+        return ResponseEntity.ok(loggedInUser.getRole());
     }
 
     @PostMapping(value = "resend", produces = "application/json")

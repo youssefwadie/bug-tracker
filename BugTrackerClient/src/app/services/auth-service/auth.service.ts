@@ -1,9 +1,10 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {User, UserLogin, UserRole} from "../../model/user";
-import {map, Observable, of, tap} from "rxjs";
+import {Role, User, UserLogin} from "../../model/user";
+import {combineLatest, map, Observable, of, tap} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {SimpleResponse} from "../../model/response.body";
+import {UserService} from "../user-service/user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthService {
   private readonly API_IS_LOGGED_IN_PATH = 'users/logged-in';
   private readonly API_RESEND_VERIFICATION_CODE_PATH = "users/resend";
   private readonly API_USER_ROLE_PATH = "users/role";
-  public readonly roleSetEvent = new EventEmitter<string>();
+
+  private readonly roleSetEvent = new EventEmitter<string>();
 
   private isAuthenticated = false;
   private checked = false;
@@ -45,6 +47,13 @@ export class AuthService {
       }
     });
 
+  }
+
+  public isAdmin(): Observable<boolean> {
+    return combineLatest([this.isLoggedIn(), this.getUserRole().pipe(map(role => role === Role.ROLE_ADMIN))])
+      .pipe(map(([loggedIn, isAdmin]) => {
+        return loggedIn && isAdmin;
+      }));
   }
 
   logout() {
@@ -84,12 +93,13 @@ export class AuthService {
     return this.http.post<SimpleResponse>(`${environment.rootUrl}/${this.API_RESEND_VERIFICATION_CODE_PATH}`, {email});
   }
 
-  private getUserRole(): Observable<UserRole> {
-    return this.http.get<UserRole>(`${environment.rootUrl}/${this.API_USER_ROLE_PATH}`, {withCredentials: true});
+  private getUserRole(): Observable<Role> {
+    return this.http.get<Role>(`${environment.rootUrl}/${this.API_USER_ROLE_PATH}`, {withCredentials: true})
+      .pipe(map(UserService.roleFromHttp));
   }
 
   private setupAuthenticationDetails() {
-    this.getUserRole().subscribe(userRole => this.roleSetEvent.emit(userRole.role));
+    this.getUserRole().subscribe(userRole => this.roleSetEvent.emit(userRole));
     this.authenticationResultEvent.emit(true);
     this.isAuthenticated = true;
   }

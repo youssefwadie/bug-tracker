@@ -1,7 +1,8 @@
 package com.github.youssefwadie.bugtracker.user.dao;
 
-import com.github.youssefwadie.bugtracker.util.JdbcUtils;
 import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.util.JdbcUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -45,8 +46,12 @@ public class UserRepositoryImpl implements UserRepository {
     public static final String DELETE_ALL = "DELETE FROM users";
     private static final String ENABLE_USER_BY_ID_TEMPLATE = "UPDATE users SET email_verified = ? WHERE id = ?";
 
-    private static final String QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ? ORDER BY %s LIMIT ? OFFSET ?";
-    private static final String QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ? LIMIT ? OFFSET ?";
+    private static final String QUERY_FIND_ALL_TEAM_MEMBERS_OF_PROJECT_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ? ORDER BY %s LIMIT ? OFFSET ?";
+    private static final String QUERY_FIND_ALL_TEAM_MEMBERS_OF_PROJECT_WITH_LIMIT_OFFSET_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ? LIMIT ? OFFSET ?";
+    private static final String QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE = "SELECT * FROM users ORDER BY %s LIMIT ? OFFSET ?";
+    private static final String QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE = "SELECT * FROM users LIMIT ? OFFSET ?";
+
+
     private static final String QUERY_FIND_ALL_BY_PROJECT_ID_TEMPLATE = "SELECT u.* FROM users u JOIN works_on wo on u.id = wo.user_id WHERE wo.project_id = ?";
     private static final String QUERY_COUNT_TEAM_MEMBERS_BY_PROJECT_ID = "SELECT COUNT(*) FROM works_on WHERE project_id = ?";
 
@@ -120,11 +125,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional(readOnly = true)
     public Optional<User> findById(Long id) {
         Assert.notNull(id, "id must not be null!");
-        User user = jdbcTemplate.queryForObject(QUERY_FIND_BY_ID_TEMPLATE, rowMapper, id);
-        if (user == null) {
+        try {
+            User user = jdbcTemplate.queryForObject(QUERY_FIND_BY_ID_TEMPLATE, rowMapper, id);
+            if (user == null) return Optional.empty();
+            return Optional.of(user);
+        } catch (EmptyResultDataAccessException | IncorrectResultSetColumnCountException ex) {
             return Optional.empty();
         }
-        return Optional.of(user);
     }
 
     @Override
@@ -138,6 +145,29 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional(readOnly = true)
     public List<User> findAll() {
         return jdbcTemplate.query(QUERY_FIND_ALL, rowMapper);
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        Assert.notNull(pageable, "pageable cannot be null");
+        final long count = count();
+
+        if (pageable.isUnpaged()) {
+            return new PageImpl<>(findAll(), pageable, count);
+        }
+
+        Sort sort = pageable.getSort();
+        if (sort.isUnsorted()) {
+            List<User> users =
+                    jdbcTemplate.query(QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE, rowMapper, pageable.getPageSize(), pageable.getOffset());
+            return new PageImpl<>(users, pageable, count);
+        }
+
+        String sortString = JdbcUtils.buildSortString(sort.get());
+        List<User> users =
+                jdbcTemplate.query(String.format(QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE, sortString),
+                        rowMapper, pageable.getPageSize(), pageable.getOffset());
+        return new PageImpl<>(users, pageable, count);
     }
 
     @Override
@@ -203,13 +233,13 @@ public class UserRepositoryImpl implements UserRepository {
         Sort sort = pageable.getSort();
         if (sort.isUnsorted()) {
             final List<User> users =
-                    jdbcTemplate.query(QUERY_FIND_ALL_WITH_LIMIT_OFFSET_TEMPLATE, rowMapper, projectId, pageable.getPageSize(), pageable.getOffset());
+                    jdbcTemplate.query(QUERY_FIND_ALL_TEAM_MEMBERS_OF_PROJECT_WITH_LIMIT_OFFSET_TEMPLATE, rowMapper, projectId, pageable.getPageSize(), pageable.getOffset());
             return new PageImpl<>(users, pageable, count);
         }
 
         String sortString = JdbcUtils.buildSortString(sort.get());
         final List<User> users =
-                jdbcTemplate.query(String.format(QUERY_FIND_ALL_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE, sortString),
+                jdbcTemplate.query(String.format(QUERY_FIND_ALL_TEAM_MEMBERS_OF_PROJECT_WITH_SORT_AND_LIMIT_OFFSET_TEMPLATE, sortString),
                         rowMapper, projectId, pageable.getPageSize(), pageable.getOffset());
         return new PageImpl<>(users, pageable, count);
     }
