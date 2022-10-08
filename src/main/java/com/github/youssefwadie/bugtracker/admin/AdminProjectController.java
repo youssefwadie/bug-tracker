@@ -52,7 +52,7 @@ public class AdminProjectController {
         }
     }
 
-    @PutMapping(value = "/{id:\\d+}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id:[1-9]\\d*}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> assignTeamMembersToProject(@PathVariable("id") Long id,
                                                              @RequestBody List<Long> developerIds) {
         try {

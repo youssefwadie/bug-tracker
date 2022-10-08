@@ -24,7 +24,7 @@ public class AdminUserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id:[1-9]\\d*}")
     public ResponseEntity<Object> getUserById(@PathVariable("id") Long id) {
         try {
             return ResponseEntity.ok(userMapper.userToUserDto(userService.findById(id)));
@@ -34,7 +34,7 @@ public class AdminUserController {
         }
     }
 
-    @GetMapping("page/{pageNumber:\\d+}")
+    @GetMapping("page/{pageNumber:[1-9]\\d*}")
     public ResponseEntity<Object> listByPage(@PathVariable("pageNumber") Integer pageNumber) {
         if (pageNumber == 0) {
             return ResponseEntity

@@ -19,6 +19,7 @@ public final class ListUtils {
      * @return {@link ListDiff} instance with the difference details.
      * @throws IllegalArgumentException if {@code firstList} is {@literal null} or {@code secondList} is {@literal null}
      */
+    @SuppressWarnings("unchecked")
     public static <T> ListDiff<T> diffLists(List<? extends Comparable<? super T>> firstList, List<? extends Comparable<? super T>> secondList) {
         if (firstList == null || secondList == null) {
             throw new IllegalArgumentException();

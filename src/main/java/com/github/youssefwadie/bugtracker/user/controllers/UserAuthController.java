@@ -6,7 +6,7 @@ import com.github.youssefwadie.bugtracker.model.ResendEmailRequest;
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.model.Role;
 import com.github.youssefwadie.bugtracker.security.UserContextHolder;
-import com.github.youssefwadie.bugtracker.security.service.AuthService;
+import com.github.youssefwadie.bugtracker.security.services.AuthService;
 import com.github.youssefwadie.bugtracker.user.services.RegistrationService;
 import com.github.youssefwadie.bugtracker.user.services.UserService;
 import com.github.youssefwadie.bugtracker.util.SimpleResponseBody;
@@ -17,7 +17,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor

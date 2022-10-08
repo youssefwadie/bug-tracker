@@ -5,8 +5,7 @@ import com.github.youssefwadie.bugtracker.security.TokenProperties;
 import com.github.youssefwadie.bugtracker.security.filters.AccessTokenGeneratorFilter;
 import com.github.youssefwadie.bugtracker.security.filters.AccessTokenValidatorFilter;
 import com.github.youssefwadie.bugtracker.security.interceptors.UserContextInterceptor;
-import com.github.youssefwadie.bugtracker.security.service.AuthService;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetailsService;
+import com.github.youssefwadie.bugtracker.security.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 import java.util.Collections;
-import java.util.List;
 
 import static com.github.youssefwadie.bugtracker.constants.ResponseConstants.TOTAL_COUNT_HEADER_NAME;
 
@@ -34,7 +32,6 @@ import static com.github.youssefwadie.bugtracker.constants.ResponseConstants.TOT
 @EnableConfigurationProperties(TokenProperties.class)
 public class SecurityConfig implements WebMvcConfigurer {
 
-    private final BugTrackerUserDetailsService userDetailsService;
     private final AuthService authService;
     private final TokenProperties tokenProperties;
 

@@ -1,8 +1,8 @@
 package com.github.youssefwadie.bugtracker.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.youssefwadie.bugtracker.security.service.AuthService;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
+import com.github.youssefwadie.bugtracker.security.services.AuthService;
+import com.github.youssefwadie.bugtracker.security.services.BugTrackerUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

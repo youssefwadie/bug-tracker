@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.youssefwadie.bugtracker.model.User;
 import com.github.youssefwadie.bugtracker.security.UserContextHolder;
-import com.github.youssefwadie.bugtracker.security.service.BugTrackerUserDetails;
+import com.github.youssefwadie.bugtracker.security.services.BugTrackerUserDetails;
 
 import lombok.extern.slf4j.Slf4j;
 

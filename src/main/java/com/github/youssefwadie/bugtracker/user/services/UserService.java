@@ -26,6 +26,7 @@ public class UserService {
     private static final Role DEFAULT_USER_ROLE = Role.ROLE_DEVELOPER;
     private static final int EXPIRES_AFTER_MINUTES = 15;
     private final static int USERS_PER_PAGE = 5;
+    private static final int USERS_PER_PROJECT_PAGE = 5;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -110,20 +111,21 @@ public class UserService {
     }
 
 
-    public Long countTeamMembersByProjectId(Long projectId) {
+    public long countTeamMembersByProjectId(long projectId) {
         return userRepository.countTeamMembersByProjectId(projectId);
     }
 
-    public Page<User> findAllTeamMembers(Long projectId, Pageable pageable) {
+    public Page<User> findAllByProject(long projectId, int pageNumber) {
+        final Pageable pageable = PageRequest.of(pageNumber, USERS_PER_PROJECT_PAGE);
         return userRepository.findAllTeamMembers(projectId, pageable);
     }
 
-    public User findById(Long id) {
+    public User findById(long id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MSG, id)));
     }
 
-    public Page<User> listByPage(Integer pageNumber) {
+    public Page<User> listByPage(int pageNumber) {
         final Pageable pageable = PageRequest.of(pageNumber, USERS_PER_PAGE);
         return userRepository.findAll(pageable);
     }

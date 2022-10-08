@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 public class TicketService {
     private static final int TICKETS_PER_PAGE = 10;
-
+    private static final int TICKETS_PER_PROJECT_PAGE = 5;
     public static final String TICKET_NOT_FOUND_MSG = "no ticket with id %d is found";
 
     private final TicketRepository ticketRepository;
@@ -60,5 +60,10 @@ public class TicketService {
     public Page<Ticket> getPage(long userId, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, TICKETS_PER_PAGE);
         return ticketRepository.findAllByUserId(userId, pageable);
+    }
+
+    public Page<Ticket> findAllTicketsByProject(long projectId, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, TICKETS_PER_PROJECT_PAGE);
+        return ticketRepository.findAllByProjectId(projectId, pageable);
     }
 }

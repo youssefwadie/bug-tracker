@@ -1,10 +1,9 @@
-package com.github.youssefwadie.bugtracker.project.dao;
+package com.github.youssefwadie.bugtracker.project;
 
 
 import com.github.youssefwadie.bugtracker.model.Project;
 import com.github.youssefwadie.bugtracker.model.User;
-import com.github.youssefwadie.bugtracker.project.ProjectService;
-import com.github.youssefwadie.bugtracker.project.ProjectValidatorService;
+import com.github.youssefwadie.bugtracker.project.dao.ProjectRepository;
 import com.github.youssefwadie.bugtracker.user.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

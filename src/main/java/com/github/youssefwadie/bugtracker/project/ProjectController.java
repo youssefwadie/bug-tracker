@@ -1,11 +1,16 @@
 package com.github.youssefwadie.bugtracker.project;
 
 import com.github.youssefwadie.bugtracker.dto.mappers.ProjectMapper;
+import com.github.youssefwadie.bugtracker.dto.mappers.TicketMapper;
 import com.github.youssefwadie.bugtracker.dto.mappers.UserMapper;
 import com.github.youssefwadie.bugtracker.dto.model.ProjectDto;
+import com.github.youssefwadie.bugtracker.dto.model.TicketDto;
 import com.github.youssefwadie.bugtracker.dto.model.UserDto;
 import com.github.youssefwadie.bugtracker.model.Project;
+import com.github.youssefwadie.bugtracker.model.Ticket;
 import com.github.youssefwadie.bugtracker.model.User;
+import com.github.youssefwadie.bugtracker.ticket.TicketService;
+import com.github.youssefwadie.bugtracker.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +29,17 @@ import static com.github.youssefwadie.bugtracker.constants.ResponseConstants.TOT
 @RequestMapping("/api/v1/projects")
 public class ProjectController {
     private final ProjectService projectService;
+    private final TicketService ticketService;
+    private final UserService userService;
+
     private final ProjectMapper projectMapper;
+    private final TicketMapper ticketMapper;
     private final UserMapper userMapper;
-    
-    @GetMapping("/page/{pageNumber:\\d+}")
+
+
+    @GetMapping("/page/{pageNumber:[1-9]\\d*}")
     public ResponseEntity<List<ProjectDto>> listByPage(@PathVariable("pageNumber") Integer pageNumber) {
-        Page<Project> projectsPage = projectService.getPage(pageNumber);
+        Page<Project> projectsPage = projectService.findAllByPage(pageNumber - 1);
 
         return ResponseEntity.ok()
                 .header(TOTAL_COUNT_HEADER_NAME, Long.toString(projectsPage.getTotalElements()))
@@ -41,7 +51,7 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.count());
     }
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id:[1-9]\\d*}")
     public ResponseEntity<ProjectDto> getById(@PathVariable Long id) {
         Optional<Project> projectById = projectService.findById(id);
         if (projectById.isEmpty()) {
@@ -50,17 +60,26 @@ public class ProjectController {
         return ResponseEntity.ok(projectMapper.projectToProjectDto(projectById.get()));
     }
 
-    @GetMapping("/{id:\\d+}/members/count")
+    @GetMapping("/{id:[1-9]\\d*}/members/count")
     public ResponseEntity<Long> getTeamMembersCount(@PathVariable("id") Long id) {
         return ResponseEntity.ok(projectService.countTeamMembersByProjectId(id));
     }
 
-    @GetMapping("/{projectId:\\d}/members/page/{pageNumber:\\d}")
+    @GetMapping("/{projectId:\\d}/members/page/{pageNumber:[1-9]\\d*}")
     public ResponseEntity<List<UserDto>> listTeamMembersByPage(@PathVariable("projectId") Long projectId,
                                                                @PathVariable("pageNumber") Integer pageNumber) {
-        final Page<User> usersPage = projectService.listTeamMembersByPage(projectId, pageNumber);
+        final Page<User> usersPage = userService.findAllByProject(projectId, pageNumber - 1);
         return ResponseEntity.ok()
                 .header(TOTAL_COUNT_HEADER_NAME, Long.toString(usersPage.getTotalElements()))
                 .body(userMapper.usersToUsersDto(usersPage.getContent()));
+    }
+
+    @GetMapping("/{projectId:\\d}/tickets/page/{pageNumber:[1-9]\\d*}")
+    public ResponseEntity<List<TicketDto>> listTicketsByPage(@PathVariable("projectId") Long projectId,
+                                                             @PathVariable("pageNumber") Integer pageNumber) {
+        Page<Ticket> ticketsPage = ticketService.findAllTicketsByProject(projectId, pageNumber);
+        return ResponseEntity.ok()
+                .header(TOTAL_COUNT_HEADER_NAME, Long.toString(ticketsPage.getTotalElements()))
+                .body(ticketMapper.ticketsToTicketsDto(ticketsPage.getContent()));
     }
 }

@@ -47,4 +47,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT COUNT(t) FROM Ticket t WHERE t.submitterId = ?1 AND t.priority = ?2")
     long countBySubmitterIdAndPriority(Long submitterId, TicketPriority priority);
 
+    @Query("SELECT t FROM Ticket t WHERE t.project.id = ?1")
+    Page<Ticket> findAllByProjectId(Long projectId, Pageable pageable);
 }

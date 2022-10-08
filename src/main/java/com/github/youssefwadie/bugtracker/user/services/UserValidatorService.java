@@ -79,9 +79,6 @@ public class UserValidatorService {
         }
     }
 
-//    private boolean emailAlreadyInUser(String email) {
-//        return userRepository.existsByEmail(email);
-//    }
 
     private boolean isUniqueEmail(User user) {
         String userEmail = user.getEmail();

@@ -35,7 +35,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketMapper.ticketsToTicketsDto(usersTickets));
     }
 
-    @GetMapping("/page/{pageNumber:\\d+}")
+    @GetMapping("/page/{pageNumber:[1-9]\\d*}")
     public ResponseEntity<List<TicketDto>> listByPage(@PathVariable("pageNumber") Integer pageNumber) {
         User loggedInUser = UserContextHolder.get();
         Page<Ticket> ticketsPage = ticketService.getPage(loggedInUser.getId(), pageNumber);
@@ -53,7 +53,7 @@ public class TicketController {
     }
 
 
-    @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id:[1-9]\\d*}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TicketDto> findTicketById(@PathVariable("id") Long id) {
         Optional<Ticket> ticketOptional = ticketService.findById(id);
         if (ticketOptional.isEmpty()) {
@@ -62,7 +62,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketMapper.ticketToTicketDto(ticketOptional.get()));
     }
 
-    @PutMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id:[1-9]\\d*}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TicketDto> updateTicketById(@PathVariable("id") Long id, @RequestBody TicketDto ticketDto) {
         Ticket ticket = ticketMapper.ticketDtoToTicket(ticketDto);
         User loggedInUser = UserContextHolder.get();
