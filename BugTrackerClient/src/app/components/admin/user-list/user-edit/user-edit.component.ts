@@ -26,7 +26,7 @@ export class UserEditComponent implements OnInit {
   readonly invalidEmailMessage = "Please enter a valid email";
   readonly invalidRoleMessage = "User's role must be set";
 
-  private readonly validEmailPattern: string = "^[a-z0-9._%+-]+@[a-z0-9.-]+(\.[a-z]{2,4})+$";
+  private readonly validEmailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+(\.[a-z]{2,4})+$";
 
   constructor(
     private router: Router,

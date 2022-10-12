@@ -4,6 +4,8 @@ import {Ticket} from "../../model/ticket";
 import {TicketService} from "../../services/ticket-service/ticket.service";
 import {PageEvent} from "@angular/material/paginator";
 import {AppConstants} from "../../constants/app-constants";
+import {ProjectService} from "../../services/project-service/project.service";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-ticket-list',
@@ -11,21 +13,22 @@ import {AppConstants} from "../../constants/app-constants";
   styleUrls: ['./ticket.list.component.css']
 })
 export class TicketListComponent implements OnInit {
-  @Input() tickets = new Array<Ticket>();
-  @Input() ticketsCount = 0;
-  @Input() dataSet = false;
+  tickets = new Array<Ticket>();
+  ticketsCount = 0;
+
+  @Input() title = "Tickets";
+  @Input() projectId: number;
+  @Input() pageSize = 10;
 
   displayedColumns: string[] = ['title', 'project', 'developer', 'type', "priority", "status", "created"];
   faEllipsisV = faEllipsisV;
 
 
-  constructor(private ticketService: TicketService) {
+  constructor(private ticketService: TicketService, private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
-    if (!this.dataSet) {
-      this.loadPage(1);
-    }
+    this.loadPage(1);
   }
 
   onPageChange(pageEvent: PageEvent): void {
@@ -33,18 +36,30 @@ export class TicketListComponent implements OnInit {
   }
 
   loadPage(pageNumber: number): void {
-    this.ticketService.listByPage(pageNumber).subscribe({
-      next: response => {
-        const ticketsCount = Number(response.headers.get(AppConstants.TOTAL_COUNT_HEADER_NAME));
-        if (!isNaN(ticketsCount)) {
-          this.ticketsCount = ticketsCount;
+    if (this.projectId && !isNaN(this.projectId)) {
+      this.projectService.listProjectsTicketByPage(this.projectId, pageNumber).subscribe({
+        next: response => {
+          this.processResponse(response);
         }
-        const body = response.body;
-        if (body) {
-          this.tickets = body;
+      });
+    } else {
+      this.ticketService.listByPage(pageNumber).subscribe({
+        next: response => {
+          this.processResponse(response);
         }
-      }
-    });
+      });
+    }
+  }
+
+  processResponse(response: HttpResponse<Ticket[]>): void {
+    const ticketsCount = Number(response.headers.get(AppConstants.TOTAL_COUNT_HEADER_NAME));
+    if (!isNaN(ticketsCount)) {
+      this.ticketsCount = ticketsCount;
+    }
+    const body = response.body;
+    if (body) {
+      this.tickets = body;
+    }
   }
 
   // TODO: to be implemented

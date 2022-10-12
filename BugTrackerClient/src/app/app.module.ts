@@ -30,8 +30,8 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { ProjectManagementComponent } from './components/admin/project-management/project.management.component';
 import { AdminHomeComponent } from './components/admin/admin-home/admin.home.component';
-import { UserManagementComponent } from './components/admin/user-management/user.management.component';
-import { UserEditComponent } from './components/admin/user-management/user-edit/user-edit.component';
+import { UserListComponent } from './components/admin/user-list/user.list.component';
+import { UserEditComponent } from './components/admin/user-list/user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -49,27 +49,27 @@ import { UserEditComponent } from './components/admin/user-management/user-edit/
     ProjectEditComponent,
     AdminHomeComponent,
     ProjectManagementComponent,
-    UserManagementComponent,
+    UserListComponent,
     UserEditComponent,
   ],
 
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    NgbModule,
-    FontAwesomeModule,
-    MatToolbarModule,
-    MatTableModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    BrowserAnimationsModule,
-    NgChartsModule,
-    NgSelectModule,
-    MatPaginatorModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        NgbModule,
+        FontAwesomeModule,
+        MatToolbarModule,
+        MatTableModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+        BrowserAnimationsModule,
+        NgChartsModule,
+        NgSelectModule,
+        MatPaginatorModule,
+    ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
   ],

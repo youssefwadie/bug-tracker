@@ -63,7 +63,7 @@ public class TicketService {
     }
 
     public Page<Ticket> findAllTicketsByProject(long projectId, int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, TICKETS_PER_PROJECT_PAGE);
+        Pageable pageable = PageRequest.of(pageNumber, TICKETS_PER_PROJECT_PAGE);
         return ticketRepository.findAllByProjectId(projectId, pageable);
     }
 }

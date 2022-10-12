@@ -12,7 +12,7 @@ import {ProjectDetailsComponent} from "./components/project-list/project-details
 import {AdminHomeComponent} from "./components/admin/admin-home/admin.home.component";
 import {AdminRouteGuard} from "./services/guards/admin.route.guard.service";
 import {ProjectManagementComponent} from "./components/admin/project-management/project.management.component";
-import {UserManagementComponent} from "./components/admin/user-management/user.management.component";
+import {UserListComponent} from "./components/admin/user-list/user.list.component";
 import {UsersResolver} from "./resolvers/users.resolver";
 
 const routes: Routes = [
@@ -26,7 +26,7 @@ const routes: Routes = [
     path: "admin", canActivate: [AdminRouteGuard], component: AdminHomeComponent, children: [
       {path: '', redirectTo: "projects", pathMatch: "full"},
       {path: "projects", resolve: {organizationTeamMembers: UsersResolver}, component: ProjectManagementComponent},
-      {path: "users", component: UserManagementComponent},
+      {path: "users", component: UserListComponent},
       {path: "**", redirectTo: "projects", pathMatch: "full"}
     ]
   },

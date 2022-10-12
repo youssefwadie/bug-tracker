@@ -1,2 +1,17 @@
-<!--<app-user-list *ngIf="backingProject" header="Team" [projectId]="backingProject.id"></app-user-list>-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4">
+      <h5 class="mat-h5">Project Name</h5>
+      <h3 class="mat-subheading-2">{{ (project$ | async)?.name }}</h3>
+      <app-user-list [management]="false" [projectId]="id" title="Assigned Personal"></app-user-list>
+    </div>
+
+    <div class="col-8">
+      <h5 class="mat-h5">Project Description</h5>
+      <h3 class="mat-subheading-2">{{ (project$ | async)?.description }}</h3>
+      <app-ticket-list [projectId]="id" title="Tickets for this project" [pageSize]="5"></app-ticket-list>
+    </div>
+
+  </div>
+</div>
 

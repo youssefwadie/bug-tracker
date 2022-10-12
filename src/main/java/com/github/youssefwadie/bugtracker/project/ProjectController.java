@@ -65,7 +65,7 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.countTeamMembersByProjectId(id));
     }
 
-    @GetMapping("/{projectId:\\d}/members/page/{pageNumber:[1-9]\\d*}")
+    @GetMapping("/{projectId:[1-9]\\d*}/members/page/{pageNumber:[1-9]\\d*}")
     public ResponseEntity<List<UserDto>> listTeamMembersByPage(@PathVariable("projectId") Long projectId,
                                                                @PathVariable("pageNumber") Integer pageNumber) {
         final Page<User> usersPage = userService.findAllByProject(projectId, pageNumber - 1);
@@ -74,10 +74,10 @@ public class ProjectController {
                 .body(userMapper.usersToUsersDto(usersPage.getContent()));
     }
 
-    @GetMapping("/{projectId:\\d}/tickets/page/{pageNumber:[1-9]\\d*}")
+    @GetMapping("/{projectId:[1-9]\\d*}/tickets/page/{pageNumber:[1-9]\\d*}")
     public ResponseEntity<List<TicketDto>> listTicketsByPage(@PathVariable("projectId") Long projectId,
                                                              @PathVariable("pageNumber") Integer pageNumber) {
-        Page<Ticket> ticketsPage = ticketService.findAllTicketsByProject(projectId, pageNumber);
+        Page<Ticket> ticketsPage = ticketService.findAllTicketsByProject(projectId, pageNumber - 1);
         return ResponseEntity.ok()
                 .header(TOTAL_COUNT_HEADER_NAME, Long.toString(ticketsPage.getTotalElements()))
                 .body(ticketMapper.ticketsToTicketsDto(ticketsPage.getContent()));

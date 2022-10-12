@@ -3,6 +3,7 @@ import {Role, User} from "../../model/user";
 import {BehaviorSubject, map, Observable, of} from "rxjs";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {AuthService} from "../auth-service/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,17 +19,24 @@ export class UserService {
 
   public static readonly USERS_PER_PAGE = 5;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.backingUsers = new Array<User>();
     this.users$ = new BehaviorSubject<User[]>(this.backingUsers);
     this.initService();
   }
 
   private initService(): void {
-    this.http.get<Array<User>>(`${environment.rootUrl}/${this.API_LIST_USERS_PATH}`, {withCredentials: true})
-      .subscribe(users => {
-        users.map(UserService.userFromHttp);
-        this.updateBackingArray(users);
+    this.authService.isAdmin()
+      .subscribe({
+        next: isAdmin => {
+          if (isAdmin) {
+            this.http.get<Array<User>>(`${environment.rootUrl}/${this.API_LIST_USERS_PATH}`, {withCredentials: true})
+              .subscribe(users => {
+                users.map(UserService.userFromHttp);
+                this.updateBackingArray(users);
+              });
+          }
+        }
       });
   }
 

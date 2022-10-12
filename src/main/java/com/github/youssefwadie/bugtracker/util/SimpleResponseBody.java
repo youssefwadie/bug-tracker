@@ -37,7 +37,7 @@ public class SimpleResponseBody {
         private String message;
         private Instant timestamp;
 
-        public Builder(HttpStatus httpStatus) {
+        private Builder(HttpStatus httpStatus) {
             this.description = httpStatus.getReasonPhrase();
             this.status = httpStatus.value();
 
